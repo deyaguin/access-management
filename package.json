@@ -1,0 +1,22 @@
+{
+  "imports": {
+    "echo": "go get -u github.com/labstack/echo",
+    "gorm": "go get -u github.com/jinzhu/gorm"
+  },
+  "scripts": {
+    "installPackages": "go get -u github.com/jinzhu/gorm"
+  },
+  "name": "accesscontrol",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leagra/accessControl.git"
+  },
+  "author": "leagr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leagra/accessControl/issues"
+  },
+  "homepage": "https://github.com/leagra/accessControl#readme",
+  "description": ""
+}
