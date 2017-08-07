@@ -1,1 +1,9 @@
-package src
+package main
+
+import (
+
+)
+
+func main() {
+
+}
