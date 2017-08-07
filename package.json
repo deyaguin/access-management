@@ -4,7 +4,7 @@
     "gorm": "go get -u github.com/jinzhu/gorm"
   },
   "scripts": {
-    "installPackages": "go get -u github.com/jinzhu/gorm"
+    "installPackages": "go get -u github.com/jinzhu/gorm & go get -u github.com/jinzhu/gorm"
   },
   "name": "accesscontrol",
   "version": "1.0.0",
