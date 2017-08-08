@@ -2,7 +2,8 @@ package app
 
 import (
 	"app/api"
-	"app/dataBase"
+	"app/db"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 type App struct {
@@ -10,12 +11,10 @@ type App struct {
 }
 
 func (app *App) Init() {
-	pgDB := &dataBase.DB{
-		"postgres",
-		"host=localhost user=accessControl dbname=accesscontrol password=agryz2010",
+	pgDB := db.SqlDB{}
+	pgDB.Connect("postgres", "host=localhost user=accessControl dbname=accesscontrol password=agryz2010")
+	api := api.Api{
+		pgDB,
 	}
-	web := &api.Api{
-		pgDB.Connect(),
-	}
-	web.Init()
+	api.Init()
 }

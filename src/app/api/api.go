@@ -1,20 +1,21 @@
 package api
 
 import (
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 	"app/api/handlers"
+	"app/db"
 )
 
 type Api struct {
-	DB *gorm.DB
+	DB db.DB
 }
 
 func (api *Api) Init() {
 	e := echo.New()
-	h := &handlers.Handler{
+	h := handlers.Handler{
 		api.DB,
 	}
+
 	e.POST("/users", h.CreateUser)
 	e.GET("/users", h.GetUsers)
 
