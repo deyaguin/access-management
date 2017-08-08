@@ -1,9 +1,8 @@
 package main
 
-import (
-
-)
+import "app"
 
 func main() {
-
+	app := &app.App{}
+	app.Init()
 }

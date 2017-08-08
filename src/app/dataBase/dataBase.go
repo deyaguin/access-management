@@ -10,8 +10,11 @@ type DB struct {
 	Url string
 }
 
-func (dataBase *DB) Connect() error {
+func (dataBase *DB) Connect() *gorm.DB {
 	db, err := gorm.Open(dataBase.Vendor, dataBase.Url)
-	defer db.Close()
-	return err
+	if err != nil {
+		panic(err)
+	}
+	//defer db.Close()
+	return db
 }
