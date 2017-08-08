@@ -8,6 +8,10 @@ import (
 type DB interface {
 	CreateUser(user *models.User)
 	GetUsers(users *[]models.User)
+	CreateGroup(group *models.Group)
+	GetGroups(groups *[]models.Group)
+	CreatePolicy(policy *models.Policy)
+	GetPolicies(policies *[]models.Policy)
 }
 
 type SqlDB struct {
@@ -29,4 +33,22 @@ func (dataBase SqlDB) CreateUser(user *models.User) {
 
 func (dataBase SqlDB) GetUsers(users *[]models.User) {
 	dataBase.db.Find(&users)
+}
+
+func (dataBase SqlDB) CreateGroup(group *models.Group) {
+	dataBase.db.NewRecord(&group)
+	dataBase.db.Create(&group)
+}
+
+func (dataBase SqlDB) GetGroups(groups *[]models.Group) {
+	dataBase.db.Find(&groups)
+}
+
+func (dataBase SqlDB) CreatePolicy(policy *models.Policy) {
+	dataBase.db.NewRecord(&policy)
+	dataBase.db.Create(&policy)
+}
+
+func (dataBase SqlDB) GetPolicies(policies *[]models.Policy) {
+	dataBase.db.Find(&policies)
 }

@@ -18,6 +18,10 @@ func (api *Api) Init() {
 
 	e.POST("/users", h.CreateUser)
 	e.GET("/users", h.GetUsers)
+	e.POST("/groups", h.CreateGroup)
+	e.GET("/groups", h.GetGroups)
+	e.POST("/policies", h.CreatePolicy)
+	e.GET("/policies", h.GetPolicies)
 
 	e.Start(":1535")
 }

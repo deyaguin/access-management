@@ -1,0 +1,112 @@
+{
+	"id": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
+	"name": "accessControl",
+	"description": "",
+	"order": [],
+	"folders": [
+		{
+			"name": "entities",
+			"description": "",
+			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
+			"order": [
+				"1de4e90d-4b83-ce47-f7c0-11005aa95050"
+			],
+			"owner": 0,
+			"folders_order": [],
+			"id": "8aab98b8-5f5c-70fb-69da-533b4383247e"
+		},
+		{
+			"name": "services",
+			"description": "",
+			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
+			"order": [
+				"97ef7772-1a5a-73ed-d37d-51b07e8960d2"
+			],
+			"owner": 0,
+			"folders_order": [],
+			"id": "08c19fac-0927-dff6-3aed-dbaef1dd5e61"
+		}
+	],
+	"folders_order": [
+		"8aab98b8-5f5c-70fb-69da-533b4383247e",
+		"08c19fac-0927-dff6-3aed-dbaef1dd5e61"
+	],
+	"timestamp": 1501573656289,
+	"owner": 0,
+	"public": false,
+	"requests": [
+		{
+			"id": "1de4e90d-4b83-ce47-f7c0-11005aa95050",
+			"headers": "Authorization: Bearer {{token}}\n",
+			"headerData": [
+				{
+					"key": "Authorization",
+					"value": "Bearer {{token}}",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://{{host}}/users",
+			"queryParams": [],
+			"preRequestScript": "",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502194232653,
+			"name": "users",
+			"description": "?page=n\nstatus=",
+			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
+			"responses": [],
+			"rawModeData": ""
+		},
+		{
+			"id": "97ef7772-1a5a-73ed-d37d-51b07e8960d2",
+			"headers": "Authorization: Bearer {{token}}\n",
+			"headerData": [
+				{
+					"key": "Authorization",
+					"value": "Bearer {{token}}",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://localhost:8000/checkPermissions?resourse=docs&action=read",
+			"queryParams": [
+				{
+					"key": "resourse",
+					"value": "docs",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "action",
+					"value": "read",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"preRequestScript": "",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1501740840889,
+			"name": "checkPermissions",
+			"description": "?page=n\nstatus=",
+			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
+			"responses": [],
+			"rawModeData": ""
+		}
+	]
+}

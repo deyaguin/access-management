@@ -11,7 +11,7 @@ type App struct {
 }
 
 func (app *App) Init() {
-	pgDB := db.SqlDB{}
+	pgDB := new(db.SqlDB)
 	pgDB.Connect("postgres", "host=localhost user=accessControl dbname=accesscontrol password=agryz2010")
 	api := api.Api{
 		pgDB,
