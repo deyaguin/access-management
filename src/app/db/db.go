@@ -8,8 +8,10 @@ import (
 type DB interface {
 	CreateUser(user *models.User)
 	GetUsers(users *[]models.User)
+
 	CreateGroup(group *models.Group)
 	GetGroups(groups *[]models.Group)
+
 	CreatePolicy(policy *models.Policy)
 	GetPolicies(policies *[]models.Policy)
 }

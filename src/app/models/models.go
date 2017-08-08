@@ -20,16 +20,16 @@ type Policy struct {
 }
 
 type GroupPolicy struct {
-	Group_id int
-	Policy_id int
+	GroupId int `gorm:"column:group_id;"`
+	PolicyId int `gorm:"column:policy_id"`
 }
 
 type UserPolicy struct {
-	User_id int
-	Policy_id int
+	UserId int `gorm:"column:user_id"`
+	PolicyId int `gorm:"column:policy_id"`
 }
 
 type UserGroup struct {
-	User_id int
-	Group_id int
+	UserId int `gorm:"column:user_id"`
+	GroupId int `gorm:"column:groups_id"`
 }
