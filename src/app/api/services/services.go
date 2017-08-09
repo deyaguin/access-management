@@ -10,6 +10,5 @@ type Service struct {
 }
 
 func (s *Service) GetUserPolicies(user *models.User, policies *[]models.Policy) {
-
 	s.DB.GetEntityAssociations(user, policies, "Policies" )
 }

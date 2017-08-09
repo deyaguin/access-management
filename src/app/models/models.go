@@ -22,13 +22,15 @@ type Policy struct {
 	Name string
 	Groups []Group `gorm:"many2many:group_policies"json:"-"`
 	Users []User `gorm:"many2many:user_policies"json:"-"`
+	Permissions []Permission `json:"-"`
 }
 
 type Permission struct {
 	ID uint `json:"-"`
 	Resourse string
 	AccessType string
-	Policies []Policy `json:"-"`
+	ActionID uint `gorm:"column:action_id"`
+	PolicyID uint `gorm:"column:policy_id"`
 }
 
 type Action struct {
