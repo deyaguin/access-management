@@ -5,31 +5,55 @@ import (
 )
 
 type User struct {
-	ID int
+	ID uint `json:"-"`
 	Name string
+	Groups []Group `gorm:"many2many:user_groups"json:"-"`
+	Policies []Policy `gorm:"many2many:user_policies"json:"-"`
 }
 
 type Group struct {
-	ID int
+	ID uint `json:"-"`
 	Name string
+	Policies []Policy `gorm:"many2many:group_policies"json:"-"`
 }
 
 type Policy struct {
-	ID int
+	ID uint `json:"-"`
 	Name string
+	Groups []Group `gorm:"many2many:group_policies"json:"-"`
+	Users []User `gorm:"many2many:user_policies"json:"-"`
 }
 
-type GroupPolicy struct {
-	GroupId int `gorm:"column:group_id;"`
-	PolicyId int `gorm:"column:policy_id"`
+type Permission struct {
+	ID uint `json:"-"`
+	Resourse string
+	AccessType string
+	Policies []Policy `json:"-"`
 }
 
-type UserPolicy struct {
-	UserId int `gorm:"column:user_id"`
-	PolicyId int `gorm:"column:policy_id"`
+type Action struct {
+	ID uint `json:"-"`
+	Name string
+	Permissions []Permission `json:"-"`
+}
+
+type Service struct {
+	ID uint `json:"-"`
+	Name string
+	Actions []Action `json:"-"`
 }
 
 type UserGroup struct {
-	UserId int `gorm:"column:user_id"`
-	GroupId int `gorm:"column:groups_id"`
+	UserID uint `gorm:"column:user_id"`
+	GroupID uint `gorm:"column:group_id"`
+}
+
+type UserPolicy struct {
+	UserID uint `gorm:"column:user_id"`
+	PolicyID uint `gorm:"column:policy_id"`
+}
+
+type GroupPolicy struct {
+	GroupID uint `gorm:"column:group_id"`
+	PolicyID uint `gorm:"column:policy_id"`
 }

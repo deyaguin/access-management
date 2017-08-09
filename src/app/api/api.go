@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo"
 	"app/api/handlers"
 	"app/db"
+	"app/api/services"
 )
 
 type Api struct {
@@ -12,8 +13,12 @@ type Api struct {
 
 func (api *Api) Init() {
 	e := echo.New()
+	s := services.Service{
+		api.DB,
+	}
 	h := handlers.Handler{
 		api.DB,
+		&s,
 	}
 
 	e.POST("/users", h.CreateUser)
@@ -22,6 +27,7 @@ func (api *Api) Init() {
 	e.GET("/groups", h.GetGroups)
 	e.POST("/policies", h.CreatePolicy)
 	e.GET("/policies", h.GetPolicies)
+	e.GET("/sm", h.Sm)
 
 	e.Start(":1535")
 }
