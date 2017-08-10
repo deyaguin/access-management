@@ -33,8 +33,8 @@ func (a *Api) FormListOfPermissions(user *models.User) []models.Permission {
 	self := a.formListOfSelfPermissions(user)
 	group := a.formListOfGroupPermissions(user)
 	//p := a.compareByAccessType(self)
-	p := a.compareByAccessType(self)
-	//fmt.Println(self)
+	p := a.onlyUn(self)
+	fmt.Println(self)
 	fmt.Println(p)
 	return append(self, group...)
 }
@@ -94,6 +94,15 @@ func (a *Api) compareByAccessType(permissions []models.Permission) []models.Perm
 	return *result
 }
 
-//func (a *Api) onlyUn(permissions []models.Permission) []models.Permission {
-//
-//}
+func (a *Api) onlyUn(permissions []models.Permission) []models.Permission {
+	var result []models.Permission
+	for i, p := range permissions {
+		for _, cP := range permissions[i+1:] {
+			if p.Equals(cP) {
+				result = append(permissions[:i], permissions[i+1:]...)
+				break
+			}
+		}
+	}
+	return result
+}
