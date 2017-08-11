@@ -6,13 +6,13 @@ import (
 )
 
 type DB interface {
-	CreateUser(user *models.User)
+	CreateUser(u *models.User)
 	GetUsers() *[]models.User
 
-	CreateGroup(group *models.Group)
+	CreateGroup(g *models.Group)
 	GetGroups() *[]models.Group
 
-	CreatePolicy(policy *models.Policy)
+	CreatePolicy(p  *models.Policy)
 	GetPolicies() *[]models.Policy
 
 	//Create(entity interface{})
@@ -20,16 +20,21 @@ type DB interface {
 	//Update(entity interface{})
 	//Delete(entity interface{})
 
-	GetEntityAssociations(entity interface{}, associations interface{}, column string)
+	//GetEntityAssociations(e interface{}, a interface{}, column string)
+
+	GetPoliciesByUser(user *models.User, policies *[]models.Policy, column string)
+	GetPoliciesByGroup(group *models.Group, policies *[]models.Policy, column string)
+	GetGroupsByUser(user *models.User, groups *[]models.Group, column string)
+	GetPermissionsByPolicy(policy *models.Policy, permissions *[]models.Permission, column string)
 }
 
 type SqlDB struct {
 	db *gorm.DB
 }
 
-func (dataBase SqlDB) CreateUser(user *models.User) {
-	dataBase.db.NewRecord(&user)
-	dataBase.db.Create(&user)
+func (dataBase SqlDB) CreateUser(u *models.User) {
+	dataBase.db.NewRecord(&u)
+	dataBase.db.Create(&u)
 }
 
 func (dataBase SqlDB) GetUsers() *[]models.User {
@@ -38,9 +43,9 @@ func (dataBase SqlDB) GetUsers() *[]models.User {
 	return users
 }
 
-func (dataBase SqlDB) CreateGroup(group *models.Group) {
-	dataBase.db.NewRecord(&group)
-	dataBase.db.Create(&group)
+func (dataBase SqlDB) CreateGroup(g *models.Group) {
+	dataBase.db.NewRecord(&g)
+	dataBase.db.Create(&g)
 }
 
 func (dataBase SqlDB) GetGroups() *[]models.Group {
@@ -49,9 +54,9 @@ func (dataBase SqlDB) GetGroups() *[]models.Group {
 	return groups
 }
 
-func (dataBase SqlDB) CreatePolicy(policy *models.Policy) {
-	dataBase.db.NewRecord(&policy)
-	dataBase.db.Create(&policy)
+func (dataBase SqlDB) CreatePolicy(p *models.Policy) {
+	dataBase.db.NewRecord(&p)
+	dataBase.db.Create(&p)
 }
 
 func (dataBase SqlDB) GetPolicies() *[]models.Policy {
@@ -60,8 +65,20 @@ func (dataBase SqlDB) GetPolicies() *[]models.Policy {
 	return policies
 }
 
-func (dataBase SqlDB) GetEntityAssociations(entity interface{}, associations interface{}, column string) {
-	dataBase.db.Model(entity).Related(associations, column)
+func (dataBase SqlDB) GetPoliciesByUser(user *models.User, policies *[]models.Policy, column string) {
+	dataBase.db.Model(user).Related(policies, column)
+}
+
+func (dataBase SqlDB) GetPoliciesByGroup(group *models.Group, policies *[]models.Policy, column string) {
+	dataBase.db.Model(group).Related(policies, column)
+}
+
+func (dataBase SqlDB) GetGroupsByUser(user *models.User, groups *[]models.Group, column string) {
+	dataBase.db.Model(user).Related(groups, column)
+}
+
+func (dataBase SqlDB) GetPermissionsByPolicy(policy *models.Policy, permissions *[]models.Permission, column string) {
+	dataBase.db.Model(policy).Related(permissions)
 }
 
 func SqlDBCreator(vendor, url string) DB {

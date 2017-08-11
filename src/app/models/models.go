@@ -4,10 +4,6 @@ import (
 	//"github.com/jinzhu/gorm"
 )
 
-type entity interface {
-	Equals(e *entity) bool
-}
-
 type User struct {
 	ID uint `json:"id"`
 	Name string
@@ -16,16 +12,19 @@ type User struct {
 }
 
 func (u *User) Equals(comparedU *User) bool {
-	if u.Name == comparedU.Name && u.ID == comparedU.ID {
-		return true
-	}
-	return false
+	result := u.Name == comparedU.Name
+	return result
 }
 
 type Group struct {
 	ID uint `json:"id"`
 	Name string
 	Policies []Policy `gorm:"many2many:group_policies"json:"-"`
+}
+
+func (g *Group) Equals(comparedG *Group) bool {
+	result := g.Name == comparedG.Name
+	return result
 }
 
 type Policy struct {
@@ -36,21 +35,24 @@ type Policy struct {
 	Permissions []Permission `json:"-"`
 }
 
+func (p *Policy) Equals(comparedP *Policy) bool {
+	result := p.Name == comparedP.Name
+	return result
+}
+
 type Permission struct {
-	ID uint `json:"id"`
+	ID       uint `json:"id"`
 	Resourse string
-	AccessType string
+	Access   bool
 	ActionID uint `gorm:"column:action_id"`
 	PolicyID uint `gorm:"column:policy_id"`
 }
 
 func (p *Permission) Equals(comparedP Permission) bool {
-	if p.Resourse == comparedP.Resourse &&
-		p.AccessType == comparedP.AccessType &&
-		p.ActionID == comparedP.ActionID {
-		return true
-	}
-	return false
+	result := p.Resourse == comparedP.Resourse &&
+		p.Access == comparedP.Access &&
+		p.ActionID == comparedP.ActionID
+	return result
 }
 
 type Action struct {
@@ -59,10 +61,20 @@ type Action struct {
 	Permissions []Permission `json:"-"`
 }
 
+func (a *Action) Equals(comparedA Action) bool {
+	result := a.Name == comparedA.Name
+	return result
+}
+
 type Service struct {
 	ID uint `json:"id"`
 	Name string
 	Actions []Action `json:"-"`
+}
+
+func (s *Service) Equals(comparedS Service) bool {
+	result := s.Name == comparedS.Name
+	return result
 }
 
 //type UserGroup struct {

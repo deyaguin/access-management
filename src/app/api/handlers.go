@@ -4,7 +4,15 @@ import (
 	"github.com/labstack/echo"
 	"app/models"
 	"net/http"
+	"fmt"
 )
+
+type userAction struct {
+	Resourse string
+	Action uint
+	ID uint
+	Name string
+}
 
 func (a *Api) CreateUser(c echo.Context) error {
 	user := new(models.User)
@@ -43,8 +51,9 @@ func (a *Api) GetPolicies(c echo.Context) error {
 }
 
 func (a *Api) CheckPermissions(c echo.Context) error {
-	user := new(models.User)
-	c.Bind(user)
-	permissions := a.FormListOfPermissions(user)
-	return c.JSON(http.StatusOK, permissions)
+	userAct := new(userAction)
+	c.Bind(userAct)
+	fmt.Println(userAct)
+	access := a.Check(userAct)
+	return c.JSON(http.StatusOK, access)
 }
