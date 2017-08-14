@@ -1,10 +1,11 @@
 {
   "imports": {
     "echo": "go get -u github.com/labstack/echo",
-    "gorm": "go get -u github.com/jinzhu/gorm"
+    "gorm": "go get -u github.com/jinzhu/gorm",
+    "validator": "go get gopkg.in/go-playground/validator.v9"
   },
   "scripts": {
-    "installPackages": "go get -u github.com/jinzhu/gorm & go get -u github.com/jinzhu/gorm"
+    "installPackages": "go get -u github.com/jinzhu/gorm && go get -u github.com/jinzhu/gorm && go get gopkg.in/go-playground/validator.v9"
   },
   "name": "accesscontrol",
   "version": "1.0.0",

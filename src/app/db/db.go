@@ -6,79 +6,90 @@ import (
 )
 
 type DB interface {
-	CreateUser(u *models.User)
-	GetUsers() *[]models.User
+	CreateUser(u *models.User) error
+	GetUsers() (*[]models.User, error)
+	//UpdateUser(u *models.User) error
+	DeleteUser(u *models.User) error
 
-	CreateGroup(g *models.Group)
-	GetGroups() *[]models.Group
+	CreateGroup(g *models.Group) error
+	GetGroups() (*[]models.Group, error)
+	//UpdateGroup(g *models.Group) error
+	//DeleteGroup(g *models.Group) error
 
-	CreatePolicy(p  *models.Policy)
-	GetPolicies() *[]models.Policy
+	CreatePolicy(p  *models.Policy) error
+	GetPolicies() (*[]models.Policy, error)
+	//UpdatePolicy(p *models.Policy) error
+	//DeletePolicy(p *models.Policy) error
 
-	//Create(entity interface{})
-	//GetAll(entities interface{})
-	//Update(entity interface{})
-	//Delete(entity interface{})
-
-	//GetEntityAssociations(e interface{}, a interface{}, column string)
-
-	GetPoliciesByUser(user *models.User, policies *[]models.Policy, column string)
-	GetPoliciesByGroup(group *models.Group, policies *[]models.Policy, column string)
-	GetGroupsByUser(user *models.User, groups *[]models.Group, column string)
-	GetPermissionsByPolicy(policy *models.Policy, permissions *[]models.Permission, column string)
+	GetPoliciesByUser(u *models.User, p *[]models.Policy, c string) error
+	GetPoliciesByGroup(g *models.Group, p *[]models.Policy, c string) error
+	GetGroupsByUser(u *models.User, g *[]models.Group, c string) error
+	GetPermissionsByPolicy(pol *models.Policy, per *[]models.Permission, c string) error
 }
 
 type SqlDB struct {
 	db *gorm.DB
 }
 
-func (dataBase SqlDB) CreateUser(u *models.User) {
-	dataBase.db.NewRecord(&u)
-	dataBase.db.Create(&u)
+func (dataBase SqlDB) CreateUser(u *models.User) error {
+	//dataBase.db.NewRecord(&u)
+	err := dataBase.db.Create(&u).Error
+	return err
 }
 
-func (dataBase SqlDB) GetUsers() *[]models.User {
+func (dataBase SqlDB) GetUsers() (*[]models.User, error) {
 	users := new([]models.User)
-	dataBase.db.Find(&users)
-	return users
+	err := dataBase.db.Find(&users).Error
+	return users, err
 }
 
-func (dataBase SqlDB) CreateGroup(g *models.Group) {
-	dataBase.db.NewRecord(&g)
-	dataBase.db.Create(&g)
+func (dataBase SqlDB) DeleteUser(u *models.User) error {
+	err := dataBase.db.Delete(&u).Error
+	return err
 }
 
-func (dataBase SqlDB) GetGroups() *[]models.Group {
+func (dataBase SqlDB) CreateGroup(g *models.Group) error {
+	//dataBase.db.NewRecord(&g)
+	err := dataBase.db.Create(&g).Error
+	return err
+}
+
+func (dataBase SqlDB) GetGroups() (*[]models.Group, error) {
 	groups := new([]models.Group)
-	dataBase.db.Find(&groups)
-	return groups
+	err := dataBase.db.Find(&groups).Error
+	return groups, err
 }
 
-func (dataBase SqlDB) CreatePolicy(p *models.Policy) {
-	dataBase.db.NewRecord(&p)
-	dataBase.db.Create(&p)
+func (dataBase SqlDB) CreatePolicy(p *models.Policy) error {
+	//dataBase.db.NewRecord(&p)
+	err := dataBase.db.Create(&p).Error
+	return err
 }
 
-func (dataBase SqlDB) GetPolicies() *[]models.Policy {
+func (dataBase SqlDB) GetPolicies() (*[]models.Policy, error) {
 	policies := new([]models.Policy)
-	dataBase.db.Find(&policies)
-	return policies
+	err := dataBase.db.Find(&policies).Error
+	return policies, err
 }
 
-func (dataBase SqlDB) GetPoliciesByUser(user *models.User, policies *[]models.Policy, column string) {
-	dataBase.db.Model(user).Related(policies, column)
+func (dataBase SqlDB) GetPoliciesByUser(u *models.User, p *[]models.Policy, c string) error {
+	err := dataBase.db.Model(u).Related(p, c).Error
+	return err
 }
 
-func (dataBase SqlDB) GetPoliciesByGroup(group *models.Group, policies *[]models.Policy, column string) {
-	dataBase.db.Model(group).Related(policies, column)
+func (dataBase SqlDB) GetPoliciesByGroup(g *models.Group, p *[]models.Policy, c string) error {
+	err := dataBase.db.Model(g).Related(p, c).Error
+	return err
 }
 
-func (dataBase SqlDB) GetGroupsByUser(user *models.User, groups *[]models.Group, column string) {
-	dataBase.db.Model(user).Related(groups, column)
+func (dataBase SqlDB) GetGroupsByUser(u *models.User, g *[]models.Group, c string) error {
+	err := dataBase.db.Model(u).Related(g, c).Error
+	return err
 }
 
-func (dataBase SqlDB) GetPermissionsByPolicy(policy *models.Policy, permissions *[]models.Permission, column string) {
-	dataBase.db.Model(policy).Related(permissions)
+func (dataBase SqlDB) GetPermissionsByPolicy(pol *models.Policy, per *[]models.Permission, c string) error {
+	err := dataBase.db.Model(pol).Related(per).Error
+	return err
 }
 
 func SqlDBCreator(vendor, url string) DB {
@@ -91,21 +102,3 @@ func SqlDBCreator(vendor, url string) DB {
 	}
 	return DB
 }
-
-//func (dataBase SqlDB) Create(entity interface{}) {
-//	dataBase.db.NewRecord(entity)
-//	dataBase.db.Create(entity)
-//}
-//
-//func (dataBase SqlDB) GetAll(entities interface{}) {
-//	dataBase.db.Find(entities)
-//}
-
-
-//func (dataBase *SqlDB) Connect(vendor, url string) {
-//	db, err := gorm.Open(vendor, url)
-//	if err != nil {
-//		panic(err)
-//	}
-//	dataBase.db = db
-//}

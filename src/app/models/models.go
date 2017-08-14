@@ -1,12 +1,8 @@
 package models
 
-import (
-	//"github.com/jinzhu/gorm"
-)
-
 type User struct {
 	ID uint `json:"id"`
-	Name string
+	Name string `validate:"required"`
 	Groups []Group `gorm:"many2many:user_groups"json:"-"`
 	Policies []Policy `gorm:"many2many:user_policies"json:"-"`
 }
@@ -18,7 +14,7 @@ func (u *User) Equals(comparedU *User) bool {
 
 type Group struct {
 	ID uint `json:"id"`
-	Name string
+	Name string `validate:"required"`
 	Policies []Policy `gorm:"many2many:group_policies"json:"-"`
 }
 
@@ -29,10 +25,10 @@ func (g *Group) Equals(comparedG *Group) bool {
 
 type Policy struct {
 	ID uint `json:"id"`
-	Name string
+	Name string `validate:"required"`
 	Groups []Group `gorm:"many2many:group_policies"json:"-"`
 	Users []User `gorm:"many2many:user_policies"json:"-"`
-	Permissions []Permission `json:"-"`
+	Permissions []Permission `json:"permissions"`
 }
 
 func (p *Policy) Equals(comparedP *Policy) bool {
@@ -42,8 +38,8 @@ func (p *Policy) Equals(comparedP *Policy) bool {
 
 type Permission struct {
 	ID       uint `json:"id"`
-	Resourse string
-	Access   bool
+	Resourse string `validate:"required"`
+	Access   bool `validate:"required"`
 	ActionID uint `gorm:"column:action_id"`
 	PolicyID uint `gorm:"column:policy_id"`
 }
@@ -57,7 +53,7 @@ func (p *Permission) Equals(comparedP Permission) bool {
 
 type Action struct {
 	ID uint `json:"id"`
-	Name string
+	Name string `validate:"required"`
 	Permissions []Permission `json:"-"`
 }
 
@@ -68,7 +64,7 @@ func (a *Action) Equals(comparedA Action) bool {
 
 type Service struct {
 	ID uint `json:"id"`
-	Name string
+	Name string `validate:"required"`
 	Actions []Action `json:"-"`
 }
 
@@ -76,18 +72,3 @@ func (s *Service) Equals(comparedS Service) bool {
 	result := s.Name == comparedS.Name
 	return result
 }
-
-//type UserGroup struct {
-//	UserID uint `gorm:"column:user_id"`
-//	GroupID uint `gorm:"column:group_id"`
-//}
-//
-//type UserPolicy struct {
-//	UserID uint `gorm:"column:user_id"`
-//	PolicyID uint `gorm:"column:policy_id"`
-//}
-//
-//type GroupPolicy struct {
-//	GroupID uint `gorm:"column:group_id"`
-//	PolicyID uint `gorm:"column:policy_id"`
-//}

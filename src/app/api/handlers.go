@@ -4,7 +4,6 @@ import (
 	"github.com/labstack/echo"
 	"app/models"
 	"net/http"
-	"fmt"
 )
 
 type userAction struct {
@@ -14,46 +13,67 @@ type userAction struct {
 	Name string
 }
 
-func (a *Api) CreateUser(c echo.Context) error {
+func (a *Api) createUser(c echo.Context) (err error) {
 	user := new(models.User)
 	c.Bind(user)
-	a.DB.CreateUser(user)
+	if err = c.Validate(user); err != nil {
+		return c.JSON(http.StatusOK, err.Error())
+	}
+	if err = a.DB.CreateUser(user); err != nil {
+		return err
+	}
 	return c.JSON(http.StatusOK, user)
 }
 
-func (a *Api) GetUsers(c echo.Context) error {
-	users := a.DB.GetUsers()
+func (a *Api) getUsers(c echo.Context) error {
+	users, dbError := a.DB.GetUsers()
+	if dbError != nil {
+		return dbError
+	}
 	return c.JSON(http.StatusOK, users)
 }
 
-func (a *Api) CreateGroup(c echo.Context) error {
+func (a *Api) deleteUser(c echo.Context) error {
+	user := new(models.User)
+	c.Bind(user)
+	dbError := a.DB.DeleteUser(user)
+	if dbError != nil {
+		return dbError
+	}
+	return c.JSON(http.StatusOK, user)
+}
+
+func (a *Api) createGroup(c echo.Context) error {
 	group := new(models.Group)
 	c.Bind(group)
-	a.DB.CreateGroup(group)
 	return c.JSON(http.StatusOK, group)
 }
 
-func (a *Api) GetGroups(c echo.Context) error {
-	groups := a.DB.GetGroups()
-	return c.JSON(http.StatusOK, groups)
+func (a *Api) getGroups(c echo.Context) error {
+	groups, dbError := a.DB.GetGroups()
+	if dbError != nil {
+		return c.JSON(http.StatusOK, groups)
+	}
+	return dbError
 }
 
-func (a *Api) CreatePolicy(c echo.Context) error {
+func (a *Api) createPolicy(c echo.Context) error {
 	policy := new(models.Policy)
 	c.Bind(policy)
-	a.DB.CreatePolicy(policy)
 	return c.JSON(http.StatusOK, policy)
 }
 
-func (a *Api) GetPolicies(c echo.Context) error {
-	policies :=	a.DB.GetPolicies()
+func (a *Api) getPolicies(c echo.Context) error {
+	policies, err :=	a.DB.GetPolicies()
+	if err != nil {
+
+	}
 	return c.JSON(http.StatusOK, policies)
 }
 
-func (a *Api) CheckPermissions(c echo.Context) error {
+func (a *Api) userPermissions(c echo.Context) error {
 	userAct := new(userAction)
 	c.Bind(userAct)
-	fmt.Println(userAct)
-	access := a.Check(userAct)
+	access := a.check(userAct)
 	return c.JSON(http.StatusOK, access)
 }

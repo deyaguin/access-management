@@ -2,81 +2,95 @@ package api
 
 import (
 	"app/models"
-	"fmt"
 )
 
-func (a *Api) GetPoliciesByUser(user *models.User) *[]models.Policy {
+func (a *Api) getPoliciesByUser(u *models.User) *[]models.Policy {
 	policies := new([]models.Policy)
-	a.DB.GetPoliciesByUser(user, policies, "Policies" )
+	err := a.DB.GetPoliciesByUser(u, policies, "Policies" )
+	if err != nil {
+
+	}
 	return policies
 }
 
-func (a *Api) GetPoliciesByGroup(group *models.Group) *[]models.Policy {
+func (a *Api) getPoliciesByGroup(g *models.Group) *[]models.Policy {
 	policies := new([]models.Policy)
-	a.DB.GetPoliciesByGroup(group, policies, "Policies")
+	err := a.DB.GetPoliciesByGroup(g, policies, "Policies")
+	if err != nil {
+
+	}
 	return policies
 }
 
-func (a *Api) GetGroupsByUser(user *models.User) *[]models.Group {
+func (a *Api) getGroupsByUser(u *models.User) *[]models.Group {
 	groups := new([]models.Group)
-	a.DB.GetGroupsByUser(user, groups, "Groups")
+	err := a.DB.GetGroupsByUser(u, groups, "Groups")
+	if err != nil {
+
+	}
 	return groups
 }
 
-func (a *Api) GetPermissionsByPolicy(policy *models.Policy) *[]models.Permission {
+func (a *Api) getPermissionsByPolicy(p *models.Policy) *[]models.Permission {
 	permissions := new([]models.Permission)
-	a.DB.GetPermissionsByPolicy(policy, permissions, "Permissions")
+	err := a.DB.GetPermissionsByPolicy(p, permissions, "Permissions")
+	if err != nil {
+
+	}
 	return permissions
 }
 
-func (a *Api) Check(userAct *userAction) bool {
+func (a *Api) check(userAct *userAction) bool {
 	user := new(models.User)
 	user.Name = userAct.Name
 	user.ID = userAct.ID
 	self := a.getSelfPermissions(user)
 	group := a.getGroupPermissions(user)
-	fmt.Println(group)
-	access := a.checkPermissions(self, userAct)
+	access, has := a.checkPermissions(self, userAct)
+	if !has {
+		access, _ = a.checkPermissions(group, userAct)
+	}
 	return access
 }
 
-func (a *Api) getSelfPermissions(user *models.User) []models.Permission {
+func (a *Api) getSelfPermissions(u *models.User) []models.Permission {
 	var permissions []models.Permission
-	a.GetPoliciesByUser(user)
-	policies := a.GetPoliciesByUser(user)
+	a.getPoliciesByUser(u)
+	policies := a.getPoliciesByUser(u)
 	for _, policy := range *policies {
-		p := a.GetPermissionsByPolicy(&policy)
+		p := a.getPermissionsByPolicy(&policy)
 		permissions = append(permissions, *p...)
 	}
 	return permissions
 }
 
-func (a *Api) getGroupPermissions(user *models.User) []models.Permission {
+func (a *Api) getGroupPermissions(u *models.User) []models.Permission {
 	var permissions []models.Permission
 	var policies []models.Policy
-	a.GetPoliciesByUser(user)
-	groups := a.GetGroupsByUser(user)
+	a.getPoliciesByUser(u)
+	groups := a.getGroupsByUser(u)
 	for _, group := range *groups {
-		p := a.GetPoliciesByGroup(&group)
+		p := a.getPoliciesByGroup(&group)
 		policies = append(policies, *p...)
 	}
 	for _, policy := range policies {
-		p := a.GetPermissionsByPolicy(&policy)
+		p := a.getPermissionsByPolicy(&policy)
 		permissions = append(permissions, *p...)
 	}
 	return permissions
 }
 
-func (a *Api) checkPermissions(permissions []models.Permission, userAct *userAction) bool {
+func (a *Api) checkPermissions(p []models.Permission, userAct *userAction) (bool, bool) {
 	result := false
-	for _, p := range permissions {
-		fmt.Println(p)
+	has := false
+	for _, p := range p {
 		if p.ActionID == userAct.Action && p.Resourse == userAct.Resourse {
+			has = true
 			result = p.Access
 			if !result {
 				break
 			}
 		}
 	}
-	return result
+	return result, has
 }
