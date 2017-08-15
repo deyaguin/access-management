@@ -9,7 +9,9 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"order": [
-				"1de4e90d-4b83-ce47-f7c0-11005aa95050"
+				"1de4e90d-4b83-ce47-f7c0-11005aa95050",
+				"55768481-fff1-9730-cc95-52519f9c987d",
+				"e498f7e7-29a6-4655-7bf8-146b30649b1c"
 			],
 			"owner": 0,
 			"folders_order": [],
@@ -20,7 +22,7 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"order": [
-				"97ef7772-1a5a-73ed-d37d-51b07e8960d2"
+				"40d034e5-3df7-a9a4-9606-76ae10918310"
 			],
 			"owner": 0,
 			"folders_order": [],
@@ -37,11 +39,11 @@
 	"requests": [
 		{
 			"id": "1de4e90d-4b83-ce47-f7c0-11005aa95050",
-			"headers": "Authorization: Bearer {{token}}\n",
+			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
-					"key": "Authorization",
-					"value": "Bearer {{token}}",
+					"key": "Content-Type",
+					"value": "application/json",
 					"description": "",
 					"enabled": true
 				}
@@ -57,56 +59,102 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1502194232653,
+			"time": 1502806218300,
 			"name": "users",
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"rawModeData": ""
+			"rawModeData": "{\n\t\"name\": \"\"\n}"
 		},
 		{
-			"id": "97ef7772-1a5a-73ed-d37d-51b07e8960d2",
-			"headers": "Authorization: Bearer {{token}}\n",
+			"id": "40d034e5-3df7-a9a4-9606-76ae10918310",
+			"headers": "Content-Type: application/json\n",
 			"headerData": [
 				{
-					"key": "Authorization",
-					"value": "Bearer {{token}}",
+					"key": "Content-Type",
+					"value": "application/json",
 					"description": "",
 					"enabled": true
 				}
 			],
-			"url": "http://localhost:8000/checkPermissions?resourse=docs&action=read",
-			"queryParams": [
-				{
-					"key": "resourse",
-					"value": "docs",
-					"equals": true,
-					"description": "",
-					"enabled": true
-				},
-				{
-					"key": "action",
-					"value": "read",
-					"equals": true,
-					"description": "",
-					"enabled": true
-				}
-			],
+			"url": "http://{{host}}/checkPermissions",
+			"queryParams": [],
 			"preRequestScript": "",
 			"pathVariables": {},
 			"pathVariableData": [],
-			"method": "GET",
+			"method": "POST",
 			"data": [],
 			"dataMode": "raw",
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1501740840889,
+			"time": 1502700614326,
 			"name": "checkPermissions",
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"rawModeData": ""
+			"isFromCollection": true,
+			"collectionRequestId": "40d034e5-3df7-a9a4-9606-76ae10918310",
+			"folder": "08c19fac-0927-dff6-3aed-dbaef1dd5e61",
+			"rawModeData": "{\n\t\"resourse\": \"docs\",\n\t\"action\": 3,\n\t\"user\": \"user100\",\n\t\"id\": 25\n}"
+		},
+		{
+			"id": "55768481-fff1-9730-cc95-52519f9c987d",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://{{host}}/users",
+			"queryParams": [],
+			"preRequestScript": "",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502806186026,
+			"name": "groups",
+			"description": "?page=n\nstatus=",
+			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
+			"responses": [],
+			"rawModeData": "{\n\t\"name\": \"asdasd\"\n}"
+		},
+		{
+			"id": "e498f7e7-29a6-4655-7bf8-146b30649b1c",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://{{host}}/policies",
+			"queryParams": [],
+			"preRequestScript": "",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502785837717,
+			"name": "policies",
+			"description": "?page=n\nstatus=",
+			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
+			"responses": [],
+			"rawModeData": "{\n\t\"name\": \"policy\",\n\t\"permissions\": [\n\t\t{\n\t\t\t\"resourse\": \"docs\",\n\t\t\t\"access\": false,\n\t\t\t\"actionID\":\t1\n\t\t},\n\t\t{\n\t\t\t\"resourse\": \"docs\",\n\t\t\t\"access\": true,\n\t\t\t\"actionID\":\t2\n\t\t}\n\t]\n}"
 		}
 	]
 }
