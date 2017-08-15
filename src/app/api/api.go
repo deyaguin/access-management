@@ -10,19 +10,19 @@ type (
 	Api struct {
 		DB db.DB
 	}
-	CustomValidator struct {
+	MyValidator struct {
 		validator *validator.Validate
 	}
 )
 
-func (cV *CustomValidator) Validate(i interface{}) error {
+func (cV *MyValidator) Validate(i interface{}) error {
 	return cV.validator.Struct(i)
 }
 
 
 func (a *Api) Init() {
 	e := echo.New()
-	e.Validator = &CustomValidator{validator: validator.New()}
+	e.Validator = &MyValidator{validator: validator.New()}
 
 	e.POST("/users", a.createUser)
 	e.GET("/users", a.getUsers)

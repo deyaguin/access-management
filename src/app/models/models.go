@@ -37,10 +37,10 @@ func (p *Policy) Equals(comparedP *Policy) bool {
 }
 
 type Permission struct {
-	ID       uint `json:"id"`
+	ID uint `json:"id"`
 	Resourse string `validate:"required"`
-	Access   bool `validate:"required"`
-	ActionID uint `gorm:"column:action_id"`
+	Access bool
+	ActionID uint `gorm:"column:action_id"validate:"required"`
 	PolicyID uint `gorm:"column:policy_id"`
 }
 
