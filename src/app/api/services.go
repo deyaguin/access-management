@@ -30,7 +30,6 @@ func (a *Api) getPermissionsByPolicy(pol *models.Policy) (*[]models.Permission, 
 
 func (a *Api) check(userAct *checkParams) (bool, error) {
 	user := new(models.User)
-	user.Name = userAct.Name
 	user.ID = userAct.ID
 	self, err := a.getSelfPermissions(user)
 	if err != nil {
@@ -70,6 +69,7 @@ func (a *Api) getGroupPermissions(u *models.User) ([]models.Permission, error) {
 		policies = append(policies, *p...)
 		if e != nil {
 			err = e
+			break
 		}
 	}
 	for _, policy := range policies {
@@ -77,6 +77,7 @@ func (a *Api) getGroupPermissions(u *models.User) ([]models.Permission, error) {
 		permissions = append(permissions, *p...)
 		if e != nil {
 			err = e
+			break
 		}
 	}
 	return permissions, err

@@ -1,0 +1,5 @@
+development:
+  dialect: postgres
+  datasource: dbname=accesscontrol sslmode=disable user=accessControl password=agryz2010 host=localhost
+  dir: migrations
+  table: migrations

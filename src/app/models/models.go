@@ -3,8 +3,8 @@ package models
 type User struct {
 	ID uint `json:"id"`
 	Name string `validate:"required"`
-	Groups []Group `gorm:"many2many:user_groups"json:"-"`
-	Policies []Policy `gorm:"many2many:user_policies"json:"-"`
+	Groups []Group `gorm:"many2many:user_groups;save_associations:false"`
+	Policies []Policy `gorm:"many2many:user_policies;save_associations:false"`
 }
 
 func (u *User) Equals(comparedU *User) bool {
@@ -15,7 +15,8 @@ func (u *User) Equals(comparedU *User) bool {
 type Group struct {
 	ID uint `json:"id"`
 	Name string `validate:"required"`
-	Policies []Policy `gorm:"many2many:group_policies"json:"-"`
+	Users []User `gorm:"many2many:user_groups;save_associations:false"`
+	Policies []Policy `gorm:"many2many:group_policies;save_associations:false"`
 }
 
 func (g *Group) Equals(comparedG *Group) bool {
@@ -26,9 +27,9 @@ func (g *Group) Equals(comparedG *Group) bool {
 type Policy struct {
 	ID uint `json:"id"`
 	Name string `validate:"required"`
-	Groups []Group `gorm:"many2many:group_policies"json:"-"`
-	Users []User `gorm:"many2many:user_policies"json:"-"`
-	Permissions []Permission `json:"permissions"`
+	Groups []Group `gorm:"many2many:group_policies;save_associations:false"`
+	Users []User `gorm:"many2many:user_policies;save_associations:false"`
+	Permissions []Permission
 }
 
 func (p *Policy) Equals(comparedP *Policy) bool {
@@ -54,7 +55,7 @@ func (p *Permission) Equals(comparedP Permission) bool {
 type Action struct {
 	ID uint `json:"id"`
 	Name string `validate:"required"`
-	Permissions []Permission `json:"-"`
+	Permissions []Permission
 }
 
 func (a *Action) Equals(comparedA Action) bool {
@@ -65,7 +66,7 @@ func (a *Action) Equals(comparedA Action) bool {
 type Service struct {
 	ID uint `json:"id"`
 	Name string `validate:"required"`
-	Actions []Action `json:"-"`
+	Actions []Action
 }
 
 func (s *Service) Equals(comparedS Service) bool {
