@@ -22,7 +22,13 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"order": [
-				"40d034e5-3df7-a9a4-9606-76ae10918310"
+				"40d034e5-3df7-a9a4-9606-76ae10918310",
+				"422c1a43-4cfe-2bc5-22de-f2ca80347264",
+				"9da9eae4-9a66-8712-a328-a7c8990e8928",
+				"1f4cafe9-195e-a0c2-1cbd-897274404f8c",
+				"985c09ff-d667-0b10-7121-38d6237b6555",
+				"1997eac0-5698-0cc9-b342-41dd9c1de186",
+				"e01ae289-3610-b25a-1b31-ff7ceef5ca37"
 			],
 			"owner": 0,
 			"folders_order": [],
@@ -37,6 +43,35 @@
 	"owner": 0,
 	"public": false,
 	"requests": [
+		{
+			"id": "1997eac0-5698-0cc9-b342-41dd9c1de186",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://{{host}}/detachUsersFromPolicy",
+			"queryParams": [],
+			"preRequestScript": "",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502887981308,
+			"name": "detachUsersFromPolicy",
+			"description": "?page=n\nstatus=",
+			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
+			"responses": [],
+			"rawModeData": ""
+		},
 		{
 			"id": "1de4e90d-4b83-ce47-f7c0-11005aa95050",
 			"headers": "Content-Type: application/json\n",
@@ -53,18 +88,47 @@
 			"preRequestScript": "",
 			"pathVariables": {},
 			"pathVariableData": [],
-			"method": "GET",
+			"method": "PUT",
 			"data": [],
 			"dataMode": "raw",
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1502806218300,
+			"time": 1502887935550,
 			"name": "users",
+			"description": "",
+			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
+			"responses": [],
+			"rawModeData": "{\n\t\"id\": 26,\n\t\"name\": \"test\",\n\t\"groups\": [{\n\t\t\"id\": 2\n\t}, {\n\t\t\"id\": 1\t\n\t}, {\n\t\t\"id\": 9\n\t}]\n}"
+		},
+		{
+			"id": "1f4cafe9-195e-a0c2-1cbd-897274404f8c",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://{{host}}/detachPoliciesFromUser",
+			"queryParams": [],
+			"preRequestScript": "",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502887977204,
+			"name": "detachPoliciesFromUser",
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"rawModeData": "{\n\t\"name\": \"\"\n}"
+			"rawModeData": ""
 		},
 		{
 			"id": "40d034e5-3df7-a9a4-9606-76ae10918310",
@@ -88,15 +152,41 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1502700614326,
+			"time": 1502870000296,
 			"name": "checkPermissions",
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"isFromCollection": true,
-			"collectionRequestId": "40d034e5-3df7-a9a4-9606-76ae10918310",
-			"folder": "08c19fac-0927-dff6-3aed-dbaef1dd5e61",
-			"rawModeData": "{\n\t\"resourse\": \"docs\",\n\t\"action\": 3,\n\t\"user\": \"user100\",\n\t\"id\": 25\n}"
+			"rawModeData": "{\n\t\"resourse\": \"docs\",\n\t\"action\": 3,\n\t\"id\": 25\n}\n"
+		},
+		{
+			"id": "422c1a43-4cfe-2bc5-22de-f2ca80347264",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://{{host}}/removeUserFromGroups",
+			"queryParams": [],
+			"preRequestScript": "",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502887939778,
+			"name": "removeUserFromGroups",
+			"description": "?page=n\nstatus=",
+			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
+			"responses": [],
+			"rawModeData": "{\n\t\"id\": 26,\n\t\"groups\": [{\n\t\t\"id\": 9\n\t}, {\n\t\t\"id\": 1\n\t}, {\n\t\t\"id\": 2\n\t}]\n}\n"
 		},
 		{
 			"id": "55768481-fff1-9730-cc95-52519f9c987d",
@@ -122,10 +212,97 @@
 			"helperAttributes": {},
 			"time": 1502806186026,
 			"name": "groups",
-			"description": "?page=n\nstatus=",
+			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
 			"rawModeData": "{\n\t\"name\": \"asdasd\"\n}"
+		},
+		{
+			"id": "985c09ff-d667-0b10-7121-38d6237b6555",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://{{host}}/detachPoliciesFromGroup",
+			"queryParams": [],
+			"preRequestScript": "",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502887979061,
+			"name": "detachPoliciesFromGroup",
+			"description": "?page=n\nstatus=",
+			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
+			"responses": [],
+			"rawModeData": ""
+		},
+		{
+			"id": "9da9eae4-9a66-8712-a328-a7c8990e8928",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://{{host}}/removeUsersFromGroup",
+			"queryParams": [],
+			"preRequestScript": "",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502887975045,
+			"name": "removeUsersFromGroup",
+			"description": "?page=n\nstatus=",
+			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
+			"responses": [],
+			"rawModeData": ""
+		},
+		{
+			"id": "e01ae289-3610-b25a-1b31-ff7ceef5ca37",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://{{host}}/detachGroupsFromPolicy",
+			"queryParams": [],
+			"preRequestScript": "",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502887983492,
+			"name": "detachGroupsFromPolicy",
+			"description": "?page=n\nstatus=",
+			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
+			"responses": [],
+			"rawModeData": ""
 		},
 		{
 			"id": "e498f7e7-29a6-4655-7bf8-146b30649b1c",
@@ -149,12 +326,12 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1502785837717,
+			"time": 1502887937541,
 			"name": "policies",
-			"description": "?page=n\nstatus=",
+			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"rawModeData": "{\n\t\"name\": \"policy\",\n\t\"permissions\": [\n\t\t{\n\t\t\t\"resourse\": \"docs\",\n\t\t\t\"access\": false,\n\t\t\t\"actionID\":\t1\n\t\t},\n\t\t{\n\t\t\t\"resourse\": \"docs\",\n\t\t\t\"access\": true,\n\t\t\t\"actionID\":\t2\n\t\t}\n\t]\n}"
+			"rawModeData": "{\n\t\"name\": \"policy22\",\n\t\"permissions\": [\n\t\t{\n\t\t\t\"resourse\": \"docs\",\n\t\t\t\"access\": false,\n\t\t\t\"actionID\":\t1\n\t\t},\n\t\t{\n\t\t\t\"resourse\": \"docs\",\n\t\t\t\"access\": true,\n\t\t\t\"actionID\":\t2\n\t\t}\n\t]\n}"
 		}
 	]
 }

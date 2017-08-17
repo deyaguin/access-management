@@ -11,7 +11,10 @@ type App struct {
 }
 
 func (app *App) Init() {
-	pgDB := db.SqlDBCreator("postgres", "host=localhost user=accessControl dbname=accesscontrol password=agryz2010")
+	pgDB, err := db.SqlDBCreator("postgres", "host=localhost user=accessControl dbname=accesscontrol password=agryz2010")
+	if err != nil {
+		panic(err)
+	}
 	api := api.Api{
 		pgDB,
 	}
