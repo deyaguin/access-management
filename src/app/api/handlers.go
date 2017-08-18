@@ -58,9 +58,9 @@ func (a *Api) getUser(c echo.Context) (err error) {
 func (a *Api) updateUser(c echo.Context) (err error) {
 	user := new(models.User)
 	c.Bind(user)
-	if err = c.Validate(user); err != nil {
-		return c.JSON(http.StatusOK, err.Error())
-	}
+	//if err = c.Validate(user); err != nil {
+	//	return c.JSON(http.StatusOK, err.Error())
+	//}
 	if err = a.DB.UpdateUser(user); err != nil {
 		c.Logger().Error(err)
 		return err
@@ -71,9 +71,9 @@ func (a *Api) updateUser(c echo.Context) (err error) {
 func (a *Api) deleteUser(c echo.Context) (err error) {
 	user := new(models.User)
 	c.Bind(user)
-	if err = c.Validate(user); err != nil {
-		return c.JSON(http.StatusOK, err.Error())
-	}
+	//if err = c.Validate(user); err != nil {
+	//	return c.JSON(http.StatusOK, err.Error())
+	//}
 	if err = a.DB.DeleteUser(user); err != nil {
 		c.Logger().Error(err)
 		return err
@@ -126,9 +126,9 @@ func (a *Api) getGroup(c echo.Context) (err error) {
 func (a *Api) updateGroup(c echo.Context) (err error) {
 	group := new(models.Group)
 	c.Bind(group)
-	if err = c.Validate(group); err != nil {
-		return c.JSON(http.StatusOK, err.Error())
-	}
+	//if err = c.Validate(group); err != nil {
+	//	return c.JSON(http.StatusOK, err.Error())
+	//}
 	if err = a.DB.UpdateGroup(group); err != nil {
 		c.Logger().Error(err)
 		return err
@@ -139,9 +139,9 @@ func (a *Api) updateGroup(c echo.Context) (err error) {
 func (a *Api) deleteGroup(c echo.Context) (err error) {
 	group := new(models.Group)
 	c.Bind(group)
-	if err = c.Validate(group); err != nil {
-		return c.JSON(http.StatusOK, err.Error())
-	}
+	//if err = c.Validate(group); err != nil {
+	//	return c.JSON(http.StatusOK, err.Error())
+	//}
 	if err = a.DB.DeleteGroup(group); err != nil {
 		c.Logger().Error(err)
 		return err
@@ -196,9 +196,9 @@ func (a *Api) getPolicy(c echo.Context) (err error) {
 func (a *Api) updatePolicy(c echo.Context) (err error) {
 	policy := new(models.Policy)
 	c.Bind(policy)
-	if err = c.Validate(policy); err != nil {
-		return c.JSON(http.StatusOK, err.Error())
-	}
+	//if err = c.Validate(policy); err != nil {
+	//	return c.JSON(http.StatusOK, err.Error())
+	//}
 	if err = a.DB.UpdatePolicy(policy); err != nil {
 		c.Logger().Error(err)
 		return err
@@ -209,9 +209,9 @@ func (a *Api) updatePolicy(c echo.Context) (err error) {
 func (a *Api) deletePolicy(c echo.Context) (err error) {
 	group := new(models.Policy)
 	c.Bind(group)
-	if err = c.Validate(group); err != nil {
-		return c.JSON(http.StatusOK, err.Error())
-	}
+	//if err = c.Validate(group); err != nil {
+	//	return c.JSON(http.StatusOK, err.Error())
+	//}
 	if err = a.DB.DeletePolicy(group); err != nil {
 		c.Logger().Error(err)
 		return err
