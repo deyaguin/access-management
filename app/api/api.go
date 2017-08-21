@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/labstack/echo"
-	"app/db"
+	"gitlab/nefco/accessControl/app/db"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -24,17 +24,17 @@ func (a *Api) Init() {
 	e.Validator = &MyValidator{validator: validator.New()}
 
 	e.POST("/users", a.createUser)
-	e.GET("/users", a.getUsers)
-	e.PUT("/users", a.updateUser)
-	e.DELETE("/users", a.deleteUser)
+	e.GET("/users/:id", a.getUser)
+	e.PATCH("/users/:id", a.updateUser)
+	e.DELETE("/users/:id", a.deleteUser)
 	e.POST("/groups", a.createGroup)
-	e.GET("/groups", a.getGroups)
-	e.PUT("/groups", a.updateGroup)
-	e.DELETE("groups", a.deleteGroup)
+	e.GET("/groups/:id", a.getGroup)
+	e.PATCH("/groups/:id", a.updateGroup)
+	e.DELETE("/groups/:id", a.deleteGroup)
 	e.POST("/policies", a.createPolicy)
-	e.GET("/policies", a.getPolicies)
-	e.PUT("/policies", a.updatePolicy)
-	e.DELETE("/policies", a.deletePolicy)
+	e.GET("/policies/:id", a.getPolicy)
+	e.PATCH("/policies/:id", a.updatePolicy)
+	e.DELETE("/policies/:id", a.deletePolicy)
 
 	e.POST("/addUserToGroups", a.addUserToGroups)
 	e.POST("/addUsersToGroup", a.addUsersToGroup)

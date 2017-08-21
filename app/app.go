@@ -1,14 +1,13 @@
 package app
 
 import (
-	"app/api"
-	"app/db"
 	//_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"gitlab/nefco/accessControl/app/api"
+	"gitlab/nefco/accessControl/app/db"
 )
 
 type App struct {
-
 }
 
 func (app *App) Init() {

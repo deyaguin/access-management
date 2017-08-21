@@ -1,6 +1,6 @@
 package main
 
-import "app"
+import "gitlab/nefco/accessControl/app"
 
 func main() {
 	app := new(app.App)

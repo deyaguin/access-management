@@ -89,23 +89,23 @@
 					"enabled": true
 				}
 			],
-			"url": "http://{{host}}/users",
+			"url": "http://{{host}}/users/16",
 			"queryParams": [],
 			"preRequestScript": "",
 			"pathVariables": {},
 			"pathVariableData": [],
-			"method": "PUT",
+			"method": "DELETE",
 			"data": [],
 			"dataMode": "raw",
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1502887935550,
+			"time": 1503325070766,
 			"name": "users",
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"rawModeData": "{\n\t\"id\": 26,\n\t\"name\": \"test\",\n\t\"groups\": [{\n\t\t\"id\": 2\n\t}, {\n\t\t\"id\": 1\t\n\t}, {\n\t\t\"id\": 9\n\t}]\n}"
+			"rawModeData": "{\n\t\"name\": \"u3\"\n}"
 		},
 		{
 			"id": "1f4cafe9-195e-a0c2-1cbd-897274404f8c",

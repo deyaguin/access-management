@@ -1,12 +1,12 @@
 package api
 
 import (
-	"app/models"
+	"gitlab/nefco/accessControl/app/models"
 )
 
 func (a *Api) getPoliciesByUser(u *models.User) (*[]models.Policy, error) {
 	p := new([]models.Policy)
-	e := a.DB.GetPoliciesByUser(u, p, "Policies" )
+	e := a.DB.GetPoliciesByUser(u, p, "Policies")
 	return p, e
 }
 
@@ -60,7 +60,7 @@ func (a *Api) getSelfPermissions(u *models.User) ([]models.Permission, error) {
 
 func (a *Api) getGroupPermissions(u *models.User) ([]models.Permission, error) {
 	var (
-		policies []models.Policy
+		policies    []models.Policy
 		permissions []models.Permission
 	)
 	groups, err := a.getGroupsByUser(u)

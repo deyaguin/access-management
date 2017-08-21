@@ -1,12 +1,12 @@
 {
   "imports": {
-    "echo": "go get -u github.com/labstack/echo",
+    "echo": "go get -u github.com/labstack/echo/...",
     "gorm": "go get -u github.com/jinzhu/gorm",
     "validator": "go get gopkg.in/go-playground/validator.v9",
     "migrations": "go get github.com/rubenv/sql-migrate/..."
   },
   "scripts": {
-    "installPackages": "go get -u github.com/jinzhu/gorm && go get -u github.com/jinzhu/gorm && go get gopkg.in/go-playground/validator.v9 && go get github.com/rubenv/sql-migrate/..."
+    "installPackages": "go get -u github.com/jinzhu/gorm && go get -u github.com/labstack/echo/... && go get -u gopkg.in/go-playground/validator.v9 && go get github.com/rubenv/sql-migrate/..."
   },
   "name": "accesscontrol",
   "version": "1.0.0",

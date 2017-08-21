@@ -2,7 +2,7 @@ package db
 
 import (
 	"github.com/jinzhu/gorm"
-	"app/models"
+	"gitlab/nefco/accessControl/app/models"
 )
 
 type DB interface {
@@ -15,22 +15,23 @@ type DB interface {
 	CreateGroup(*models.Group) error
 	GetGroups() (*[]models.Group, error)
 	GetGroup(int) (*models.Group, error)
-	UpdateGroup(*models.Group) (error)
-	DeleteGroup(*models.Group) (error)
+	UpdateGroup(*models.Group) error
+	DeleteGroup(*models.Group) error
 
 	CreatePolicy(*models.Policy) error
 	GetPolicies() (*[]models.Policy, error)
 	GetPolicy(int) (*models.Policy, error)
-	UpdatePolicy(*models.Policy) (error)
-	DeletePolicy(*models.Policy) (error)
+	UpdatePolicy(*models.Policy) error
+	DeletePolicy(*models.Policy) error
 
 	CreatePermission(*models.Permission) error
+	GetPermission(int) (*models.Permission, error)
 	UpdatePermission(*models.Permission) error
 	DeletePermission(*models.Permission) error
 
 	//CreateAction(*models.Action) error
 	//GetActions(*[]models.Action) error
-	//GetAction(id uint) error
+	GetAction(id int) (*models.Action, error)
 	//UpdateAction(*models.Action) error
 	//DeleteAction(*models.Action) error
 
@@ -60,129 +61,26 @@ type SqlDB struct {
 
 ///user
 
-func (dataBase SqlDB) CreateUser(u *models.User) (e error) {
-	e = dataBase.db.Create(u).Error
-	return e
-}
 
-func (dataBase SqlDB) GetUsers() (u *[]models.User, e error) {
-	u = new([]models.User)
-	e = dataBase.db.Find(u).Error
-	return u, e
-}
-
-func (dataBase SqlDB) GetUser(key int) (u *models.User, e error) {
-	u = new(models.User)
-	e = dataBase.db.Where(key).Find(u).Error
-	return u, e
-}
-
-func (dataBase SqlDB) UpdateUser(u *models.User) (e error) {
-	e = dataBase.db.Save(u).Error
-	return e
-}
-
-func (dataBase SqlDB) DeleteUser(u *models.User) (e error) {
-	e = dataBase.db.Delete(u).Error
-	return e
-}
 
 ///group
 
-func (dataBase SqlDB) CreateGroup(g *models.Group) (e error) {
-	e = dataBase.db.Create(g).Error
-	return e
-}
 
-func (dataBase SqlDB) GetGroups() (g *[]models.Group, e error) {
-	g = new([]models.Group)
-	e = dataBase.db.Find(g).Error
-	return g, e
-}
-
-func (dataBase SqlDB) GetGroup(key int) (g *models.Group, e error) {
-	g = new(models.Group)
-	e = dataBase.db.Where(key).Find(g).Error
-	return g, e
-}
-
-func (dataBase SqlDB) UpdateGroup(g *models.Group) (e error) {
-	e = dataBase.db.Save(g).Error
-	return e
-}
-
-func (dataBase SqlDB) DeleteGroup(g *models.Group) (e error) {
-	e = dataBase.db.Delete(g).Error
-	return e
-}
 
 ///policy
 
-func (dataBase SqlDB) CreatePolicy(p *models.Policy) (e error) {
-	e = dataBase.db.Create(p).Error
-	return e
-}
 
-func (dataBase SqlDB) GetPolicies() (p *[]models.Policy, e error) {
-	p = new([]models.Policy)
-	e = dataBase.db.Find(p).Error
-	return p, e
-}
-
-func (dataBase SqlDB) GetPolicy(key int) (p *models.Policy, e error) {
-	p = new(models.Policy)
-	e = dataBase.db.Where(key).Find(p).Error
-	return p, e
-}
-
-func (dataBase SqlDB) UpdatePolicy(p *models.Policy) (e error) {
-	e = dataBase.db.Save(p).Error
-	return e
-}
-
-func (dataBase SqlDB) DeletePolicy(p *models.Policy) (e error) {
-	e = dataBase.db.Delete(p).Error
-	return e
-}
 
 ///permission
 
-func (dataBase SqlDB) CreatePermission(p *models.Permission) (e error) {
-	e = dataBase.db.Create(p).Error
-	return e
-}
 
-func (dataBase SqlDB) UpdatePermission(p *models.Permission) (e error) {
-	e = dataBase.db.Save(p).Error
-	return e
-}
 
-func (dataBase SqlDB) DeletePermission(p *models.Permission) (e error) {
-	e = dataBase.db.Delete(p).Error
-	return e
-}
+///action
+
 
 ///getBy
 
-func (dataBase SqlDB) GetPoliciesByUser(u *models.User, p *[]models.Policy, c string) (e error) {
-	e = dataBase.db.Model(u).Related(p, c).Error
-	return e
-}
 
-func (dataBase SqlDB) GetPoliciesByGroup(g *models.Group, p *[]models.Policy, c string) (e error) {
-	e = dataBase.db.Model(g).Related(p, c).Error
-	return e
-}
-
-func (dataBase SqlDB) GetGroupsByUser(u *models.User, g *[]models.Group, c string) (e error) {
-	e = dataBase.db.Model(u).Related(g, c).Error
-	return e
-}
-
-func (dataBase SqlDB) GetPermissionsByPolicy(pol *models.Policy, per *[]models.Permission, c string) (e error) {
-	e = dataBase.db.Model(pol).Related(per).Error
-	return e
-}
 
 ///associations
 
