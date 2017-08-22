@@ -8,6 +8,9 @@ CREATE TABLE permissions
   action_id integer,
   policy_id integer NOT NULL,
   access boolean,
+  created_at date,
+  updated_at date,
+  deleted_at date,
   CONSTRAINT action_id FOREIGN KEY (action_id)
       REFERENCES actions (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,

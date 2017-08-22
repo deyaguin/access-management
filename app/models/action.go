@@ -1,7 +1,8 @@
 package models
 
 type Action struct {
-	ID          int    `json:"id"`
+	ID          int `json:"id"`
+	UUID        string
 	Name        string `validate:"required"`
 	Permissions []Permission
 }

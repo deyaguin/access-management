@@ -1,7 +1,14 @@
 package models
 
+import (
+	"time"
+)
+
 type Permission struct {
-	ID       int    `json:"id"`
+	ID        int `json:"id"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
 	Resourse string `validate:"required"`
 	Access   bool   `validate:"required"`
 	ActionID int    `gorm:"column:action_id" validate:"required"`

@@ -1,7 +1,14 @@
 package models
 
+import (
+	"time"
+)
+
 type Policy struct {
-	ID          int    `json:"id"`
+	ID        int `json:"id"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
 	Name        string  `validate:"required"`
 	Groups      []Group `gorm:"many2many:group_policies;save_associations:false"`
 	Users       []User  `gorm:"many2many:user_policies;save_associations:false"`

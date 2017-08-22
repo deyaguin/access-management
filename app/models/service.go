@@ -1,7 +1,8 @@
 package models
 
 type Service struct {
-	ID      int   `json:"id"`
+	ID      int `json:"id"`
+	UUID    string
 	Name    string `validate:"required"`
 	Actions []Action
 }
