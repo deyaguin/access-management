@@ -8,10 +8,10 @@ import (
 )
 
 type App struct {
-
+	api api.Api
 }
 
-func (app *App) Init() {
+func (app *App) AppCreator() {
 	pgDB, err := db.SqlDBCreator("postgres", "host=localhost user=accessControl dbname=accesscontrol password=agryz2010")
 	//sqliteDB, err := db.SqlDBCreator("sqlite3", "test.db")
 	if err != nil {
@@ -21,5 +21,9 @@ func (app *App) Init() {
 		pgDB,
 		//sqliteDB,
 	}
-	api.Init()
+	app.api = api
+}
+
+func (app *App) Init() {
+	app.api.Init()
 }

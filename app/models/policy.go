@@ -5,9 +5,9 @@ import (
 )
 
 type Policy struct {
-	ID          int `json:"id"`
-	CreatedAt   time.Time `json:"-"`
-	UpdatedAt   time.Time `json:"-"`
+	ID          int        `json:"id"`
+	CreatedAt   time.Time  `json:"-"`
+	UpdatedAt   time.Time  `json:"-"`
 	DeletedAt   *time.Time `json:"-"`
 	Name        string
 	Groups      []Group      `gorm:"many2many:group_policies;save_associations:false" json:"-"`
