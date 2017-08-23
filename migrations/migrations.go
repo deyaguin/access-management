@@ -35,17 +35,25 @@ var migrate1 = &gormigrate.Migration{
 }
 
 func (migration *Migration) Init() {
-	pgDB, err := gorm.Open("postgres", "host=localhost user=accessControl dbname=test password=agryz2010")
+	//pgDB, err := gorm.Open("postgres", "host=localhost user=accessControl dbname=test password=agryz2010")
+	sqliteDB, err := gorm.Open("sqlite3", "test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err = pgDB.DB().Ping(); err != nil {
+	//if err = pgDB.DB().Ping(); err != nil {
+	//	log.Fatal(err)
+	//}
+	if err = sqliteDB.DB().Ping(); err != nil {
 		log.Fatal(err)
 	}
 
-	pgDB.LogMode(true)
+	//pgDB.LogMode(true)
+	sqliteDB.LogMode(true)
 
-	m := gormigrate.New(pgDB, gormigrate.DefaultOptions, []*gormigrate.Migration{
+	//m := gormigrate.New(pgDB, gormigrate.DefaultOptions, []*gormigrate.Migration{
+	//	migrate1,
+	//})
+	m := gormigrate.New(sqliteDB, gormigrate.DefaultOptions, []*gormigrate.Migration{
 		migrate1,
 	})
 
