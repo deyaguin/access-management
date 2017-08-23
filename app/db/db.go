@@ -44,10 +44,11 @@ type DB interface {
 	AttachPoliciesByGroup(*models.Group, *[]models.Policy) error
 	DetachPoliciesByGroup(*models.Group, *[]models.Policy) error
 
-	GetPoliciesByUser(*models.User, *[]models.Policy, string) error
-	GetPoliciesByGroup(*models.Group, *[]models.Policy, string) error
-	GetGroupsByUser(*models.User, *[]models.Group, string) error
-	GetPermissionsByPolicy(*models.Policy, *[]models.Permission, string) error
+	GetPoliciesByUser(*models.User, *[]models.Policy) error
+	GetPoliciesByGroup(*models.Group, *[]models.Policy) error
+	GetGroupsByUser(*models.User, *[]models.Group) error
+	GetUsersByGroup(*models.Group, *[]models.User) error
+	GetPermissionsByPolicy(*models.Policy, *[]models.Permission) error
 }
 
 type SqlDB struct {

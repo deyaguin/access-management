@@ -2,9 +2,8 @@ package models
 
 type Service struct {
 	ID      int `json:"id"`
-	UUID    string
-	Name    string `validate:"required"`
-	Actions []Action
+	Name    string
+	Actions []Action `json:"-"`
 }
 
 func (s *Service) Equals(comparedS Service) bool {

@@ -2,9 +2,8 @@ package models
 
 type Action struct {
 	ID          int `json:"id"`
-	UUID        string
-	Name        string `validate:"required"`
-	Permissions []Permission
+	Name        string
+	Permissions []Permission `json:"-"`
 }
 
 func (a *Action) Equals(comparedA Action) bool {

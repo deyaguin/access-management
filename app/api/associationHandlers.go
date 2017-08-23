@@ -7,6 +7,19 @@ import (
 	"strconv"
 )
 
+type users struct {
+	Users []models.User `validate:"required"`
+}
+type groups struct {
+	Groups []models.Group `validate:"required"`
+}
+type policies struct {
+	Policies []models.Policy `validate:"required"`
+}
+type permissions struct {
+	Permissions []models.Permission `validate:"required"`
+}
+
 func (a *Api) addUsersToGroup(c echo.Context) (err error) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -17,15 +30,17 @@ func (a *Api) addUsersToGroup(c echo.Context) (err error) {
 		return c.JSON(http.StatusNotFound, "group not found")
 	}
 	group := &models.Group{ID: id}
-	c.Bind(group)
-	users := group.Users
-	for _, u := range users {
+	users := new(users)
+	c.Bind(users)
+	if err = c.Validate(users); err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+	for _, u := range users.Users {
 		if _, err = a.DB.GetUser(u.ID); err != nil {
 			return c.JSON(http.StatusNotFound, "user not found")
-			break
 		}
 	}
-	if err = a.DB.AddUsersToGroup(group, &users); err != nil {
+	if err = a.DB.AddUsersToGroup(group, &users.Users); err != nil {
 		c.Logger().Error(err)
 		return err
 	}
@@ -42,15 +57,14 @@ func (a *Api) removeUsersFromGroup(c echo.Context) (err error) {
 		return c.JSON(http.StatusNotFound, "group not found")
 	}
 	group := &models.Group{ID: id}
-	c.Bind(group)
-	users := group.Users
-	for _, u := range users {
+	users := new(users)
+	c.Bind(users)
+	for _, u := range users.Users {
 		if _, err = a.DB.GetUser(u.ID); err != nil {
 			return c.JSON(http.StatusNotFound, "user not found")
-			break
 		}
 	}
-	if err = a.DB.RemoveUsersFromGroup(group, &users); err != nil {
+	if err = a.DB.RemoveUsersFromGroup(group, &users.Users); err != nil {
 		c.Logger().Error(err)
 		return err
 	}
@@ -67,14 +81,17 @@ func (a *Api) addPermissionsToPolicy(c echo.Context) (err error) {
 		return c.JSON(http.StatusNotFound, "policy not found")
 	}
 	policy := &models.Policy{ID: id}
-	c.Bind(policy)
-	permissions := policy.Permissions
-	for p := range permissions {
+	permissions := new(permissions)
+	c.Bind(permissions)
+	if err = c.Validate(permissions); err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+	for _, p := range permissions.Permissions {
 		if err = c.Validate(p); err != nil {
 			return c.JSON(http.StatusBadRequest, err.Error())
 		}
 	}
-	if err = a.DB.AddPermissionsToPolicy(policy, &permissions); err != nil {
+	if err = a.DB.AddPermissionsToPolicy(policy, &permissions.Permissions); err != nil {
 		c.Logger().Error(err)
 		return err
 	}
@@ -91,15 +108,15 @@ func (a *Api) removePermissionsFromPolicy(c echo.Context) (err error) {
 		return c.JSON(http.StatusNotFound, "policy not found")
 	}
 	policy := &models.Policy{ID: id}
-	c.Bind(policy)
-	permissions := policy.Permissions
-	for _, p := range permissions {
+	permissions := new(permissions)
+	c.Bind(permissions)
+	for _, p := range permissions.Permissions {
 		if _, err = a.DB.GetPermission(p.ID); err != nil {
 			return c.JSON(http.StatusNotFound, "permission not found")
 			break
 		}
 	}
-	if err = a.DB.RemovePermissionsFromPolicy(policy, &permissions); err != nil {
+	if err = a.DB.RemovePermissionsFromPolicy(policy, &permissions.Permissions); err != nil {
 		c.Logger().Error(err)
 		return err
 	}
@@ -116,15 +133,15 @@ func (a *Api) attachPoliciesByUser(c echo.Context) (err error) {
 		return c.JSON(http.StatusNotFound, "user not found")
 	}
 	user := &models.User{ID: id}
-	c.Bind(user)
-	policies := user.Policies
-	for _, p := range policies {
+	policies := new(policies)
+	c.Bind(policies)
+	for _, p := range policies.Policies {
 		if _, err = a.DB.GetPolicy(p.ID); err != nil {
 			return c.JSON(http.StatusNotFound, "policy not found")
 			break
 		}
 	}
-	if err = a.DB.AttachPoliciesByUser(user, &policies); err != nil {
+	if err = a.DB.AttachPoliciesByUser(user, &policies.Policies); err != nil {
 		c.Logger().Error(err)
 		return err
 	}
@@ -141,15 +158,15 @@ func (a *Api) detachPoliciesByUser(c echo.Context) (err error) {
 		return c.JSON(http.StatusNotFound, "user not found")
 	}
 	user := &models.User{ID: id}
-	c.Bind(user)
-	policies := user.Policies
-	for _, p := range policies {
+	policies := new(policies)
+	c.Bind(policies)
+	for _, p := range policies.Policies {
 		if _, err = a.DB.GetPolicy(p.ID); err != nil {
 			return c.JSON(http.StatusNotFound, "policy not found")
 			break
 		}
 	}
-	if err = a.DB.DetachPoliciesByUser(user, &policies); err != nil {
+	if err = a.DB.DetachPoliciesByUser(user, &policies.Policies); err != nil {
 		c.Logger().Error(err)
 		return err
 	}
@@ -166,15 +183,15 @@ func (a *Api) attachPoliciesByGroup(c echo.Context) (err error) {
 		return c.JSON(http.StatusNotFound, "group not found")
 	}
 	group := &models.Group{ID: id}
-	c.Bind(group)
-	policies := group.Policies
-	for _, p := range policies {
+	policies := new(policies)
+	c.Bind(policies)
+	for _, p := range policies.Policies {
 		if _, err = a.DB.GetPolicy(p.ID); err != nil {
 			return c.JSON(http.StatusNotFound, "policy not found")
 			break
 		}
 	}
-	if err = a.DB.AttachPoliciesByGroup(group, &policies); err != nil {
+	if err = a.DB.AttachPoliciesByGroup(group, &policies.Policies); err != nil {
 		c.Logger().Error(err)
 		return err
 	}
@@ -191,15 +208,15 @@ func (a *Api) detachPoliciesByGroup(c echo.Context) (err error) {
 		return c.JSON(http.StatusNotFound, "group not found")
 	}
 	group := &models.Group{ID: id}
-	c.Bind(group)
-	policies := group.Policies
-	for _, p := range policies {
+	policies := new(policies)
+	c.Bind(policies)
+	for _, p := range policies.Policies {
 		if _, err = a.DB.GetPolicy(p.ID); err != nil {
 			return c.JSON(http.StatusNotFound, "policy not found")
 			break
 		}
 	}
-	if err = a.DB.DetachPoliciesByGroup(group, &policies); err != nil {
+	if err = a.DB.DetachPoliciesByGroup(group, &policies.Policies); err != nil {
 		c.Logger().Error(err)
 		return err
 	}

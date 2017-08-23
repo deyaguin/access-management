@@ -18,7 +18,12 @@ func (dataBase SqlDB) AddPermissionsToPolicy(pol *models.Policy, per *[]models.P
 }
 
 func (dataBase SqlDB) RemovePermissionsFromPolicy(pol *models.Policy, per *[]models.Permission) (e error) {
-	e = dataBase.db.Model(pol).Association("permissions").Delete(per).Error
+	//e = dataBase.db.Model(pol).Association("permissions").Delete(per).Error
+	for _, p := range *per {
+		if e = dataBase.db.Delete(p).Error; e != nil {
+			return e
+		}
+	}
 	return e
 }
 
