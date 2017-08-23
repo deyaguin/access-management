@@ -6,44 +6,50 @@ import (
 
 func (a *Api) getPoliciesByUser(u *models.User) (*[]models.Policy, error) {
 	p := new([]models.Policy)
-	e := a.DB.GetPoliciesByUser(u, p, "Policies")
+	e := a.DB.GetPoliciesByUser(u, p)
 	return p, e
 }
 
 func (a *Api) getPoliciesByGroup(g *models.Group) (*[]models.Policy, error) {
 	p := new([]models.Policy)
-	e := a.DB.GetPoliciesByGroup(g, p, "Policies")
+	e := a.DB.GetPoliciesByGroup(g, p)
 	return p, e
 }
 
 func (a *Api) getGroupsByUser(u *models.User) (*[]models.Group, error) {
 	g := new([]models.Group)
-	e := a.DB.GetGroupsByUser(u, g, "Groups")
+	e := a.DB.GetGroupsByUser(u, g)
 	return g, e
+}
+
+func (a *Api) getUsersByGroup(g *models.Group) (*[]models.User, error) {
+	u := new([]models.User)
+	e := a.DB.GetUsersByGroup(g, u)
+	return u, e
 }
 
 func (a *Api) getPermissionsByPolicy(pol *models.Policy) (*[]models.Permission, error) {
 	per := new([]models.Permission)
-	e := a.DB.GetPermissionsByPolicy(pol, per, "Permissions")
+	e := a.DB.GetPermissionsByPolicy(pol, per)
 	return per, e
 }
 
-func (a *Api) check(userAct *checkParams) (bool, error) {
+func (a *Api) checkPermissions(userAct *checkParams) (bool, error) {
 	user := new(models.User)
 	user.ID = userAct.ID
-	self, err := a.getSelfPermissions(user)
+	self, err := a.getUserPermissions(user)
 	if err != nil {
 		return false, err
 	}
 	group, err := a.getGroupPermissions(user)
-	access, has := a.checkPermissions(self, userAct)
+	access, has := a.comparePermissions(self, userAct)
 	if !has {
-		access, _ = a.checkPermissions(group, userAct)
+		access, _ = a.comparePermissions(group, userAct)
 	}
 	return access, err
 }
 
-func (a *Api) getSelfPermissions(u *models.User) ([]models.Permission, error) {
+func (a *Api) getUserPermissions(u *models.User) ([]models.Permission, error) {
 	var permissions []models.Permission
 	policies, err := a.getPoliciesByUser(u)
 	if err == nil {
@@ -83,7 +89,7 @@ func (a *Api) getGroupPermissions(u *models.User) ([]models.Permission, error) {
 	return permissions, err
 }
 
-func (a *Api) checkPermissions(p []models.Permission, userAct *checkParams) (result bool, has bool) {
+func (a *Api) comparePermissions(p []models.Permission, userAct *checkParams) (result bool, has bool) {
 	result = false
 	has = false
 	for _, p := range p {

@@ -40,16 +40,20 @@ func (a *Api) Init() {
 	e.DELETE("/policies/:id", a.removePolicy)
 
 	e.PUT("/groups/:id/users", a.addUsersToGroup)
+	e.GET("/groups/:id/users", a.getUsersByGroupHandler)
 	e.DELETE("/groups/:id/users", a.removeUsersFromGroup)
 	e.PUT("/policies/:id/permissions", a.addPermissionsToPolicy)
+	e.GET("/policies/:id/permissions", a.getPermissionsByPolicyHandler)
 	e.DELETE("/policies/:id/permissions", a.removePermissionsFromPolicy)
 	e.PUT("/users/:id/policies", a.attachPoliciesByUser)
+	e.GET("/users/:id/policies", a.getPoliciesByUserHandler)
 	e.DELETE("users/:id/policies", a.detachPoliciesByUser)
 	e.PUT("/groups/:id/policies", a.attachPoliciesByGroup)
+	e.GET("/groups/:id/policies", a.getPoliciesByGroupHandler)
 	e.DELETE("/groups/:id/policies", a.detachPoliciesByGroup)
 
 	e.PATCH("/permissions/:id", a.updatePermission)
-	e.DELETE("/permissions/:id", a.removePermissionsFromPolicy)
+	//e.DELETE("/permissions/:id", a.removePermission)
 
 	e.POST("/check_permissions", a.userPermissions)
 	e.Logger.Fatal(e.Start(":1535"))

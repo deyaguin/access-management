@@ -8,6 +8,7 @@ import (
 )
 
 type App struct {
+
 }
 
 func (app *App) Init() {
