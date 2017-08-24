@@ -2,13 +2,13 @@ package api
 
 import (
 	"github.com/labstack/echo"
-	"gitlab/nefco/accessControl/app/db"
+	"gitlab/nefco/accessControl/app/storage"
 	"gopkg.in/go-playground/validator.v9"
 )
 
 type (
 	Api struct {
-		DB db.DB
+		DB storage.DB
 	}
 	GoPgValidator struct {
 		validator *validator.Validate

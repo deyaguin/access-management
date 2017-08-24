@@ -1,4 +1,4 @@
-package db
+package storage
 
 import (
 	"gitlab/nefco/accessControl/app/models"
