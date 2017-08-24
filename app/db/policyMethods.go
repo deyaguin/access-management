@@ -1,30 +1,32 @@
 package db
 
-import "gitlab/nefco/accessControl/app/models"
+import (
+	"gitlab/nefco/accessControl/app/models"
+)
 
-func (dataBase SqlDB) CreatePolicy(p *models.Policy) (e error) {
-	e = dataBase.db.Create(p).Error
-	return e
+func (dataBase SqlDB) CreatePolicy(policy *models.Policy) error {
+	err := dataBase.db.Create(policy).Error
+	return err
 }
 
-func (dataBase SqlDB) GetPolicies() (p *[]models.Policy, e error) {
-	p = new([]models.Policy)
-	e = dataBase.db.Find(p).Error
-	return p, e
+func (dataBase SqlDB) GetPolicies() (*[]models.Policy, error) {
+	policies := new([]models.Policy)
+	err := dataBase.db.Find(policies).Error
+	return policies, err
 }
 
-func (dataBase SqlDB) GetPolicy(key int) (p *models.Policy, e error) {
-	p = new(models.Policy)
-	e = dataBase.db.Where(key).Find(p).Error
-	return p, e
+func (dataBase SqlDB) GetPolicy(id int) (*models.Policy, error) {
+	policy := new(models.Policy)
+	err := dataBase.db.Where(id).Find(policy).Error
+	return policy, err
 }
 
-func (dataBase SqlDB) UpdatePolicy(p *models.Policy) (e error) {
-	e = dataBase.db.Save(p).Error
-	return e
+func (dataBase SqlDB) UpdatePolicy(policy *models.Policy) error {
+	err := dataBase.db.Save(policy).Error
+	return err
 }
 
-func (dataBase SqlDB) DeletePolicy(p *models.Policy) (e error) {
-	e = dataBase.db.Delete(p).Error
-	return e
+func (dataBase SqlDB) DeletePolicy(policy *models.Policy) error {
+	err := dataBase.db.Where("id = ?", policy.ID).Delete(policy).Error
+	return err
 }

@@ -11,18 +11,18 @@ type policyParams struct {
 	Name string `validation:"required"`
 }
 
-func (a *Api) createPolicy(c echo.Context) (err error) {
-	pP := new(policyParams)
-	c.Bind(pP)
-	if err = c.Validate(pP); err != nil {
+func (a *Api) createPolicy(c echo.Context) error {
+	pParams := new(policyParams)
+	c.Bind(pParams)
+	if err := c.Validate(pParams); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	policy := &models.Policy{Name: pP.Name}
-	if err = a.DB.CreatePolicy(policy); err != nil {
+	policy := &models.Policy{Name: pParams.Name}
+	if err := a.DB.CreatePolicy(policy); err != nil {
 		c.Logger().Error(err)
 		return err
 	}
-	return c.JSON(http.StatusCreated, "created")
+	return c.JSON(http.StatusCreated, policy)
 }
 
 func (a *Api) getPolicies(c echo.Context) error {
@@ -34,7 +34,7 @@ func (a *Api) getPolicies(c echo.Context) error {
 	return c.JSON(http.StatusOK, policies)
 }
 
-func (a *Api) getPolicy(c echo.Context) (err error) {
+func (a *Api) getPolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Logger().Error(err)
@@ -47,7 +47,7 @@ func (a *Api) getPolicy(c echo.Context) (err error) {
 	return c.JSON(http.StatusOK, policy)
 }
 
-func (a *Api) updatePolicy(c echo.Context) (err error) {
+func (a *Api) updatePolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Logger().Error(err)
@@ -56,20 +56,20 @@ func (a *Api) updatePolicy(c echo.Context) (err error) {
 	if _, err := a.DB.GetPolicy(id); err != nil {
 		return c.JSON(http.StatusNotFound, err.Error())
 	}
-	pP := new(policyParams)
-	c.Bind(pP)
-	if err = c.Validate(pP); err != nil {
+	pParams := new(policyParams)
+	c.Bind(pParams)
+	if err = c.Validate(pParams); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	var policy = &models.Policy{ID: id, Name: pP.Name}
+	var policy = &models.Policy{ID: id, Name: pParams.Name}
 	if err = a.DB.UpdatePolicy(policy); err != nil {
 		c.Logger().Error(err)
 		return err
 	}
-	return c.JSON(http.StatusOK, "updated")
+	return c.JSON(http.StatusOK, policy)
 }
 
-func (a *Api) removePolicy(c echo.Context) (err error) {
+func (a *Api) removePolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if _, err := a.DB.GetPolicy(id); err != nil {
 		return c.JSON(http.StatusNotFound, err.Error())
@@ -79,5 +79,5 @@ func (a *Api) removePolicy(c echo.Context) (err error) {
 		c.Logger().Error(err)
 		return err
 	}
-	return c.JSON(http.StatusOK, "remove")
+	return c.NoContent(http.StatusOK)
 }

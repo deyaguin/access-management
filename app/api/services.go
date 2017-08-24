@@ -35,8 +35,9 @@ func (a *Api) getPermissionsByPolicy(pol *models.Policy) (*[]models.Permission, 
 }
 
 func (a *Api) checkPermissions(userAct *checkParams) (bool, error) {
-	user := new(models.User)
-	user.ID = userAct.ID
+	//user := new(models.User)
+	//user.ID = userAct.ID
+	user := &models.User{ID: userAct.ID}
 	self, err := a.getUserPermissions(user)
 	if err != nil {
 		return false, err

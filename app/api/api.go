@@ -10,18 +10,18 @@ type (
 	Api struct {
 		DB db.DB
 	}
-	MyValidator struct {
+	GoPgValidator struct {
 		validator *validator.Validate
 	}
 )
 
-func (cV *MyValidator) Validate(i interface{}) error {
+func (cV *GoPgValidator) Validate(i interface{}) error {
 	return cV.validator.Struct(i)
 }
 
-func (a *Api) Init() {
+func (a *Api) NewApi() {
 	e := echo.New()
-	e.Validator = &MyValidator{validator: validator.New()}
+	e.Validator = &GoPgValidator{validator: validator.New()}
 
 	e.POST("/users", a.createUser)
 	e.GET("/users", a.getUsers)
@@ -41,16 +41,16 @@ func (a *Api) Init() {
 
 	e.PUT("/groups/:id/users", a.addUsersToGroup)
 	e.GET("/groups/:id/users", a.getUsersByGroupHandler)
-	e.DELETE("/groups/:id/users", a.removeUsersFromGroup)
+	e.DELETE("/groups/:gid/users/:uid", a.removeUserFromGroup)
 	e.PUT("/policies/:id/permissions", a.addPermissionsToPolicy)
 	e.GET("/policies/:id/permissions", a.getPermissionsByPolicyHandler)
-	e.DELETE("/policies/:id/permissions", a.removePermissionsFromPolicy)
+	e.DELETE("/policies/:polid/permissions/:perid", a.removePermission)
 	e.PUT("/users/:id/policies", a.attachPoliciesByUser)
 	e.GET("/users/:id/policies", a.getPoliciesByUserHandler)
-	e.DELETE("users/:id/policies", a.detachPoliciesByUser)
+	e.DELETE("users/:uid/policies/:pid", a.detachPolicyByUser)
 	e.PUT("/groups/:id/policies", a.attachPoliciesByGroup)
 	e.GET("/groups/:id/policies", a.getPoliciesByGroupHandler)
-	e.DELETE("/groups/:id/policies", a.detachPoliciesByGroup)
+	e.DELETE("/groups/:gid/policies/:pid", a.detachPolicyByGroup)
 
 	e.PATCH("/permissions/:id", a.updatePermission)
 	//e.DELETE("/permissions/:id", a.removePermission)

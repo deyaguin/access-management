@@ -1,30 +1,32 @@
 package db
 
-import "gitlab/nefco/accessControl/app/models"
+import (
+	"gitlab/nefco/accessControl/app/models"
+)
 
-func (dataBase SqlDB) CreateGroup(g *models.Group) (e error) {
-	e = dataBase.db.Create(g).Error
-	return e
+func (dataBase SqlDB) CreateGroup(group *models.Group) error {
+	err := dataBase.db.Create(group).Error
+	return err
 }
 
-func (dataBase SqlDB) GetGroups() (g *[]models.Group, e error) {
-	g = new([]models.Group)
-	e = dataBase.db.Find(g).Error
-	return g, e
+func (dataBase SqlDB) GetGroups() (*[]models.Group, error) {
+	groups := new([]models.Group)
+	err := dataBase.db.Find(groups).Error
+	return groups, err
 }
 
-func (dataBase SqlDB) GetGroup(key int) (g *models.Group, e error) {
-	g = new(models.Group)
-	e = dataBase.db.Where(key).Find(g).Error
-	return g, e
+func (dataBase SqlDB) GetGroup(id int) (*models.Group, error) {
+	group := new(models.Group)
+	err := dataBase.db.Where(id).Find(group).Error
+	return group, err
 }
 
-func (dataBase SqlDB) UpdateGroup(g *models.Group) (e error) {
-	e = dataBase.db.Save(g).Error
-	return e
+func (dataBase SqlDB) UpdateGroup(group *models.Group) error {
+	err := dataBase.db.Save(group).Error
+	return err
 }
 
-func (dataBase SqlDB) DeleteGroup(g *models.Group) (e error) {
-	e = dataBase.db.Delete(g).Error
-	return e
+func (dataBase SqlDB) DeleteGroup(group *models.Group) error {
+	err := dataBase.db.Where("id = ?", group.ID).Delete(group).Error
+	return err
 }

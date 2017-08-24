@@ -20,8 +20,8 @@ type User struct {
 	UpdatedAt time.Time
 	DeletedAt *time.Time
 	Name      string
-	Groups    []Group  `gorm:"many2many:user_groups;save_associations:false" json:"-"`
-	Policies  []Policy `gorm:"many2many:user_policies;save_associations:false" json:"-"`
+	Groups    []Group  `gorm:"many2many:user_groups;save_associations:false"`
+	Policies  []Policy `gorm:"many2many:user_policies;save_associations:false"`
 }
 
 type Group struct {
@@ -30,8 +30,8 @@ type Group struct {
 	UpdatedAt time.Time
 	DeletedAt *time.Time
 	Name      string
-	Users     []User   `gorm:"many2many:user_groups;save_associations:false" json:"-"`
-	Policies  []Policy `gorm:"many2many:group_policies;save_associations:false" json:"-"`
+	Users     []User   `gorm:"many2many:user_groups;save_associations:false"`
+	Policies  []Policy `gorm:"many2many:group_policies;save_associations:false"`
 }
 
 type Permission struct {
@@ -51,7 +51,7 @@ type Policy struct {
 	UpdatedAt   time.Time
 	DeletedAt   *time.Time
 	Name        string
-	Groups      []Group `gorm:"many2many:group_policies;save_associations:false" json:"-"`
-	Users       []User  `gorm:"many2many:user_policies;save_associations:false" json:"-"`
+	Groups      []Group `gorm:"many2many:group_policies;save_associations:false"`
+	Users       []User  `gorm:"many2many:user_policies;save_associations:false"`
 	Permissions []Permission
 }

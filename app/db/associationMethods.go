@@ -2,47 +2,37 @@ package db
 
 import "gitlab/nefco/accessControl/app/models"
 
-func (dataBase SqlDB) AddUsersToGroup(g *models.Group, u *[]models.User) (e error) {
-	e = dataBase.db.Model(g).Association("users").Append(u).Error
-	return e
+func (dataBase SqlDB) AddUsersToGroup(group *models.Group, users *[]models.User) error {
+	err := dataBase.db.Model(group).Association("users").Append(users).Error
+	return err
 }
 
-func (dataBase SqlDB) RemoveUsersFromGroup(g *models.Group, u *[]models.User) (e error) {
-	e = dataBase.db.Model(g).Association("users").Delete(u).Error
-	return e
+func (dataBase SqlDB) RemoveUserFromGroup(group *models.Group, user *models.User) error {
+	err := dataBase.db.Model(group).Association("users").Delete(user).Error
+	return err
 }
 
-func (dataBase SqlDB) AddPermissionsToPolicy(pol *models.Policy, per *[]models.Permission) (e error) {
-	e = dataBase.db.Model(pol).Association("permissions").Append(per).Error
-	return e
+func (dataBase SqlDB) AddPermissionsToPolicy(policy *models.Policy, permissions *[]models.Permission) error {
+	err := dataBase.db.Model(policy).Association("permissions").Append(permissions).Error
+	return err
 }
 
-func (dataBase SqlDB) RemovePermissionsFromPolicy(pol *models.Policy, per *[]models.Permission) (e error) {
-	//e = dataBase.db.Model(pol).Association("permissions").Delete(per).Error
-	for _, p := range *per {
-		if e = dataBase.db.Delete(p).Error; e != nil {
-			return e
-		}
-	}
-	return e
+func (dataBase SqlDB) AttachPoliciesByUser(user *models.User, policies *[]models.Policy) error {
+	err := dataBase.db.Model(user).Association("policies").Append(policies).Error
+	return err
 }
 
-func (dataBase SqlDB) AttachPoliciesByUser(u *models.User, p *[]models.Policy) (e error) {
-	e = dataBase.db.Model(u).Association("policies").Append(p).Error
-	return e
+func (dataBase SqlDB) DetachPolicyByUser(user *models.User, policy *models.Policy) error {
+	err := dataBase.db.Model(user).Association("policies").Delete(policy).Error
+	return err
 }
 
-func (dataBase SqlDB) DetachPoliciesByUser(u *models.User, p *[]models.Policy) (e error) {
-	e = dataBase.db.Model(u).Association("policies").Delete(p).Error
-	return e
+func (dataBase SqlDB) AttachPoliciesByGroup(group *models.Group, policies *[]models.Policy) error {
+	err := dataBase.db.Model(group).Association("policies").Append(policies).Error
+	return err
 }
 
-func (dataBase SqlDB) AttachPoliciesByGroup(g *models.Group, p *[]models.Policy) (e error) {
-	e = dataBase.db.Model(g).Association("policies").Append(p).Error
-	return e
-}
-
-func (dataBase SqlDB) DetachPoliciesByGroup(g *models.Group, p *[]models.Policy) (e error) {
-	e = dataBase.db.Model(g).Association("policies").Delete(p).Error
-	return e
+func (dataBase SqlDB) DetachPolicyByGroup(group *models.Group, policy *models.Policy) error {
+	err := dataBase.db.Model(group).Association("policies").Delete(policy).Error
+	return err
 }

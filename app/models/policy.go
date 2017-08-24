@@ -8,7 +8,7 @@ type Policy struct {
 	ID          int        `json:"id"`
 	CreatedAt   time.Time  `json:"-"`
 	UpdatedAt   time.Time  `json:"-"`
-	DeletedAt   time.Time `json:"-"`
+	DeletedAt   time.Time `json:"-" gorm:"default:''"`
 	Name        string
 	Groups      []Group      `gorm:"many2many:group_policies;save_associations:false" json:"-"`
 	Users       []User       `gorm:"many2many:user_policies;save_associations:false" json:"-"`

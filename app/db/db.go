@@ -36,19 +36,21 @@ type DB interface {
 	//DeleteAction(*models.Action) error
 
 	AddUsersToGroup(*models.Group, *[]models.User) error
-	RemoveUsersFromGroup(*models.Group, *[]models.User) error
+	RemoveUserFromGroup(*models.Group, *models.User) error
 	AddPermissionsToPolicy(*models.Policy, *[]models.Permission) error
-	RemovePermissionsFromPolicy(*models.Policy, *[]models.Permission) error
+	//RemovePermissionsFromPolicy(*models.Policy, *models.Permission) error
 	AttachPoliciesByUser(*models.User, *[]models.Policy) error
-	DetachPoliciesByUser(*models.User, *[]models.Policy) error
+	DetachPolicyByUser(*models.User, *models.Policy) error
 	AttachPoliciesByGroup(*models.Group, *[]models.Policy) error
-	DetachPoliciesByGroup(*models.Group, *[]models.Policy) error
+	DetachPolicyByGroup(*models.Group, *models.Policy) error
 
 	GetPoliciesByUser(*models.User, *[]models.Policy) error
 	GetPoliciesByGroup(*models.Group, *[]models.Policy) error
 	GetGroupsByUser(*models.User, *[]models.Group) error
 	GetUsersByGroup(*models.Group, *[]models.User) error
 	GetPermissionsByPolicy(*models.Policy, *[]models.Permission) error
+	GetUsersByPolicy(*models.Policy, *[]models.User) error
+	GetGroupsByPolicy(*models.Policy, *[]models.Group) error
 }
 
 type SqlDB struct {

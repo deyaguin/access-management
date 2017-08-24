@@ -7,13 +7,31 @@ import (
 	"strconv"
 )
 
-type permissionParams struct {
-	Resourse string `validate:"required"`
-	Access   bool   `validate:"required"`
-	ActionID int    `validate:"required"`
-}
+//type permissionParams struct {
+//	Resourse string `validate:"required"`
+//	Access   bool   `validate:"required"`
+//	ActionID int    `validate:"required"`
+//}
 
-func (a *Api) createPermission(c echo.Context) (err error) {
+//func (a *Api) createPermission(c echo.Context) error {
+//	permission := new(models.Permission)
+//	id, err := strconv.Atoi(c.Param("id"))
+//	permission, err = a.DB.GetPermission(id)
+//	if err != nil {
+//		return c.JSON(http.StatusNotFound, err.Error())
+//	}
+//	c.Bind(permission)
+//	if err = c.Validate(permission); err != nil {
+//		return c.JSON(http.StatusBadRequest, err.Error())
+//	}
+//	if err = a.DB.UpdatePermission(permission); err != nil {
+//		c.Logger().Error(err)
+//		return err
+//	}
+//	return c.JSON(http.StatusCreated, permission)
+//}
+
+func (a *Api) updatePermission(c echo.Context) error {
 	permission := new(models.Permission)
 	id, err := strconv.Atoi(c.Param("id"))
 	permission, err = a.DB.GetPermission(id)
@@ -28,29 +46,11 @@ func (a *Api) createPermission(c echo.Context) (err error) {
 		c.Logger().Error(err)
 		return err
 	}
-	return c.JSON(http.StatusOK, "updated")
+	return c.JSON(http.StatusOK, permission)
 }
 
-func (a *Api) updatePermission(c echo.Context) (err error) {
-	permission := new(models.Permission)
-	id, err := strconv.Atoi(c.Param("id"))
-	permission, err = a.DB.GetPermission(id)
-	if err != nil {
-		return c.JSON(http.StatusNotFound, err.Error())
-	}
-	c.Bind(permission)
-	if err = c.Validate(permission); err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
-	}
-	if err = a.DB.UpdatePermission(permission); err != nil {
-		c.Logger().Error(err)
-		return err
-	}
-	return c.JSON(http.StatusOK, "updated")
-}
-
-func (a *Api) removePermission(c echo.Context) (err error) {
-	id, err := strconv.Atoi(c.ParamValues()[1])
+func (a *Api) removePermission(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("perid"))
 	if err != nil {
 		c.Logger().Error(err)
 		return err
@@ -63,5 +63,5 @@ func (a *Api) removePermission(c echo.Context) (err error) {
 		c.Logger().Error(err)
 		return err
 	}
-	return c.JSON(http.StatusOK, "remove")
+	return c.NoContent(http.StatusOK)
 }

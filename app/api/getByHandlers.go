@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func (a *Api) getUsersByGroupHandler(c echo.Context) (err error) {
+func (a *Api) getUsersByGroupHandler(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Logger().Error(err)
@@ -25,7 +25,7 @@ func (a *Api) getUsersByGroupHandler(c echo.Context) (err error) {
 	return c.JSON(http.StatusOK, users)
 }
 
-func (a *Api) getPermissionsByPolicyHandler(c echo.Context) (err error) {
+func (a *Api) getPermissionsByPolicyHandler(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Logger().Error(err)
@@ -43,7 +43,7 @@ func (a *Api) getPermissionsByPolicyHandler(c echo.Context) (err error) {
 	return c.JSON(http.StatusOK, permissions)
 }
 
-func (a *Api) getPoliciesByUserHandler(c echo.Context) (err error) {
+func (a *Api) getPoliciesByUserHandler(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Logger().Error(err)
@@ -61,7 +61,7 @@ func (a *Api) getPoliciesByUserHandler(c echo.Context) (err error) {
 	return c.JSON(http.StatusOK, policies)
 }
 
-func (a *Api) getPoliciesByGroupHandler(c echo.Context) (err error) {
+func (a *Api) getPoliciesByGroupHandler(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Logger().Error(err)

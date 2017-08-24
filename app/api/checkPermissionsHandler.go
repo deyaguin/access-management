@@ -11,10 +11,10 @@ type checkParams struct {
 	ID       int    `validation:"required"`
 }
 
-func (a *Api) userPermissions(c echo.Context) (err error) {
-	cP := new(checkParams)
-	c.Bind(cP)
-	access, err := a.checkPermissions(cP)
+func (a *Api) userPermissions(c echo.Context) error {
+	cParams := new(checkParams)
+	c.Bind(cParams)
+	access, err := a.checkPermissions(cParams)
 	if err != nil {
 		c.Logger().Error(err)
 		return err

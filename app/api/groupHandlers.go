@@ -11,18 +11,18 @@ type groupParams struct {
 	Name string `validation:"required"`
 }
 
-func (a *Api) createGroup(c echo.Context) (err error) {
-	gP := new(groupParams)
-	c.Bind(gP)
-	if err = c.Validate(gP); err != nil {
-		return c.JSON(http.StatusOK, err.Error())
+func (a *Api) createGroup(c echo.Context) error {
+	gParams := new(groupParams)
+	c.Bind(gParams)
+	if err := c.Validate(gParams); err != nil {
+		return c.JSON(http.StatusCreated, err.Error())
 	}
-	group := &models.Group{Name: gP.Name}
-	if err = a.DB.CreateGroup(group); err != nil {
+	group := &models.Group{Name: gParams.Name}
+	if err := a.DB.CreateGroup(group); err != nil {
 		c.Logger().Error(err)
 		return err
 	}
-	return c.JSON(http.StatusCreated, "created")
+	return c.JSON(http.StatusCreated, group)
 }
 
 func (a *Api) getGroups(c echo.Context) error {
@@ -34,7 +34,7 @@ func (a *Api) getGroups(c echo.Context) error {
 	return c.JSON(http.StatusOK, groups)
 }
 
-func (a *Api) getGroup(c echo.Context) (err error) {
+func (a *Api) getGroup(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Logger().Error(err)
@@ -47,7 +47,7 @@ func (a *Api) getGroup(c echo.Context) (err error) {
 	return c.JSON(http.StatusOK, group)
 }
 
-func (a *Api) updateGroup(c echo.Context) (err error) {
+func (a *Api) updateGroup(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Logger().Error(err)
@@ -56,20 +56,20 @@ func (a *Api) updateGroup(c echo.Context) (err error) {
 	if _, err := a.DB.GetGroup(id); err != nil {
 		return c.JSON(http.StatusNotFound, err.Error())
 	}
-	gP := new(groupParams)
-	c.Bind(gP)
-	if err = c.Validate(gP); err != nil {
+	gParams := new(groupParams)
+	c.Bind(gParams)
+	if err = c.Validate(gParams); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	var group = &models.Group{ID: id, Name: gP.Name}
+	var group = &models.Group{ID: id, Name: gParams.Name}
 	if err = a.DB.UpdateGroup(group); err != nil {
 		c.Logger().Error(err)
 		return err
 	}
-	return c.JSON(http.StatusCreated, "updated")
+	return c.JSON(http.StatusCreated, group)
 }
 
-func (a *Api) removeGroup(c echo.Context) (err error) {
+func (a *Api) removeGroup(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if _, err := a.DB.GetGroup(id); err != nil {
 		return c.JSON(http.StatusNotFound, err.Error())
@@ -79,5 +79,5 @@ func (a *Api) removeGroup(c echo.Context) (err error) {
 		c.Logger().Error(err)
 		return err
 	}
-	return c.JSON(http.StatusOK, "remove")
+	return c.NoContent(http.StatusOK)
 }
