@@ -20,7 +20,7 @@ func (dataBase SqlDB) UpdatePermission(permission *models.Permission) error {
 	return err
 }
 
-func (dataBase SqlDB) DeletePermission(permission *models.Permission) error {
+func (dataBase SqlDB) RemovePermission(permission *models.Permission) error {
 	err := dataBase.db.Where("id = ?", permission.ID).Delete(permission).Error
 	return err
 }

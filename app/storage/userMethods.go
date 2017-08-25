@@ -5,8 +5,7 @@ import (
 )
 
 func (dataBase SqlDB) CreateUser(user *models.User) error {
-	err := dataBase.db.Create(user).Error
-	return err
+	return dataBase.db.Create(user).Error
 }
 
 func (dataBase SqlDB) GetUsers() (*[]models.User, error) {
@@ -22,11 +21,9 @@ func (dataBase SqlDB) GetUser(id int) (*models.User, error) {
 }
 
 func (dataBase SqlDB) UpdateUser(user *models.User) error {
-	err := dataBase.db.Save(user).Error
-	return err
+	return dataBase.db.Save(user).Error
 }
 
-func (dataBase SqlDB) DeleteUser(user *models.User) error {
-	err := dataBase.db.Where("id = ?", user.ID).Delete(user).Error
-	return err
+func (dataBase SqlDB) RemoveUser(user *models.User) error {
+	return dataBase.db.Where("id = ?", user.ID).Delete(user).Error
 }

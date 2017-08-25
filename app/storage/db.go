@@ -10,24 +10,24 @@ type DB interface {
 	GetUsers() (*[]models.User, error)
 	GetUser(int) (*models.User, error)
 	UpdateUser(*models.User) error
-	DeleteUser(*models.User) error
+	RemoveUser(*models.User) error
 
 	CreateGroup(*models.Group) error
 	GetGroups() (*[]models.Group, error)
 	GetGroup(int) (*models.Group, error)
 	UpdateGroup(*models.Group) error
-	DeleteGroup(*models.Group) error
+	RemoveGroup(*models.Group) error
 
 	CreatePolicy(*models.Policy) error
 	GetPolicies() (*[]models.Policy, error)
 	GetPolicy(int) (*models.Policy, error)
 	UpdatePolicy(*models.Policy) error
-	DeletePolicy(*models.Policy) error
+	RemovePolicy(*models.Policy) error
 
 	CreatePermission(*models.Permission) error
 	GetPermission(int) (*models.Permission, error)
 	UpdatePermission(*models.Permission) error
-	DeletePermission(*models.Permission) error
+	RemovePermission(*models.Permission) error
 
 	//CreateAction(*models.Action) error
 	//GetActions(*[]models.Action) error
@@ -44,13 +44,13 @@ type DB interface {
 	AttachPoliciesByGroup(*models.Group, *[]models.Policy) error
 	DetachPolicyByGroup(*models.Group, *models.Policy) error
 
-	GetPoliciesByUser(*models.User, *[]models.Policy) error
-	GetPoliciesByGroup(*models.Group, *[]models.Policy) error
-	GetGroupsByUser(*models.User, *[]models.Group) error
-	GetUsersByGroup(*models.Group, *[]models.User) error
-	GetPermissionsByPolicy(*models.Policy, *[]models.Permission) error
-	GetUsersByPolicy(*models.Policy, *[]models.User) error
-	GetGroupsByPolicy(*models.Policy, *[]models.Group) error
+	GetPoliciesByUser(*models.User) (*[]models.Policy, error)
+	GetPoliciesByGroup(*models.Group) (*[]models.Policy, error)
+	GetGroupsByUser(*models.User) (*[]models.Group, error)
+	GetUsersByGroup(*models.Group) (*[]models.User, error)
+	GetPermissionsByPolicy(*models.Policy) (*[]models.Permission, error)
+	GetUsersByPolicy(*models.Policy) (*[]models.User, error)
+	GetGroupsByPolicy(*models.Policy) (*[]models.Group, error)
 }
 
 type SqlDB struct {

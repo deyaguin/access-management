@@ -26,7 +26,7 @@ func (dataBase SqlDB) UpdateGroup(group *models.Group) error {
 	return err
 }
 
-func (dataBase SqlDB) DeleteGroup(group *models.Group) error {
+func (dataBase SqlDB) RemoveGroup(group *models.Group) error {
 	err := dataBase.db.Where("id = ?", group.ID).Delete(group).Error
 	return err
 }

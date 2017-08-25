@@ -1,7 +1,12 @@
 package models
 
+import "time"
+
 type Action struct {
-	ID          int `json:"id"`
+	ID          int `json:"id" gorm:"AUTO_INCREMENT;not null;unique"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	DeletedAt   *time.Time `json:""`
 	Name        string
 	Permissions []Permission `json:"-"`
 }

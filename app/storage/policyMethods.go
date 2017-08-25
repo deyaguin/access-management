@@ -26,7 +26,7 @@ func (dataBase SqlDB) UpdatePolicy(policy *models.Policy) error {
 	return err
 }
 
-func (dataBase SqlDB) DeletePolicy(policy *models.Policy) error {
+func (dataBase SqlDB) RemovePolicy(policy *models.Policy) error {
 	err := dataBase.db.Where("id = ?", policy.ID).Delete(policy).Error
 	return err
 }

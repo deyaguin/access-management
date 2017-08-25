@@ -2,59 +2,65 @@ package api
 
 import (
 	"github.com/labstack/echo"
-	"gitlab/nefco/accessControl/app/storage"
-	"gopkg.in/go-playground/validator.v9"
+	"gitlab/nefco/accessControl/app/services"
 )
 
-type (
-	Api struct {
-		DB storage.DB
-	}
-	GoPgValidator struct {
-		validator *validator.Validate
-	}
-)
-
-func (cV *GoPgValidator) Validate(i interface{}) error {
-	return cV.validator.Struct(i)
+type Api struct {
+	userService       services.UserService
+	groupService      services.GroupService
+	policyService     services.PolicyService
+	permissionService services.PermissionService
+	relationsService  services.RelationsService
 }
 
-func (a *Api) NewApi() {
+func NewAPI(
+	userService services.UserService,
+	groupService services.GroupService,
+	policyService services.PolicyService,
+	permissionService services.PermissionService,
+	relationsService services.RelationsService,
+) {
+	api := &Api{
+		userService,
+		groupService,
+		policyService,
+		permissionService,
+		relationsService,
+	}
 	e := echo.New()
-	e.Validator = &GoPgValidator{validator: validator.New()}
 
-	e.POST("/users", a.createUser)
-	e.GET("/users", a.getUsers)
-	e.GET("/users/:id", a.getUser)
-	e.PATCH("/users/:id", a.updateUser)
-	e.DELETE("/users/:id", a.removeUser)
-	e.POST("/groups", a.createGroup)
-	e.GET("/groups", a.getGroups)
-	e.GET("/groups/:id", a.getGroup)
-	e.PATCH("/groups/:id", a.updateGroup)
-	e.DELETE("/groups/:id", a.removeGroup)
-	e.POST("/policies", a.createPolicy)
-	e.GET("/policies", a.getPolicies)
-	e.GET("/policies/:id", a.getPolicy)
-	e.PATCH("/policies/:id", a.updatePolicy)
-	e.DELETE("/policies/:id", a.removePolicy)
-
-	e.PUT("/groups/:id/users", a.addUsersToGroup)
-	e.GET("/groups/:id/users", a.getUsersByGroupHandler)
-	e.DELETE("/groups/:gid/users/:uid", a.removeUserFromGroup)
-	e.PUT("/policies/:id/permissions", a.addPermissionsToPolicy)
-	e.GET("/policies/:id/permissions", a.getPermissionsByPolicyHandler)
-	e.DELETE("/policies/:polid/permissions/:perid", a.removePermission)
-	e.PUT("/users/:id/policies", a.attachPoliciesByUser)
-	e.GET("/users/:id/policies", a.getPoliciesByUserHandler)
-	e.DELETE("users/:uid/policies/:pid", a.detachPolicyByUser)
-	e.PUT("/groups/:id/policies", a.attachPoliciesByGroup)
-	e.GET("/groups/:id/policies", a.getPoliciesByGroupHandler)
-	e.DELETE("/groups/:gid/policies/:pid", a.detachPolicyByGroup)
-
-	e.PATCH("/permissions/:id", a.updatePermission)
-	//e.DELETE("/permissions/:id", a.removePermission)
-
-	e.POST("/check_permissions", a.userPermissions)
+	e.POST("/users", api.createUser)
+	e.GET("/users", api.getUsers)
+	e.GET("/users/:id", api.getUser)
+	e.PATCH("/users/:id", api.updateUser)
+	e.DELETE("/users/:id", api.removeUser)
+	e.POST("/groups", api.createGroup)
+	e.GET("/groups", api.getGroups)
+	e.GET("/groups/:id", api.getGroup)
+	e.PATCH("/groups/:id", api.updateGroup)
+	e.DELETE("/groups/:id", api.removeGroup)
+	e.POST("/policies", api.createPolicy)
+	e.GET("/policies", api.getPolicies)
+	e.GET("/policies/:id", api.getPolicy)
+	e.PATCH("/policies/:id", api.updatePolicy)
+	e.DELETE("/policies/:id", api.removePolicy)
+	//
+	//e.PUT("/groups/:id/users", a.addUsersToGroup)
+	//e.GET("/groups/:id/users", a.getUsersByGroupHandler)
+	//e.DELETE("/groups/:gid/users/:uid", a.removeUserFromGroup)
+	//e.PUT("/policies/:id/permissions", a.addPermissionsToPolicy)
+	//e.GET("/policies/:id/permissions", a.getPermissionsByPolicyHandler)
+	//e.DELETE("/policies/:polid/permissions/:perid", a.removePermission)
+	//e.PUT("/users/:id/policies", a.attachPoliciesByUser)
+	//e.GET("/users/:id/policies", a.getPoliciesByUserHandler)
+	//e.DELETE("users/:uid/policies/:pid", a.detachPolicyByUser)
+	//e.PUT("/groups/:id/policies", a.attachPoliciesByGroup)
+	//e.GET("/groups/:id/policies", a.getPoliciesByGroupHandler)
+	//e.DELETE("/groups/:gid/policies/:pid", a.detachPolicyByGroup)
+	//
+	//e.PATCH("/permissions/:id", a.updatePermission)
+	////e.DELETE("/permissions/:id", a.removePermission)
+	//
+	e.POST("/check_permissions", api.userPermissions)
 	e.Logger.Fatal(e.Start(":1535"))
 }
