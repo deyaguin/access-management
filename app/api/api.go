@@ -44,23 +44,21 @@ func NewAPI(
 	e.GET("/policies/:id", api.getPolicy)
 	e.PATCH("/policies/:id", api.updatePolicy)
 	e.DELETE("/policies/:id", api.removePolicy)
-	//
-	//e.PUT("/groups/:id/users", a.addUsersToGroup)
-	//e.GET("/groups/:id/users", a.getUsersByGroupHandler)
-	//e.DELETE("/groups/:gid/users/:uid", a.removeUserFromGroup)
-	//e.PUT("/policies/:id/permissions", a.addPermissionsToPolicy)
-	//e.GET("/policies/:id/permissions", a.getPermissionsByPolicyHandler)
-	//e.DELETE("/policies/:polid/permissions/:perid", a.removePermission)
-	//e.PUT("/users/:id/policies", a.attachPoliciesByUser)
-	//e.GET("/users/:id/policies", a.getPoliciesByUserHandler)
-	//e.DELETE("users/:uid/policies/:pid", a.detachPolicyByUser)
-	//e.PUT("/groups/:id/policies", a.attachPoliciesByGroup)
-	//e.GET("/groups/:id/policies", a.getPoliciesByGroupHandler)
-	//e.DELETE("/groups/:gid/policies/:pid", a.detachPolicyByGroup)
-	//
+
+	e.PUT("/groups/:id/users", api.addUsersToGroup)
+	e.GET("/groups/:id/users", api.getUsersByGroupHandler)
+	e.DELETE("/groups/:groupId/users/:userId", api.removeUserFromGroup)
+	e.PUT("/policies/:id/permissions", api.addPermissionsToPolicy)
+	e.GET("/policies/:id/permissions", api.getPermissionsByPolicyHandler)
+	e.DELETE("/policies/:policyId/permissions/:permissionId", api.removePermissionFromPolicy)
+	e.PUT("/users/:id/policies", api.attachPoliciesByUser)
+	e.GET("/users/:id/policies", api.getPoliciesByUserHandler)
+	e.DELETE("users/:userId/policies/:policyId", api.detachPolicyByUser)
+	e.PUT("/groups/:id/policies", api.attachPoliciesByGroup)
+	e.GET("/groups/:id/policies", api.getPoliciesByGroupHandler)
+	e.DELETE("/groups/:groupId/policies/:policyId", api.detachPolicyByGroup)
 	//e.PATCH("/permissions/:id", a.updatePermission)
-	////e.DELETE("/permissions/:id", a.removePermission)
-	//
+
 	e.POST("/check_permissions", api.userPermissions)
 	e.Logger.Fatal(e.Start(":1535"))
 }

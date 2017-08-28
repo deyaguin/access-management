@@ -31,10 +31,10 @@ func (a *Api) getUserPermissions(u *models.User) ([]models.Permission, error) {
 	policies, err := a.relationsService.GetPoliciesByUser(u)
 	if err == nil {
 		for _, policy := range *policies {
-			p, e := a.relationsService.GetPermissionsByPolicy(&policy)
-			permissions = append(permissions, *p...)
-			if e != nil {
-				err = e
+			permission, err := a.relationsService.GetPermissionsByPolicy(&policy)
+			permissions = append(permissions, *permission...)
+			if err != nil {
+				err = err
 			}
 		}
 	}
@@ -48,18 +48,18 @@ func (a *Api) getGroupPermissions(u *models.User) ([]models.Permission, error) {
 	)
 	groups, err := a.relationsService.GetGroupsByUser(u)
 	for _, group := range *groups {
-		p, e := a.relationsService.GetPoliciesByGroup(&group)
-		policies = append(policies, *p...)
-		if e != nil {
-			err = e
+		policy, err := a.relationsService.GetPoliciesByGroup(&group)
+		policies = append(policies, *policy...)
+		if err != nil {
+			err = err
 			break
 		}
 	}
 	for _, policy := range policies {
-		p, e := a.relationsService.GetPermissionsByPolicy(&policy)
-		permissions = append(permissions, *p...)
-		if e != nil {
-			err = e
+		permission, err := a.relationsService.GetPermissionsByPolicy(&policy)
+		permissions = append(permissions, *permission...)
+		if err != nil {
+			err = err
 			break
 		}
 	}

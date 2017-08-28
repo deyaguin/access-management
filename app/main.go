@@ -1,4 +1,4 @@
-package app
+package main
 
 import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -19,12 +19,14 @@ func main() {
 	groupService := services.NewGroupService(pgDB)
 	policyService := services.NewPolicyService(pgDB)
 	permissionService := services.NewPermissionService(pgDB)
+	relationsService := services.NewRelationsService(pgDB)
 
 	api.NewAPI(
 		userService,
 		groupService,
 		policyService,
 		permissionService,
+		relationsService,
 	)
 
 }
