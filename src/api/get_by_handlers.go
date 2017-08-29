@@ -3,7 +3,6 @@ package api
 import (
 	"github.com/labstack/echo"
 	"gitlab/nefco/access-management-system/src/models"
-	"gitlab/nefco/access-management-system/src/services"
 	"net/http"
 	"strconv"
 )
@@ -11,7 +10,7 @@ import (
 func (a *Api) getUsersByGroupHandler(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	group := &models.Group{ID: id}
 
@@ -26,7 +25,7 @@ func (a *Api) getUsersByGroupHandler(c echo.Context) error {
 func (a *Api) getPermissionsByPolicyHandler(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	policy := &models.Policy{ID: id}
 
@@ -41,7 +40,7 @@ func (a *Api) getPermissionsByPolicyHandler(c echo.Context) error {
 func (a *Api) getPoliciesByUserHandler(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	user := &models.User{ID: id}
 
@@ -56,7 +55,7 @@ func (a *Api) getPoliciesByUserHandler(c echo.Context) error {
 func (a *Api) getPoliciesByGroupHandler(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	group := &models.Group{ID: id}
 

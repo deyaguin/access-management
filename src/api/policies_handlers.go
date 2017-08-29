@@ -3,7 +3,6 @@ package api
 import (
 	"github.com/labstack/echo"
 	"gitlab/nefco/access-management-system/src/models"
-	"gitlab/nefco/access-management-system/src/services"
 	"net/http"
 	"strconv"
 )
@@ -12,7 +11,7 @@ func (a *Api) createPolicy(c echo.Context) error {
 	policyCreating := &models.Policy{}
 
 	if err := c.Bind(policyCreating); err != nil {
-		return services.NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError("body is unprocessable")
 	}
 
 	policy, err := a.policyService.CreatePolicy(policyCreating)
@@ -35,7 +34,7 @@ func (a *Api) getPolicies(c echo.Context) error {
 func (a *Api) getPolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 
 	policy, err := a.policyService.GetPolicy(id)
@@ -49,12 +48,12 @@ func (a *Api) getPolicy(c echo.Context) error {
 func (a *Api) updatePolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 
 	policyUpdating := &models.Policy{ID: id}
 	if err := c.Bind(policyUpdating); err != nil {
-		return services.NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError("body is unprocessable")
 	}
 
 	policy, err := a.policyService.UpdatePolicy(policyUpdating)
@@ -68,7 +67,7 @@ func (a *Api) updatePolicy(c echo.Context) error {
 func (a *Api) removePolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 
 	policy := &models.Policy{ID: id}

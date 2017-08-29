@@ -8,7 +8,7 @@ import (
 
 type usersResponse struct {
 	Users *[]models.User `json:"users"`
-	Count int `json:"count"`
+	Count int            `json:"count"`
 }
 
 type UserService interface {

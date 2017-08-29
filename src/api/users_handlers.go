@@ -3,7 +3,6 @@ package api
 import (
 	"github.com/labstack/echo"
 	"gitlab/nefco/access-management-system/src/models"
-	"gitlab/nefco/access-management-system/src/services"
 	"net/http"
 	"strconv"
 )
@@ -12,7 +11,7 @@ func (a *Api) createUser(c echo.Context) error {
 	userCreating := &models.User{}
 
 	if err := c.Bind(userCreating); err != nil {
-		return services.NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError("body is unprocessable")
 	}
 
 	user, err := a.userService.CreateUser(userCreating)
@@ -26,7 +25,7 @@ func (a *Api) createUser(c echo.Context) error {
 func (a *Api) getUsers(c echo.Context) error {
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
-		return services.NewInvalidQueryError("page number is not valid")
+		return NewInvalidQueryError("page number is not valid")
 	}
 
 	users, err := a.userService.GetUsers(page)
@@ -40,7 +39,7 @@ func (a *Api) getUsers(c echo.Context) error {
 func (a *Api) getUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("user id is not valid")
+		return NewInvalidQueryError("user id is not valid")
 	}
 
 	user, err := a.userService.GetUser(id)
@@ -54,12 +53,12 @@ func (a *Api) getUser(c echo.Context) error {
 func (a *Api) updateUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("user id is not valid")
+		return NewInvalidQueryError("user id is not valid")
 	}
 
 	userUpdating := &models.User{ID: id}
 	if err := c.Bind(userUpdating); err != nil {
-		return services.NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError("body is unprocessable")
 	}
 
 	user, err := a.userService.UpdateUser(userUpdating)
@@ -73,7 +72,7 @@ func (a *Api) updateUser(c echo.Context) error {
 func (a *Api) removeUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("user id is not valid")
+		return NewInvalidQueryError("user id is not valid")
 	}
 
 	user := &models.User{ID: id}

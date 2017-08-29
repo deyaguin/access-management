@@ -3,7 +3,6 @@ package api
 import (
 	"github.com/labstack/echo"
 	"gitlab/nefco/access-management-system/src/models"
-	"gitlab/nefco/access-management-system/src/services"
 	"net/http"
 	"strconv"
 )
@@ -24,13 +23,13 @@ type permissions struct {
 func (a *Api) addUsersToGroup(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	group := &models.Group{ID: id}
 
 	users := new(users)
 	if err = c.Bind(users); err != nil {
-		return services.NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError("body is unprocessable")
 	}
 
 	if err = a.relationsService.AddUsersToGroup(group, users.Users); err != nil {
@@ -43,7 +42,7 @@ func (a *Api) addUsersToGroup(c echo.Context) error {
 func (a *Api) removeUserFromGroup(c echo.Context) error {
 	groupId, err := strconv.Atoi(c.Param("groupId"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	group := &models.Group{ID: groupId}
 
@@ -63,13 +62,13 @@ func (a *Api) removeUserFromGroup(c echo.Context) error {
 func (a *Api) addPermissionsToPolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	policy := &models.Policy{ID: id}
 
 	permissions := new(permissions)
 	if err = c.Bind(permissions); err != nil {
-		return services.NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError("body is unprocessable")
 	}
 
 	if err = a.relationsService.AddPermissionsToPolicy(policy, permissions.Permissions); err != nil {
@@ -82,13 +81,13 @@ func (a *Api) addPermissionsToPolicy(c echo.Context) error {
 func (a *Api) removePermissionFromPolicy(c echo.Context) error {
 	policyId, err := strconv.Atoi(c.Param("policyId"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	policy := &models.Policy{ID: policyId}
 
 	permissionId, err := strconv.Atoi(c.Param("permissionId"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	permission := &models.Permission{ID: permissionId}
 
@@ -102,13 +101,13 @@ func (a *Api) removePermissionFromPolicy(c echo.Context) error {
 func (a *Api) attachPoliciesByUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	user := &models.User{ID: id}
 
 	policies := new(policies)
 	if err = c.Bind(policies); err != nil {
-		return services.NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError("body is unprocessable")
 	}
 
 	if err = a.relationsService.AttachPoliciesByUser(user, policies.Policies); err != nil {
@@ -121,13 +120,13 @@ func (a *Api) attachPoliciesByUser(c echo.Context) error {
 func (a *Api) detachPolicyByUser(c echo.Context) error {
 	userId, err := strconv.Atoi(c.Param("userId"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	user := &models.User{ID: userId}
 
 	policyId, err := strconv.Atoi(c.Param("policyId"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	policy := &models.Policy{ID: policyId}
 
@@ -141,13 +140,13 @@ func (a *Api) detachPolicyByUser(c echo.Context) error {
 func (a *Api) attachPoliciesByGroup(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	group := &models.Group{ID: id}
 
 	policies := new(policies)
 	if err = c.Bind(policies); err != nil {
-		return services.NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError("body is unprocessable")
 	}
 
 	if err = a.relationsService.AttachPoliciesByGroup(group, policies.Policies); err != nil {
@@ -160,13 +159,13 @@ func (a *Api) attachPoliciesByGroup(c echo.Context) error {
 func (a *Api) detachPolicyByGroup(c echo.Context) error {
 	groupId, err := strconv.Atoi(c.Param("groupId"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	group := &models.Group{ID: groupId}
 
 	policyId, err := strconv.Atoi(c.Param("policyId"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return NewInvalidQueryError("query params is not valid")
 	}
 	policy := &models.Policy{ID: policyId}
 
