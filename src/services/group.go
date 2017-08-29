@@ -25,44 +25,54 @@ func NewGroupService(storage storage.DB) GroupService {
 }
 
 func (service *groupService) CreateGroup(groupCreating *models.Group) (*models.Group, error) {
-	group := new(models.Group)
-
 	if err := validator.Validate(groupCreating); err != nil {
-		return group, NewValidationError(err.Error())
+		return nil, NewValidationError(err.Error())
 	}
 
+	group := new(models.Group)
 	group.SetFields(groupCreating)
 
-	err := service.storage.CreateGroup(group)
-	return group, err
+	if err := service.storage.CreateGroup(group); err != nil {
+		return nil, err
+	}
+
+	return group, nil
 }
 
 func (service *groupService) GetGroup(id int) (*models.Group, error) {
 	group, err := service.storage.GetGroup(id)
 	if err != nil {
-		return group, NewEntityNotFoundError("group", id)
+		return nil, NewEntityNotFoundError("group", id)
 	}
 
-	return group, err
+	return group, nil
 }
 
 func (service *groupService) GetGroups() (*[]models.Group, error) {
-	return service.storage.GetGroups()
+	groups, err := service.storage.GetGroups()
+	if err != nil {
+		return nil, err
+	}
+
+	return groups, nil
 }
 
 func (service *groupService) UpdateGroup(groupUpdating *models.Group) (*models.Group, error) {
 	group, err := service.storage.GetGroup(groupUpdating.ID)
 	if err != nil {
-		return group, NewEntityNotFoundError("group", groupUpdating.ID)
+		return nil, NewEntityNotFoundError("group", groupUpdating.ID)
 	}
 
 	if err := validator.Validate(groupUpdating); err != nil {
-		return group, NewValidationError(err.Error())
+		return nil, NewValidationError(err.Error())
 	}
 
 	group.SetFields(groupUpdating)
+	if err := service.storage.UpdateGroup(group); err != nil {
+		return nil, err
+	}
 
-	return group, service.storage.UpdateGroup(group)
+	return group, nil
 }
 
 func (service *groupService) RemoveGroup(group *models.Group) error {
@@ -70,5 +80,9 @@ func (service *groupService) RemoveGroup(group *models.Group) error {
 		return NewEntityNotFoundError("group", group.ID)
 	}
 
-	return service.storage.RemoveGroup(group)
+	if err := service.storage.RemoveGroup(group); err != nil {
+		return err
+	}
+
+	return nil
 }

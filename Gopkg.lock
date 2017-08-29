@@ -2,18 +2,6 @@
 
 
 [[projects]]
-  name = "github.com/go-playground/locales"
-  packages = [".","currency"]
-  revision = "b860c92274dfb72f517b8b4c11c6d9f2f8cc9d91"
-  version = "v0.11.1"
-
-[[projects]]
-  name = "github.com/go-playground/universal-translator"
-  packages = ["."]
-  revision = "b32fa301c9fe55953584134cb6853a13c87ec0a1"
-  version = "v0.16.0"
-
-[[projects]]
   name = "github.com/jinzhu/gorm"
   packages = [".","dialects/postgres"]
   revision = "5174cc5c242a728b435ea2be8a2f7f998e15429b"
@@ -68,6 +56,24 @@
   revision = "dcecefd839c4193db0d35b88ec65b4c12d360ab0"
 
 [[projects]]
+  name = "go.uber.org/atomic"
+  packages = ["."]
+  revision = "4e336646b2ef9fc6e47be8e21594178f98e5ebcf"
+  version = "v1.2.0"
+
+[[projects]]
+  name = "go.uber.org/multierr"
+  packages = ["."]
+  revision = "3c4937480c32f4c13a875a1829af76c98ca3d40a"
+  version = "v1.1.0"
+
+[[projects]]
+  name = "go.uber.org/zap"
+  packages = [".","buffer","internal/bufferpool","internal/color","internal/exit","zapcore"]
+  revision = "9d9d6135afe89b6fc4a05e9a8552526caba38048"
+  version = "v1.5.0"
+
+[[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["acme","acme/autocert"]
@@ -78,12 +84,6 @@
   name = "golang.org/x/sys"
   packages = ["unix"]
   revision = "07c182904dbd53199946ba614a412c61d3c548f5"
-
-[[projects]]
-  name = "gopkg.in/go-playground/validator.v9"
-  packages = ["."]
-  revision = "d529ee1b0f30352444f507cc6cdac96bfd12decc"
-  version = "v9.6.0"
 
 [[projects]]
   name = "gopkg.in/gormigrate.v1"
@@ -100,6 +100,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "811adf67e46fe7c1ba43c0124ec41de89ba52631255801b992658823be2458e3"
+  inputs-digest = "b0b3deb2b6d1dc8458a4f499abc7b91a8064f0c8bc82a7698684221a27c66ea0"
   solver-name = "gps-cdcl"
   solver-version = 1

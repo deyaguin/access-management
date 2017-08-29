@@ -26,45 +26,53 @@ func NewPolicyService(storage storage.DB) PolicyService {
 }
 
 func (service *policyService) CreatePolicy(policyCreating *models.Policy) (*models.Policy, error) {
-	policy := new(models.Policy)
-
 	if err := validator.Validate(policyCreating); err != nil {
-
-		return policy, NewValidationError(err.Error())
+		return nil, NewValidationError(err.Error())
 	}
 
+	policy := new(models.Policy)
 	policy.SetFields(policyCreating)
 
-	err := service.storage.CreatePolicy(policy)
-	return policy, err
+	if err := service.storage.CreatePolicy(policy); err != nil {
+		return nil, err
+	}
+	return policy, nil
 }
 
 func (service *policyService) GetPolicy(id int) (*models.Policy, error) {
 	policy, err := service.storage.GetPolicy(id)
 	if err != nil {
-		return policy, NewEntityNotFoundError("policy", id)
+		return nil, NewEntityNotFoundError("policy", id)
 	}
 
-	return policy, err
+	return policy, nil
 }
 
 func (service *policyService) GetPolicies() (*[]models.Policy, error) {
-	return service.storage.GetPolicies()
+	policies, err := service.storage.GetPolicies()
+	if err != nil {
+		return nil, err
+	}
+
+	return policies, nil
 }
 
 func (service *policyService) UpdatePolicy(policyUpdating *models.Policy) (*models.Policy, error) {
 	policy, err := service.storage.GetPolicy(policyUpdating.ID)
 	if err != nil {
-		return policy, NewEntityNotFoundError("permission", policyUpdating.ID)
+		return nil, NewEntityNotFoundError("permission", policyUpdating.ID)
 	}
 
 	if err := validator.Validate(policyUpdating); err != nil {
-		return policy, NewValidationError(err.Error())
+		return nil, NewValidationError(err.Error())
 	}
 
 	policy.SetFields(policyUpdating)
+	if err := service.storage.UpdatePolicy(policy); err != nil {
+		return nil, err
+	}
 
-	return policy, service.storage.UpdatePolicy(policy)
+	return policy, nil
 }
 
 func (service *policyService) RemovePolicy(policy *models.Policy) error {
@@ -72,5 +80,9 @@ func (service *policyService) RemovePolicy(policy *models.Policy) error {
 		return NewEntityNotFoundError("policy", policy.ID)
 	}
 
-	return service.storage.RemovePolicy(policy)
+	if err := service.storage.RemovePolicy(policy); err != nil {
+		return err
+	}
+
+	return nil
 }

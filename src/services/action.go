@@ -25,44 +25,51 @@ func NewActionService(storage storage.DB) ActionService {
 }
 
 func (service *actionService) CreateAction(actionCreating *models.Action) (*models.Action, error) {
-	action := new(models.Action)
-
 	if err := validator.Validate(actionCreating); err != nil {
-		return action, NewValidationError(err.Error())
+		return nil, NewValidationError(err.Error())
 	}
 
+	action := new(models.Action)
 	action.SetFields(actionCreating)
 
-	err := service.storage.CreateAction(action)
-	return action, err
+	if err := service.storage.CreateAction(action); err != nil {
+		return nil, err
+	}
+
+	return action, nil
 }
 
 func (service *actionService) GetAction(id int) (*models.Action, error) {
 	action, err := service.storage.GetAction(id)
 	if err != nil {
-		return action, NewEntityNotFoundError("action", id)
+		return nil, NewEntityNotFoundError("action", id)
 	}
 
-	return action, err
+	return action, nil
 }
 
 func (service *actionService) GetActions() (*[]models.Action, error) {
-	return service.storage.GetActions()
+	action, err := service.storage.GetActions()
+	if err != nil {
+		return nil, err
+	}
+
+	return action, nil
 }
 
 func (service *actionService) UpdateAction(actionUpdating *models.Action) (*models.Action, error) {
 	action, err := service.storage.GetAction(actionUpdating.ID)
 	if err != nil {
-		return action, err
+		return nil, err
 	}
 
 	if err := validator.Validate(actionUpdating); err != nil {
-		return action, NewValidationError(err.Error())
+		return nil, NewValidationError(err.Error())
 	}
 
 	action.SetFields(actionUpdating)
 
-	return action, err
+	return action, nil
 }
 
 func (service *actionService) RemoveAction(action *models.Action) error {
@@ -70,5 +77,9 @@ func (service *actionService) RemoveAction(action *models.Action) error {
 		return NewEntityNotFoundError("action", action.ID)
 	}
 
-	return service.storage.RemoveAction(action)
+	if err := service.storage.RemoveAction(action); err != nil {
+		return err
+	}
+
+	return nil
 }

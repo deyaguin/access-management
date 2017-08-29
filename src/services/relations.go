@@ -45,12 +45,13 @@ func (service *relationsService) AddUsersToGroup(group *models.Group, users *[]m
 		if _, err := service.storage.GetUser(user.ID); err != nil {
 			return NewEntityNotFoundError("user", user.ID)
 		}
-		if user.ID == 0 {
-			return *new(error)
-		}
 	}
 
-	return service.storage.AddUsersToGroup(group, users)
+	if err := service.storage.AddUsersToGroup(group, users); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (service *relationsService) AddPermissionsToPolicy(policy *models.Policy, permissions *[]models.Permission) error {
@@ -64,7 +65,11 @@ func (service *relationsService) AddPermissionsToPolicy(policy *models.Policy, p
 		}
 	}
 
-	return service.storage.AddPermissionsToPolicy(policy, permissions)
+	if err := service.storage.AddPermissionsToPolicy(policy, permissions); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (service *relationsService) AttachPoliciesByUser(user *models.User, policies *[]models.Policy) error {
@@ -76,12 +81,13 @@ func (service *relationsService) AttachPoliciesByUser(user *models.User, policie
 		if _, err := service.storage.GetPolicy(policy.ID); err != nil {
 			return NewEntityNotFoundError("policy", policy.ID)
 		}
-		if policy.ID == 0 {
-			return *new(error)
-		}
 	}
 
-	return service.storage.AttachPoliciesByUser(user, policies)
+	if err := service.storage.AttachPoliciesByUser(user, policies); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (service *relationsService) AttachPoliciesByGroup(group *models.Group, policies *[]models.Policy) error {
@@ -98,7 +104,11 @@ func (service *relationsService) AttachPoliciesByGroup(group *models.Group, poli
 		}
 	}
 
-	return service.storage.AttachPoliciesByGroup(group, policies)
+	if err := service.storage.AttachPoliciesByGroup(group, policies); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (service *relationsService) RemoveUserFromGroup(group *models.Group, user *models.User) error {
@@ -109,7 +119,11 @@ func (service *relationsService) RemoveUserFromGroup(group *models.Group, user *
 		return NewEntityNotFoundError("user", user.ID)
 	}
 
-	return service.storage.RemoveUserFromGroup(group, user)
+	if err := service.storage.RemoveUserFromGroup(group, user); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (service *relationsService) RemovePermissionFromPolicy(policy *models.Policy, permission *models.Permission) error {
@@ -120,7 +134,11 @@ func (service *relationsService) RemovePermissionFromPolicy(policy *models.Polic
 		return NewEntityNotFoundError("permission", permission.ID)
 	}
 
-	return service.storage.RemovePermission(permission)
+	if err := service.storage.RemovePermission(permission); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (service *relationsService) DetachPolicyByUser(user *models.User, policy *models.Policy) error {
@@ -131,7 +149,11 @@ func (service *relationsService) DetachPolicyByUser(user *models.User, policy *m
 		return NewEntityNotFoundError("policy", policy.ID)
 	}
 
-	return service.storage.DetachPolicyByUser(user, policy)
+	if err := service.storage.DetachPolicyByUser(user, policy); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (service *relationsService) DetachPolicyByGroup(group *models.Group, policy *models.Policy) error {
@@ -142,75 +164,100 @@ func (service *relationsService) DetachPolicyByGroup(group *models.Group, policy
 		return NewEntityNotFoundError("policy", policy.ID)
 	}
 
-	return service.storage.DetachPolicyByGroup(group, policy)
+	if err := service.storage.DetachPolicyByGroup(group, policy); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (service *relationsService) GetGroupsByUser(user *models.User) (*[]models.Group, error) {
-	groups := new([]models.Group)
-
 	if _, err := service.storage.GetUser(user.ID); err != nil {
-		return groups, NewEntityNotFoundError("user", user.ID)
+		return nil, NewEntityNotFoundError("user", user.ID)
 	}
 
-	return service.storage.GetGroupsByUser(user)
+	groups, err := service.storage.GetGroupsByUser(user)
+	if err != nil {
+		return nil, err
+	}
+
+	return groups, err
 }
 
 func (service *relationsService) GetUsersByGroup(group *models.Group) (*[]models.User, error) {
-	users := new([]models.User)
-
 	if _, err := service.storage.GetGroup(group.ID); err != nil {
-		return users, NewEntityNotFoundError("group", group.ID)
+		return nil, NewEntityNotFoundError("group", group.ID)
 	}
 
-	return service.storage.GetUsersByGroup(group)
+	users, err := service.storage.GetUsersByGroup(group)
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
 
 func (service *relationsService) GetPoliciesByUser(user *models.User) (*[]models.Policy, error) {
-	policies := new([]models.Policy)
-
 	if _, err := service.storage.GetUser(user.ID); err != nil {
-		return policies, NewEntityNotFoundError("user", user.ID)
+		return nil, NewEntityNotFoundError("user", user.ID)
 	}
 
-	return service.storage.GetPoliciesByUser(user)
+	policies, err := service.storage.GetPoliciesByUser(user)
+	if err != nil {
+		return nil, err
+	}
+
+	return policies, nil
 }
 
 func (service *relationsService) GetPoliciesByGroup(group *models.Group) (*[]models.Policy, error) {
-	policies := new([]models.Policy)
-
 	if _, err := service.storage.GetGroup(group.ID); err != nil {
-		return policies, NewEntityNotFoundError("group", group.ID)
+		return nil, NewEntityNotFoundError("group", group.ID)
 	}
 
-	return service.storage.GetPoliciesByGroup(group)
+	policies, err := service.storage.GetPoliciesByGroup(group)
+	if err != nil {
+		return nil, err
+	}
+
+	return policies, nil
 }
 
 func (service *relationsService) GetUsersByPolicy(policy *models.Policy) (*[]models.User, error) {
-	users := new([]models.User)
-
 	if _, err := service.storage.GetPolicy(policy.ID); err != nil {
-		return users, NewEntityNotFoundError("policy", policy.ID)
+		return nil, NewEntityNotFoundError("policy", policy.ID)
 	}
 
-	return service.storage.GetUsersByPolicy(policy)
+	users, err := service.storage.GetUsersByPolicy(policy)
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
 
 func (service *relationsService) GetGroupsByPolicy(policy *models.Policy) (*[]models.Group, error) {
-	groups := new([]models.Group)
-
 	if _, err := service.storage.GetPolicy(policy.ID); err != nil {
-		return groups, NewEntityNotFoundError("policy", policy.ID)
+		return nil, NewEntityNotFoundError("policy", policy.ID)
 	}
 
-	return service.storage.GetGroupsByPolicy(policy)
+	groups, err := service.storage.GetGroupsByPolicy(policy)
+	if err != nil {
+		return nil, err
+	}
+
+	return groups, nil
 }
 
 func (service *relationsService) GetPermissionsByPolicy(policy *models.Policy) (*[]models.Permission, error) {
-	permissions := new([]models.Permission)
-
 	if _, err := service.storage.GetPolicy(policy.ID); err != nil {
-		return permissions, NewEntityNotFoundError("policy", policy.ID)
+		return nil, NewEntityNotFoundError("policy", policy.ID)
 	}
 
-	return service.storage.GetPermissionsByPolicy(policy)
+	permissions, err := service.storage.GetPermissionsByPolicy(policy)
+	if err != nil {
+		return nil, err
+	}
+
+	return permissions, nil
 }

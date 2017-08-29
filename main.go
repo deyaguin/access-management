@@ -20,6 +20,7 @@ func main() {
 	policyService := services.NewPolicyService(pgDB)
 	permissionService := services.NewPermissionService(pgDB)
 	relationsService := services.NewRelationsService(pgDB)
+	permissionsCheckService := services.NewPermissionsCheckService(pgDB)
 
 	api.NewAPI(
 		userService,
@@ -27,5 +28,6 @@ func main() {
 		policyService,
 		permissionService,
 		relationsService,
+		permissionsCheckService,
 	)
 }

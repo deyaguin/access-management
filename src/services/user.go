@@ -30,58 +30,64 @@ func NewUserService(storage storage.DB) UserService {
 }
 
 func (service *userService) CreateUser(userCreating *models.User) (*models.User, error) {
-	user := new(models.User)
-
 	if err := validator.Validate(userCreating); err != nil {
-		return user, NewValidationError(err.Error())
+		return nil, NewValidationError(err.Error())
 	}
 
+	user := new(models.User)
 	user.SetFields(userCreating)
 
-	err := service.storage.CreateUser(user)
-	return user, err
+	if err := service.storage.CreateUser(user); err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 func (service *userService) GetUser(id int) (*models.User, error) {
 	user, err := service.storage.GetUser(id)
 	if err != nil {
-		return user, NewEntityNotFoundError("user", id)
+		return nil, NewEntityNotFoundError("user", id)
 	}
 
-	return user, err
+	return user, nil
 }
 
 func (service *userService) GetUsers(page int) (*usersResponse, error) {
-	response := new(usersResponse)
 	users, err := service.storage.GetUsers(page)
 	if err != nil {
-		return response, err
+		return nil, err
 	}
 
 	count, err := service.storage.GetUsersCount()
 	if err != nil {
-		return response, err
+		return nil, err
 	}
 
-	response.Count = count
-	response.Users = users
+	response := &usersResponse{
+		users,
+		count,
+	}
 
-	return response, err
+	return response, nil
 }
 
 func (service *userService) UpdateUser(userUpdating *models.User) (*models.User, error) {
 	user, err := service.storage.GetUser(userUpdating.ID)
 	if err != nil {
-		return user, NewEntityNotFoundError("user", userUpdating.ID)
+		return nil, NewEntityNotFoundError("user", userUpdating.ID)
 	}
 
 	if err := validator.Validate(userUpdating); err != nil {
-		return user, NewValidationError(err.Error())
+		return nil, NewValidationError(err.Error())
 	}
 
 	user.SetFields(userUpdating)
+	if err := service.storage.UpdateUser(user); err != nil {
+		return nil, err
+	}
 
-	return user, service.storage.UpdateUser(user)
+	return user, nil
 }
 
 func (service *userService) RemoveUser(user *models.User) error {
@@ -89,5 +95,9 @@ func (service *userService) RemoveUser(user *models.User) error {
 		return NewEntityNotFoundError("user", user.ID)
 	}
 
-	return service.storage.RemoveUser(user)
+	if err := service.storage.RemoveUser(user); err != nil {
+		return err
+	}
+
+	return nil
 }

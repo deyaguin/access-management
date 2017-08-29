@@ -24,16 +24,19 @@ func NewPermissionService(storage storage.DB) PermissionService {
 func (service *permissionService) UpdatePermission(permissionUpdating *models.Permission) (*models.Permission, error) {
 	permission, err := service.storage.GetPermission(permissionUpdating.ID)
 	if err != nil {
-		return permission, NewEntityNotFoundError("permission", permissionUpdating.ID)
+		return nil, NewEntityNotFoundError("permission", permissionUpdating.ID)
 	}
 
 	if err := validator.Validate(permissionUpdating); err != nil {
-		return permission, NewValidationError(err.Error())
+		return nil, NewValidationError(err.Error())
 	}
 
 	permission.SetFields(permissionUpdating)
+	if err := service.storage.UpdatePermission(permission); err != nil {
+		return nil, err
+	}
 
-	return permission, service.storage.UpdatePermission(permission)
+	return permission, nil
 }
 
 func (service *permissionService) RemovePermission(permission *models.Permission) error {
@@ -41,5 +44,9 @@ func (service *permissionService) RemovePermission(permission *models.Permission
 		return NewEntityNotFoundError("permission", permission.ID)
 	}
 
-	return service.storage.RemovePermission(permission)
+	if err := service.storage.RemovePermission(permission); err != nil {
+		return err
+	}
+
+	return nil
 }
