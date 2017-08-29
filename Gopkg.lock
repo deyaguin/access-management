@@ -3,7 +3,7 @@
 
 [[projects]]
   name = "github.com/jinzhu/gorm"
-  packages = [".","dialects/postgres"]
+  packages = [".","dialects/sqlite"]
   revision = "5174cc5c242a728b435ea2be8a2f7f998e15429b"
   version = "v1.0"
 
@@ -16,20 +16,14 @@
 [[projects]]
   name = "github.com/labstack/echo"
   packages = ["."]
-  revision = "935a60782cbbc55110e7bd4b33120e4567cbee43"
-  version = "v3.2.1"
+  revision = "cec7629194fe4bf83b0c72d9a02d340c7a1468ac"
+  version = "3.2.3"
 
 [[projects]]
   name = "github.com/labstack/gommon"
   packages = ["color","log"]
   revision = "779b8a8b9850a97acba6a3fe20feb628c39e17c1"
   version = "0.2.2"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/lib/pq"
-  packages = [".","hstore","oid"]
-  revision = "e42267488fe361b9dc034be7a6bffef5b195bceb"
 
 [[projects]]
   name = "github.com/mattn/go-colorable"
@@ -44,6 +38,12 @@
   version = "v0.0.2"
 
 [[projects]]
+  name = "github.com/mattn/go-sqlite3"
+  packages = ["."]
+  revision = "ca5e3819723d8eeaf170ad510e7da1d6d2e94a08"
+  version = "v1.2.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/valyala/bytebufferpool"
   packages = ["."]
@@ -56,34 +56,22 @@
   revision = "dcecefd839c4193db0d35b88ec65b4c12d360ab0"
 
 [[projects]]
-  name = "go.uber.org/atomic"
-  packages = ["."]
-  revision = "4e336646b2ef9fc6e47be8e21594178f98e5ebcf"
-  version = "v1.2.0"
-
-[[projects]]
-  name = "go.uber.org/multierr"
-  packages = ["."]
-  revision = "3c4937480c32f4c13a875a1829af76c98ca3d40a"
-  version = "v1.1.0"
-
-[[projects]]
-  name = "go.uber.org/zap"
-  packages = [".","buffer","internal/bufferpool","internal/color","internal/exit","zapcore"]
-  revision = "9d9d6135afe89b6fc4a05e9a8552526caba38048"
-  version = "v1.5.0"
-
-[[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["acme","acme/autocert"]
-  revision = "eb71ad9bd329b5ac0fd0148dd99bd62e8be8e035"
+  revision = "81e90905daefcd6fd217b62423c0908922eadb30"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = ["context"]
+  revision = "66aacef3dd8a676686c7ae3716979581e8b03c47"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "07c182904dbd53199946ba614a412c61d3c548f5"
+  revision = "2d6f6f883a06fc0d5f4b14a81e4c28705ea64c15"
 
 [[projects]]
   name = "gopkg.in/gormigrate.v1"
@@ -100,6 +88,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "b0b3deb2b6d1dc8458a4f499abc7b91a8064f0c8bc82a7698684221a27c66ea0"
+  inputs-digest = "6018cf581634b6442a9b7865a9c053dc849522991597a2da0e92d92acc7b8559"
   solver-name = "gps-cdcl"
   solver-version = 1

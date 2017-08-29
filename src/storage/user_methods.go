@@ -33,3 +33,25 @@ func (dataBase SqlDB) UpdateUser(user *models.User) error {
 func (dataBase SqlDB) RemoveUser(user *models.User) error {
 	return dataBase.db.Where("id = ?", user.ID).Delete(user).Error
 }
+
+func (dataBase SqlDB) AttachPoliciesByUser(user *models.User, policies *[]models.Policy) error {
+	err := dataBase.db.Model(user).Association("policies").Append(policies).Error
+	return err
+}
+
+func (dataBase SqlDB) DetachPolicyByUser(user *models.User, policy *models.Policy) error {
+	err := dataBase.db.Model(user).Association("policies").Delete(policy).Error
+	return err
+}
+
+func (dataBase SqlDB) GetPoliciesByUser(user *models.User) (*[]models.Policy, error) {
+	policies := new([]models.Policy)
+	err := dataBase.db.Model(user).Related(policies, "Policies").Error
+	return policies, err
+}
+
+func (dataBase SqlDB) GetGroupsByUser(user *models.User) (*[]models.Group, error) {
+	groups := new([]models.Group)
+	err := dataBase.db.Model(user).Related(groups, "Groups").Error
+	return groups, err
+}

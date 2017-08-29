@@ -6,11 +6,10 @@ import (
 )
 
 type Api struct {
-	userService       services.UserService
-	groupService      services.GroupService
-	policyService     services.PolicyService
-	permissionService services.PermissionService
-	relationsService  services.RelationsService
+	userService             services.UserService
+	groupService            services.GroupService
+	policyService           services.PolicyService
+	permissionService       services.PermissionService
 	permissionsCheckService services.PermissionsCheckService
 }
 
@@ -19,7 +18,6 @@ func NewAPI(
 	groupService services.GroupService,
 	policyService services.PolicyService,
 	permissionService services.PermissionService,
-	relationsService services.RelationsService,
 	permissionsCheckService services.PermissionsCheckService,
 ) {
 	api := &Api{
@@ -27,8 +25,7 @@ func NewAPI(
 		groupService,
 		policyService,
 		permissionService,
-		relationsService,
-permissionsCheckService,
+		permissionsCheckService,
 	}
 	e := echo.New()
 
@@ -50,13 +47,13 @@ permissionsCheckService,
 	e.PATCH("/permissions/:id", api.updatePermission)
 
 	e.PUT("/groups/:id/users", api.addUsersToGroup)
-	e.GET("/groups/:id/users", api.getUsersByGroupHandler)
+	e.GET("/groups/:id/users", api.getUsersByGroup)
 	e.DELETE("/groups/:groupId/users/:userId", api.removeUserFromGroup)
 	e.PUT("/policies/:id/permissions", api.addPermissionsToPolicy)
-	e.GET("/policies/:id/permissions", api.getPermissionsByPolicyHandler)
+	e.GET("/policies/:id/permissions", api.getPermissionsByPolicy)
 	e.DELETE("/policies/:policyId/permissions/:permissionId", api.removePermissionFromPolicy)
 	e.PUT("/users/:id/policies", api.attachPoliciesByUser)
-	e.GET("/users/:id/policies", api.getPoliciesByUserHandler)
+	e.GET("/users/:id/policies", api.getPoliciesByUser)
 	e.DELETE("users/:userId/policies/:policyId", api.detachPolicyByUser)
 	e.PUT("/groups/:id/policies", api.attachPoliciesByGroup)
 	e.GET("/groups/:id/policies", api.getPoliciesByGroupHandler)
