@@ -169,12 +169,12 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1503663724669,
+			"time": 1503989152826,
 			"name": "createPolicy",
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"rawModeData": "{\n\t\"name\": \"p2\"\n}"
+			"rawModeData": "{\n\t\"name\": \"\",\n\t\"description\": \"\"\n}"
 		},
 		{
 			"id": "14999713-28a0-5a28-02b9-a30eefc11ceb",
@@ -407,12 +407,12 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1503904131479,
+			"time": 1503989159363,
 			"name": "checkPermissions",
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"rawModeData": "{\n\t\"resourse\": \"docs\",\n\t\"action\": 3,\n\t\"id\": 29\n}\n"
+			"rawModeData": "{\n\t\"resourse\": \"docs\",\n\t\"action\": 1,\n\t\"id\": 29\n}\n"
 		},
 		{
 			"id": "422c1a43-4cfe-2bc5-22de-f2ca80347264",
@@ -606,13 +606,13 @@
 			"preRequestScript": "",
 			"pathVariables": {},
 			"pathVariableData": [],
-			"method": "POST",
+			"method": "PATCH",
 			"data": [],
 			"dataMode": "raw",
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1503925083343,
+			"time": 1504000083289,
 			"name": "updateUser",
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
@@ -630,7 +630,7 @@
 					"enabled": true
 				}
 			],
-			"url": "http://{{host}}/users/2",
+			"url": "http://{{host}}/users/36",
 			"queryParams": [],
 			"preRequestScript": "",
 			"pathVariables": {},
@@ -641,7 +641,7 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1503663472558,
+			"time": 1504005423708,
 			"name": "removeUser",
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
@@ -728,12 +728,12 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1503923200973,
+			"time": 1503997425552,
 			"name": "createUser",
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"rawModeData": "{\n\t\"name\": \"u1\"\n}"
+			"rawModeData": "{\n\t\"name\": \"20\"\n}"
 		},
 		{
 			"id": "880eda23-53f7-9427-704e-ca3a873792c6",
@@ -953,8 +953,16 @@
 					"enabled": true
 				}
 			],
-			"url": "http://{{host}}/users",
-			"queryParams": [],
+			"url": "http://{{host}}/users?page=2",
+			"queryParams": [
+				{
+					"key": "page",
+					"value": "2",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
 			"preRequestScript": "",
 			"pathVariables": {},
 			"pathVariableData": [],
@@ -964,7 +972,7 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1503663707620,
+			"time": 1504005424873,
 			"name": "getUsers",
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",

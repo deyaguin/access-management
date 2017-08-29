@@ -8,7 +8,7 @@ import (
 type CheckingParams struct {
 	Resourse string `validation:"nonzero"`
 	Action   int    `validation:"nonzero"`
-	UserID   int    `validation:"nonzero"`
+	ID       int    `validation:"nonzero"`
 }
 
 type PermissionsCheckService interface {
@@ -29,7 +29,7 @@ func NewPermissionsCheckService(storage storage.DB) PermissionsCheckService {
 }
 
 func (service *permissionsCheckService) CheckPermissions(checkingParams *CheckingParams) (bool, error) {
-	user := &models.User{ID: checkingParams.UserID}
+	user := &models.User{ID: checkingParams.ID}
 	userPermissions, err := service.getUserPermissions(user)
 	if err != nil {
 		return false, err
