@@ -12,9 +12,9 @@ func (err *ValidationError) Error() string {
 	return err.Message
 }
 
-func NewValidationError(Message string) *ValidationError {
+func NewValidationError(message string) *ValidationError {
 	return &ValidationError{
-		Message,
+		message,
 	}
 }
 
@@ -24,7 +24,7 @@ type EntityNotFoundError struct {
 }
 
 func (err *EntityNotFoundError) Error() string {
-	return fmt.Sprintf("%s with indetifier %d not found", err.Entity, err.ID)
+	return fmt.Sprintf("%s with identifier %d not found", err.Entity, err.ID)
 }
 
 func NewEntityNotFoundError(entity string, id int) *EntityNotFoundError {

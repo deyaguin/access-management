@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"github.com/labstack/echo"
 	"gitlab/nefco/access-management-system/src/models"
 	"gitlab/nefco/access-management-system/src/services"
@@ -25,7 +24,12 @@ func (a *Api) createUser(c echo.Context) error {
 }
 
 func (a *Api) getUsers(c echo.Context) error {
-	users, err := a.userService.GetUsers()
+	page, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil {
+		return services.NewInvalidQueryError("page number is not valid")
+	}
+
+	users, err := a.userService.GetUsers(page)
 	if err != nil {
 		return err
 	}
@@ -36,12 +40,11 @@ func (a *Api) getUsers(c echo.Context) error {
 func (a *Api) getUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return services.NewInvalidQueryError("user id is not valid")
 	}
 
 	user, err := a.userService.GetUser(id)
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
 
@@ -51,7 +54,7 @@ func (a *Api) getUser(c echo.Context) error {
 func (a *Api) updateUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return services.NewInvalidQueryError("user id is not valid")
 	}
 
 	userUpdating := &models.User{ID: id}
@@ -70,7 +73,7 @@ func (a *Api) updateUser(c echo.Context) error {
 func (a *Api) removeUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return services.NewInvalidQueryError("query params is not valid")
+		return services.NewInvalidQueryError("user id is not valid")
 	}
 
 	user := &models.User{ID: id}
@@ -78,5 +81,5 @@ func (a *Api) removeUser(c echo.Context) error {
 		return err
 	}
 
-	return c.NoContent(http.StatusOK)
+	return c.NoContent(http.StatusNoContent)
 }

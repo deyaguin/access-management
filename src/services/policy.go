@@ -4,6 +4,7 @@ import (
 	"gitlab/nefco/access-management-system/src/models"
 	"gitlab/nefco/access-management-system/src/storage"
 	"gopkg.in/validator.v2"
+
 )
 
 type PolicyService interface {
@@ -27,8 +28,9 @@ func NewPolicyService(storage storage.DB) PolicyService {
 func (service *policyService) CreatePolicy(policyCreating *models.Policy) (*models.Policy, error) {
 	policy := new(models.Policy)
 
-	if err := validator.Validate(policy); err != nil {
-		return policy, err
+	if err := validator.Validate(policyCreating); err != nil {
+
+		return policy, NewValidationError(err.Error())
 	}
 
 	policy.SetFields(policyCreating)

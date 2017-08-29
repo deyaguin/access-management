@@ -6,10 +6,15 @@ import (
 	"gopkg.in/validator.v2"
 )
 
+type usersResponse struct {
+	Users *[]models.User `json:"users"`
+	Count int `json:"count"`
+}
+
 type UserService interface {
 	CreateUser(*models.User) (*models.User, error)
 	GetUser(int) (*models.User, error)
-	GetUsers() (*[]models.User, error)
+	GetUsers(int) (*usersResponse, error)
 	UpdateUser(*models.User) (*models.User, error)
 	RemoveUser(*models.User) error
 }
@@ -46,8 +51,22 @@ func (service *userService) GetUser(id int) (*models.User, error) {
 	return user, err
 }
 
-func (service *userService) GetUsers() (*[]models.User, error) {
-	return service.storage.GetUsers()
+func (service *userService) GetUsers(page int) (*usersResponse, error) {
+	response := new(usersResponse)
+	users, err := service.storage.GetUsers(page)
+	if err != nil {
+		return response, err
+	}
+
+	count, err := service.storage.GetUsersCount()
+	if err != nil {
+		return response, err
+	}
+
+	response.Count = count
+	response.Users = users
+
+	return response, err
 }
 
 func (service *userService) UpdateUser(userUpdating *models.User) (*models.User, error) {
@@ -67,7 +86,7 @@ func (service *userService) UpdateUser(userUpdating *models.User) (*models.User,
 
 func (service *userService) RemoveUser(user *models.User) error {
 	if _, err := service.storage.GetUser(user.ID); err != nil {
-		return err
+		return NewEntityNotFoundError("user", user.ID)
 	}
 
 	return service.storage.RemoveUser(user)

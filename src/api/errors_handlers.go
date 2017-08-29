@@ -19,6 +19,6 @@ func (a *Api) errorHandler(err error, c echo.Context) {
 	case *services.InvalidQueryError:
 		c.JSON(http.StatusBadRequest, &errorBody{err.Error()})
 	case *services.UnprocessableBodyError:
-		c.JSON(http.StatusUnprocessableEntity, &errorBody{err.Error()})
+		c.JSON(http.StatusBadRequest, &errorBody{err.Error()})
 	}
 }

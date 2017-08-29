@@ -76,5 +76,5 @@ func (a *Api) removePolicy(c echo.Context) error {
 		return err
 	}
 
-	return c.NoContent(http.StatusOK)
+	return c.NoContent(http.StatusNoContent)
 }

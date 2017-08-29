@@ -57,7 +57,7 @@ func (a *Api) removeUserFromGroup(c echo.Context) error {
 		return err
 	}
 
-	return c.NoContent(http.StatusOK)
+	return c.NoContent(http.StatusNoContent)
 }
 
 func (a *Api) addPermissionsToPolicy(c echo.Context) error {
@@ -96,7 +96,7 @@ func (a *Api) removePermissionFromPolicy(c echo.Context) error {
 		return err
 	}
 
-	return c.NoContent(http.StatusOK)
+	return c.NoContent(http.StatusNoContent)
 }
 
 func (a *Api) attachPoliciesByUser(c echo.Context) error {
@@ -135,7 +135,7 @@ func (a *Api) detachPolicyByUser(c echo.Context) error {
 		return err
 	}
 
-	return c.NoContent(http.StatusOK)
+	return c.NoContent(http.StatusNoContent)
 }
 
 func (a *Api) attachPoliciesByGroup(c echo.Context) error {
@@ -174,5 +174,5 @@ func (a *Api) detachPolicyByGroup(c echo.Context) error {
 		return err
 	}
 
-	return c.NoContent(http.StatusOK)
+	return c.NoContent(http.StatusNoContent)
 }

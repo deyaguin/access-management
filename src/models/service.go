@@ -6,7 +6,7 @@ type Service struct {
 	ID        int        `json:"id" gorm:"AUTO_INCREMENT;not null;unique"`
 	CreatedAt time.Time  `json:"createdAt"`
 	UpdatedAt time.Time  `json:"updatedAt"`
-	DeletedAt *time.Time `json:""`
+	DeletedAt *time.Time `json:"-"`
 	Name      string     `json:"name" validate:"nonzero"`
 	Actions   []Action   `json:"-"`
 }

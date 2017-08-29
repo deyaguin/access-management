@@ -11,6 +11,7 @@ type Api struct {
 	policyService     services.PolicyService
 	permissionService services.PermissionService
 	relationsService  services.RelationsService
+	permissionsCheckService services.PermissionsCheckService
 }
 
 func NewAPI(
@@ -19,6 +20,7 @@ func NewAPI(
 	policyService services.PolicyService,
 	permissionService services.PermissionService,
 	relationsService services.RelationsService,
+	permissionsCheckService services.PermissionsCheckService,
 ) {
 	api := &Api{
 		userService,
@@ -26,6 +28,7 @@ func NewAPI(
 		policyService,
 		permissionService,
 		relationsService,
+permissionsCheckService,
 	}
 	e := echo.New()
 

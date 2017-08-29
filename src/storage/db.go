@@ -7,7 +7,8 @@ import (
 
 type DB interface {
 	CreateUser(*models.User) error
-	GetUsers() (*[]models.User, error)
+	GetUsers(int) (*[]models.User, error)
+	GetUsersCount() (int, error)
 	GetUser(int) (*models.User, error)
 	UpdateUser(*models.User) error
 	RemoveUser(*models.User) error
@@ -29,16 +30,15 @@ type DB interface {
 	UpdatePermission(*models.Permission) error
 	RemovePermission(*models.Permission) error
 
-	//CreateAction(*models.Action) error
-	//GetActions(*[]models.Action) error
+	CreateAction(*models.Action) error
+	GetActions() (*[]models.Action, error)
 	GetAction(id int) (*models.Action, error)
-	//UpdateAction(*models.Action) error
-	//DeleteAction(*models.Action) error
+	UpdateAction(*models.Action) error
+	RemoveAction(*models.Action) error
 
 	AddUsersToGroup(*models.Group, *[]models.User) error
 	RemoveUserFromGroup(*models.Group, *models.User) error
 	AddPermissionsToPolicy(*models.Policy, *[]models.Permission) error
-	//RemovePermissionsFromPolicy(*models.Policy, *models.Permission) error
 	AttachPoliciesByUser(*models.User, *[]models.Policy) error
 	DetachPolicyByUser(*models.User, *models.Policy) error
 	AttachPoliciesByGroup(*models.Group, *[]models.Policy) error

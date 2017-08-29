@@ -28,7 +28,7 @@ func (service *groupService) CreateGroup(groupCreating *models.Group) (*models.G
 	group := new(models.Group)
 
 	if err := validator.Validate(groupCreating); err != nil {
-		return groupCreating, NewValidationError(err.Error())
+		return group, NewValidationError(err.Error())
 	}
 
 	group.SetFields(groupCreating)
