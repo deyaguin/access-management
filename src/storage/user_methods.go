@@ -8,9 +8,9 @@ func (dataBase SqlDB) CreateUser(user *models.User) error {
 	return dataBase.db.Create(user).Error
 }
 
-func (dataBase SqlDB) GetUsers(page int) (*[]models.User, error) {
+func (dataBase SqlDB) GetUsers(page, perPage int) (*[]models.User, error) {
 	users := new([]models.User)
-	err := dataBase.db.Limit(ITEMS_ON_PAGE).Offset(page * ITEMS_ON_PAGE).Find(users).Error
+	err := dataBase.db.Limit(perPage).Offset(page * perPage).Find(users).Error
 	return users, err
 }
 
@@ -31,7 +31,7 @@ func (dataBase SqlDB) UpdateUser(user *models.User) error {
 }
 
 func (dataBase SqlDB) RemoveUser(user *models.User) error {
-	return dataBase.db.Where("id = ?", user.ID).Delete(user).Error
+	return dataBase.db.Delete(user).Error
 }
 
 func (dataBase SqlDB) AttachPoliciesByUser(user *models.User, policies *[]models.Policy) error {

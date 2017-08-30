@@ -9,10 +9,16 @@ func (dataBase SqlDB) CreatePolicy(policy *models.Policy) error {
 	return err
 }
 
-func (dataBase SqlDB) GetPolicies() (*[]models.Policy, error) {
+func (dataBase SqlDB) GetPolicies(page, perPage int) (*[]models.Policy, error) {
 	policies := new([]models.Policy)
-	err := dataBase.db.Find(policies).Error
+	err := dataBase.db.Limit(perPage).Offset(page * perPage).Find(policies).Error
 	return policies, err
+}
+
+func (dataBase SqlDB) GetPoliciesCount() (int, error) {
+	var count int
+	err := dataBase.db.Table("policies").Count(&count).Error
+	return count, err
 }
 
 func (dataBase SqlDB) GetPolicy(id int) (*models.Policy, error) {

@@ -7,15 +7,11 @@ import (
 	"strconv"
 )
 
-type permissions struct {
-	Permissions *[]models.Permission `validate:"required"`
-}
-
 func (a *Api) createPolicy(c echo.Context) error {
 	policyCreating := &models.Policy{}
 
 	if err := c.Bind(policyCreating); err != nil {
-		return NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError()
 	}
 
 	policy, err := a.policyService.CreatePolicy(policyCreating)
@@ -27,7 +23,17 @@ func (a *Api) createPolicy(c echo.Context) error {
 }
 
 func (a *Api) getPolicies(c echo.Context) error {
-	policies, err := a.policyService.GetPolicies()
+	page, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil {
+		return NewInvalidQueryError("page", c.QueryParam("page"))
+	}
+
+	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
+	if err != nil {
+		return NewInvalidQueryError("per_page", c.QueryParam("per_page"))
+	}
+
+	policies, err := a.policyService.GetPolicies(page, perPage)
 	if err != nil {
 		return NewInvalidQueryError("GroupID", string(3))
 	}
@@ -52,12 +58,12 @@ func (a *Api) getPolicy(c echo.Context) error {
 func (a *Api) updatePolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", string(id))
+		return NewInvalidQueryError("PolicyID", c.Param("id"))
 	}
 
 	policyUpdating := &models.Policy{ID: id}
 	if err := c.Bind(policyUpdating); err != nil {
-		return NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError()
 	}
 
 	policy, err := a.policyService.UpdatePolicy(policyUpdating)
@@ -71,11 +77,10 @@ func (a *Api) updatePolicy(c echo.Context) error {
 func (a *Api) removePolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", string(id))
+		return NewInvalidQueryError("PolicyID", c.Param("id"))
 	}
 
-	policy := &models.Policy{ID: id}
-	if err := a.policyService.RemovePolicy(policy); err != nil {
+	if err := a.policyService.RemovePolicy(id); err != nil {
 		return err
 	}
 
@@ -85,13 +90,13 @@ func (a *Api) removePolicy(c echo.Context) error {
 func (a *Api) addPermissionsToPolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", string(id))
+		return NewInvalidQueryError("PolicyID", c.Param("id"))
 	}
 	policy := &models.Policy{ID: id}
 
 	permissions := new(permissions)
 	if err = c.Bind(permissions); err != nil {
-		return NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError()
 	}
 
 	if err = a.policyService.AddPermissionsToPolicy(policy, permissions.Permissions); err != nil {
@@ -104,17 +109,15 @@ func (a *Api) addPermissionsToPolicy(c echo.Context) error {
 func (a *Api) removePermissionFromPolicy(c echo.Context) error {
 	policyId, err := strconv.Atoi(c.Param("policyId"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", string(policyId))
+		return NewInvalidQueryError("PolicyID", c.Param("policyId"))
 	}
-	policy := &models.Policy{ID: policyId}
 
 	permissionId, err := strconv.Atoi(c.Param("permissionId"))
 	if err != nil {
-		return NewInvalidQueryError("PermissionID", string(permissionId))
+		return NewInvalidQueryError("PermissionID", c.Param("permissionId"))
 	}
-	permission := &models.Permission{ID: permissionId}
 
-	if err = a.policyService.RemovePermissionFromPolicy(policy, permission); err != nil {
+	if err = a.policyService.RemovePermissionFromPolicy(policyId, permissionId); err != nil {
 		return err
 	}
 
@@ -124,11 +127,10 @@ func (a *Api) removePermissionFromPolicy(c echo.Context) error {
 func (a *Api) getPermissionsByPolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", string(id))
+		return NewInvalidQueryError("PolicyID", c.Param("id"))
 	}
-	policy := &models.Policy{ID: id}
 
-	permissions, err := a.policyService.GetPermissionsByPolicy(policy)
+	permissions, err := a.policyService.GetPermissionsByPolicy(id)
 	if err != nil {
 		return err
 	}

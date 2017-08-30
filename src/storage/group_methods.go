@@ -9,10 +9,16 @@ func (dataBase SqlDB) CreateGroup(group *models.Group) error {
 	return err
 }
 
-func (dataBase SqlDB) GetGroups() (*[]models.Group, error) {
+func (dataBase SqlDB) GetGroups(page, perPage int) (*[]models.Group, error) {
 	groups := new([]models.Group)
-	err := dataBase.db.Find(groups).Error
+	err := dataBase.db.Limit(perPage).Offset(page * perPage).Find(groups).Error
 	return groups, err
+}
+
+func (dataBase SqlDB) GetGroupsCount() (int, error) {
+	var count int
+	err := dataBase.db.Table("groups").Count(&count).Error
+	return count, err
 }
 
 func (dataBase SqlDB) GetGroup(id int) (*models.Group, error) {

@@ -7,15 +7,11 @@ import (
 	"strconv"
 )
 
-type groups struct {
-	Groups *[]models.Group `validate:"required"`
-}
-
 func (a *Api) createUser(c echo.Context) error {
 	userCreating := &models.User{}
 
 	if err := c.Bind(userCreating); err != nil {
-		return NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError()
 	}
 
 	user, err := a.userService.CreateUser(userCreating)
@@ -29,10 +25,15 @@ func (a *Api) createUser(c echo.Context) error {
 func (a *Api) getUsers(c echo.Context) error {
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
-		return NewInvalidQueryError("GroupID", string(3))
+		return NewInvalidQueryError("page", c.QueryParam("page"))
 	}
 
-	users, err := a.userService.GetUsers(page)
+	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
+	if err != nil {
+		return NewInvalidQueryError("per_page", c.QueryParam("per_page"))
+	}
+
+	users, err := a.userService.GetUsers(page, perPage)
 	if err != nil {
 		return err
 	}
@@ -43,7 +44,7 @@ func (a *Api) getUsers(c echo.Context) error {
 func (a *Api) getUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("UserID", string(id))
+		return NewInvalidQueryError("UserID", c.Param("id"))
 	}
 
 	user, err := a.userService.GetUser(id)
@@ -57,12 +58,12 @@ func (a *Api) getUser(c echo.Context) error {
 func (a *Api) updateUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("UserID", string(id))
+		return NewInvalidQueryError("UserID", c.Param("id"))
 	}
 
 	userUpdating := &models.User{ID: id}
 	if err := c.Bind(userUpdating); err != nil {
-		return NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError()
 	}
 
 	user, err := a.userService.UpdateUser(userUpdating)
@@ -76,11 +77,10 @@ func (a *Api) updateUser(c echo.Context) error {
 func (a *Api) removeUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("UserID", string(id))
+		return NewInvalidQueryError("UserID", c.Param("id"))
 	}
 
-	user := &models.User{ID: id}
-	if err := a.userService.RemoveUser(user); err != nil {
+	if err := a.userService.RemoveUser(id); err != nil {
 		return err
 	}
 
@@ -90,13 +90,13 @@ func (a *Api) removeUser(c echo.Context) error {
 func (a *Api) attachPoliciesByUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("UserID", string(id))
+		return NewInvalidQueryError("UserID", c.Param("id"))
 	}
 	user := &models.User{ID: id}
 
 	policies := new(policies)
 	if err = c.Bind(policies); err != nil {
-		return NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError()
 	}
 
 	if err = a.userService.AttachPoliciesByUser(user, policies.Policies); err != nil {
@@ -109,17 +109,15 @@ func (a *Api) attachPoliciesByUser(c echo.Context) error {
 func (a *Api) detachPolicyByUser(c echo.Context) error {
 	userId, err := strconv.Atoi(c.Param("userId"))
 	if err != nil {
-		return NewInvalidQueryError("UserID", string(userId))
+		return NewInvalidQueryError("UserID", c.Param("userId"))
 	}
-	user := &models.User{ID: userId}
 
 	policyId, err := strconv.Atoi(c.Param("policyId"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", string(policyId))
+		return NewInvalidQueryError("PolicyID", c.Param("policyId"))
 	}
-	policy := &models.Policy{ID: policyId}
 
-	if err = a.userService.DetachPolicyByUser(user, policy); err != nil {
+	if err = a.userService.DetachPolicyByUser(userId, policyId); err != nil {
 		return err
 	}
 
@@ -129,11 +127,10 @@ func (a *Api) detachPolicyByUser(c echo.Context) error {
 func (a *Api) getPoliciesByUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("UserID", string(id))
+		return NewInvalidQueryError("UserID", c.Param("id"))
 	}
-	user := &models.User{ID: id}
 
-	policies, err := a.userService.GetPoliciesByUser(user)
+	policies, err := a.userService.GetPoliciesByUser(id)
 	if err != nil {
 		return err
 	}

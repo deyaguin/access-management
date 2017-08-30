@@ -10,12 +10,12 @@ import (
 func (a *Api) updatePermission(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("PermissionID", string(id))
+		return NewInvalidQueryError("PermissionID", c.Param("id"))
 	}
 
 	permissionUpdating := &models.Permission{ID: id}
 	if err := c.Bind(permissionUpdating); err != nil {
-		return NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError()
 	}
 
 	permission, err := a.permissionService.UpdatePermission(permissionUpdating)

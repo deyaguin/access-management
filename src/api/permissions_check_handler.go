@@ -9,7 +9,7 @@ import (
 func (a *Api) userPermissions(c echo.Context) error {
 	checkingParams := new(services.CheckingParams)
 	if err := c.Bind(checkingParams); err != nil {
-		return NewUnprocessableBodyError("body is unprocessable")
+		return NewUnprocessableBodyError()
 	}
 
 	access, err := a.permissionsCheckService.CheckPermissions(checkingParams)

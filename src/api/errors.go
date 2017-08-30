@@ -23,11 +23,11 @@ type UnprocessableBodyError struct {
 }
 
 func (err *UnprocessableBodyError) Error() string {
-	return err.Message
+	return "Unprocessable body"
 }
 
-func NewUnprocessableBodyError(message string) *UnprocessableBodyError {
+func NewUnprocessableBodyError() *UnprocessableBodyError {
 	return &UnprocessableBodyError{
-		message,
+		//message,
 	}
 }

@@ -8,7 +8,7 @@ import (
 
 type PermissionService interface {
 	UpdatePermission(*models.Permission) (*models.Permission, error)
-	RemovePermission(*models.Permission) error
+	RemovePermission(int) error
 }
 
 type permissionService struct {
@@ -39,9 +39,10 @@ func (service *permissionService) UpdatePermission(permissionUpdating *models.Pe
 	return permission, nil
 }
 
-func (service *permissionService) RemovePermission(permission *models.Permission) error {
-	if _, err := service.storage.GetPermission(permission.ID); err != nil {
-		return NewEntityNotFoundError("permission", permission.ID)
+func (service *permissionService) RemovePermission(permissionId int) error {
+	permission, err := service.storage.GetPermission(permissionId)
+	if err != nil {
+		return NewEntityNotFoundError("permission", permissionId)
 	}
 
 	if err := service.storage.RemovePermission(permission); err != nil {
