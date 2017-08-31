@@ -15,22 +15,26 @@ type PolicyService interface {
 
 	AddPermissionsToPolicy(*models.Policy, *[]models.Permission) error
 	RemovePermissionFromPolicy(int, int) error
-	GetUsersByPolicy(int) (*[]models.User, error)
-	GetGroupsByPolicy(int) (*[]models.Group, error)
-	GetPermissionsByPolicy(int) (*[]models.Permission, error)
+	GetUsersByPolicy(int, int, int) (*items, error)
+	GetGroupsByPolicy(int, int, int) (*items, error)
+	GetPermissionsByPolicy(int, int, int) (*items, error)
 }
 
 type policyService struct {
 	storage storage.DB
 }
 
-func NewPolicyService(storage storage.DB) PolicyService {
+func NewPolicyService(
+	storage storage.DB,
+) PolicyService {
 	return &policyService{
 		storage,
 	}
 }
 
-func (service *policyService) CreatePolicy(policyCreating *models.Policy) (*models.Policy, error) {
+func (service *policyService) CreatePolicy(
+	policyCreating *models.Policy,
+) (*models.Policy, error) {
 	if err := validator.Validate(policyCreating); err != nil {
 		return nil, NewValidationError(err.Error())
 	}
@@ -44,7 +48,9 @@ func (service *policyService) CreatePolicy(policyCreating *models.Policy) (*mode
 	return policy, nil
 }
 
-func (service *policyService) GetPolicy(id int) (*models.Policy, error) {
+func (service *policyService) GetPolicy(
+	id int,
+) (*models.Policy, error) {
 	policy, err := service.storage.GetPolicy(id)
 	if err != nil {
 		return nil, NewEntityNotFoundError("policy", id)
@@ -53,7 +59,10 @@ func (service *policyService) GetPolicy(id int) (*models.Policy, error) {
 	return policy, nil
 }
 
-func (service *policyService) GetPolicies(page, perPage int) (*items, error) {
+func (service *policyService) GetPolicies(
+	page int,
+	perPage int,
+) (*items, error) {
 	policies, err := service.storage.GetPolicies(page, perPage)
 	if err != nil {
 		return nil, err
@@ -72,7 +81,9 @@ func (service *policyService) GetPolicies(page, perPage int) (*items, error) {
 	return response, nil
 }
 
-func (service *policyService) UpdatePolicy(policyUpdating *models.Policy) (*models.Policy, error) {
+func (service *policyService) UpdatePolicy(
+	policyUpdating *models.Policy,
+) (*models.Policy, error) {
 	policy, err := service.storage.GetPolicy(policyUpdating.ID)
 	if err != nil {
 		return nil, NewEntityNotFoundError("permission", policyUpdating.ID)
@@ -90,7 +101,9 @@ func (service *policyService) UpdatePolicy(policyUpdating *models.Policy) (*mode
 	return policy, nil
 }
 
-func (service *policyService) RemovePolicy(id int) error {
+func (service *policyService) RemovePolicy(
+	id int,
+) error {
 	policy, err := service.storage.GetPolicy(id)
 	if err != nil {
 		return NewEntityNotFoundError("policy", id)
@@ -103,7 +116,10 @@ func (service *policyService) RemovePolicy(id int) error {
 	return nil
 }
 
-func (service *policyService) AddPermissionsToPolicy(policy *models.Policy, permissions *[]models.Permission) error {
+func (service *policyService) AddPermissionsToPolicy(
+	policy *models.Policy,
+	permissions *[]models.Permission,
+) error {
 	if _, err := service.storage.GetPolicy(policy.ID); err != nil {
 		return NewEntityNotFoundError("policy", policy.ID)
 	}
@@ -114,14 +130,20 @@ func (service *policyService) AddPermissionsToPolicy(policy *models.Policy, perm
 		}
 	}
 
-	if err := service.storage.AddPermissionsToPolicy(policy, permissions); err != nil {
+	if err := service.storage.AddPermissionsToPolicy(
+		policy,
+		permissions,
+	); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (service *policyService) RemovePermissionFromPolicy(policyId, permissionId int) error {
+func (service *policyService) RemovePermissionFromPolicy(
+	policyId int,
+	permissionId int,
+) error {
 	_, err := service.storage.GetPolicy(policyId)
 	if err != nil {
 		return NewEntityNotFoundError("policy", policyId)
@@ -139,44 +161,83 @@ func (service *policyService) RemovePermissionFromPolicy(policyId, permissionId 
 	return nil
 }
 
-func (service *policyService) GetPermissionsByPolicy(policyId int) (*[]models.Permission, error) {
+func (service *policyService) GetPermissionsByPolicy(
+	policyId int,
+	page int,
+	perPage int,
+) (*items, error) {
 	policy, err := service.storage.GetPolicy(policyId)
 	if err != nil {
 		return nil, NewEntityNotFoundError("policy", policyId)
 	}
 
-	permissions, err := service.storage.GetPermissionsByPolicy(policy)
+	permissions, count, err := service.storage.GetPermissionsByPolicy(
+		policy,
+		&page,
+		&perPage,
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	return permissions, nil
+	items := &items{
+		permissions,
+		count,
+	}
+
+	return items, nil
 }
 
-func (service *policyService) GetUsersByPolicy(policyId int) (*[]models.User, error) {
+func (service *policyService) GetUsersByPolicy(
+	policyId int,
+	page int,
+	perPage int,
+) (*items, error) {
 	policy, err := service.storage.GetPolicy(policyId)
 	if err != nil {
 		return nil, NewEntityNotFoundError("policy", policyId)
 	}
 
-	users, err := service.storage.GetUsersByPolicy(policy)
+	users, count, err := service.storage.GetUsersByPolicy(
+		policy,
+		&page,
+		&perPage,
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	return users, nil
+	items := &items{
+		users,
+		count,
+	}
+
+	return items, nil
 }
 
-func (service *policyService) GetGroupsByPolicy(policyId int) (*[]models.Group, error) {
+func (service *policyService) GetGroupsByPolicy(
+	policyId int,
+	page int,
+	perPage int,
+) (*items, error) {
 	policy, err := service.storage.GetPolicy(policyId)
 	if err != nil {
 		return nil, NewEntityNotFoundError("policy", policyId)
 	}
 
-	groups, err := service.storage.GetGroupsByPolicy(policy)
+	groups, count, err := service.storage.GetGroupsByPolicy(
+		policy,
+		&page,
+		&perPage,
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	return groups, nil
+	items := &items{
+		groups,
+		count,
+	}
+
+	return items, nil
 }

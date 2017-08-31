@@ -7,11 +7,17 @@ type Service struct {
 	CreatedAt time.Time  `json:"createdAt"`
 	UpdatedAt time.Time  `json:"updatedAt"`
 	DeletedAt *time.Time `json:"-"`
-	Name      string     `json:"name" validate:"nonzero"`
+	Name      *string    `json:"name" validate:"nonzero"`
 	Actions   []Action   `json:"-"`
 }
 
-func (s *Service) Equals(comparedS Service) bool {
-	result := s.Name == comparedS.Name
+func (s *Service) Equals(service Service) bool {
+	result := s.Name == service.Name
 	return result
+}
+
+func (s *Service) SetFields(service Service) {
+	if service.Name != nil {
+		s.Name = service.Name
+	}
 }

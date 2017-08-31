@@ -14,8 +14,8 @@ type DB interface {
 	RemoveUser(*models.User) error
 	AttachPoliciesByUser(*models.User, *[]models.Policy) error
 	DetachPolicyByUser(*models.User, *models.Policy) error
-	GetPoliciesByUser(*models.User) (*[]models.Policy, error)
-	GetGroupsByUser(*models.User) (*[]models.Group, error)
+	GetPoliciesByUser(*models.User, *int, *int) (*[]models.Policy, int, error)
+	GetGroupsByUser(*models.User, *int, *int) (*[]models.Group, int, error)
 
 	CreateGroup(*models.Group) error
 	GetGroups(int, int) (*[]models.Group, error)
@@ -25,10 +25,10 @@ type DB interface {
 	RemoveGroup(*models.Group) error
 	AddUsersToGroup(*models.Group, *[]models.User) error
 	RemoveUserFromGroup(*models.Group, *models.User) error
-	GetUsersByGroup(*models.Group) (*[]models.User, error)
+	GetUsersByGroup(*models.Group, *int, *int) (*[]models.User, int, error)
 	AttachPoliciesByGroup(*models.Group, *[]models.Policy) error
 	DetachPolicyByGroup(*models.Group, *models.Policy) error
-	GetPoliciesByGroup(*models.Group) (*[]models.Policy, error)
+	GetPoliciesByGroup(*models.Group, *int, *int) (*[]models.Policy, int, error)
 
 	CreatePolicy(*models.Policy) error
 	GetPolicies(int, int) (*[]models.Policy, error)
@@ -37,18 +37,17 @@ type DB interface {
 	UpdatePolicy(*models.Policy) error
 	RemovePolicy(*models.Policy) error
 	AddPermissionsToPolicy(*models.Policy, *[]models.Permission) error
-
 	CreatePermission(*models.Permission) error
 	GetPermission(int) (*models.Permission, error)
 	UpdatePermission(*models.Permission) error
 	RemovePermission(*models.Permission) error
-	GetPermissionsByPolicy(*models.Policy) (*[]models.Permission, error)
-	GetUsersByPolicy(*models.Policy) (*[]models.User, error)
-	GetGroupsByPolicy(*models.Policy) (*[]models.Group, error)
+	GetPermissionsByPolicy(*models.Policy, *int, *int) (*[]models.Permission, int, error)
+	GetUsersByPolicy(*models.Policy, *int, *int) (*[]models.User, int, error)
+	GetGroupsByPolicy(*models.Policy, *int, *int) (*[]models.Group, int, error)
 
 	CreateAction(*models.Action) error
 	GetActions() (*[]models.Action, error)
-	GetAction(id int) (*models.Action, error)
+	GetAction(int) (*models.Action, error)
 	UpdateAction(*models.Action) error
 	RemoveAction(*models.Action) error
 }

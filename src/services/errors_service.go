@@ -10,7 +10,11 @@ type EntityNotFoundError struct {
 }
 
 func (err *EntityNotFoundError) Error() string {
-	return fmt.Sprintf("%s with identifier %d not found", err.Entity, err.ID)
+	return fmt.Sprintf(
+		"%s with identifier %d not found",
+		err.Entity,
+		err.ID,
+	)
 }
 
 func NewEntityNotFoundError(entity string, id int) *EntityNotFoundError {

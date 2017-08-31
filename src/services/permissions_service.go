@@ -15,16 +15,23 @@ type permissionService struct {
 	storage storage.DB
 }
 
-func NewPermissionService(storage storage.DB) PermissionService {
+func NewPermissionService(
+	storage storage.DB,
+) PermissionService {
 	return &permissionService{
 		storage,
 	}
 }
 
-func (service *permissionService) UpdatePermission(permissionUpdating *models.Permission) (*models.Permission, error) {
+func (service *permissionService) UpdatePermission(
+	permissionUpdating *models.Permission,
+) (*models.Permission, error) {
 	permission, err := service.storage.GetPermission(permissionUpdating.ID)
 	if err != nil {
-		return nil, NewEntityNotFoundError("permission", permissionUpdating.ID)
+		return nil, NewEntityNotFoundError(
+			"permission",
+			permissionUpdating.ID,
+		)
 	}
 
 	if err := validator.Validate(permissionUpdating); err != nil {
@@ -39,10 +46,15 @@ func (service *permissionService) UpdatePermission(permissionUpdating *models.Pe
 	return permission, nil
 }
 
-func (service *permissionService) RemovePermission(permissionId int) error {
+func (service *permissionService) RemovePermission(
+	permissionId int,
+) error {
 	permission, err := service.storage.GetPermission(permissionId)
 	if err != nil {
-		return NewEntityNotFoundError("permission", permissionId)
+		return NewEntityNotFoundError(
+			"permission",
+			permissionId,
+		)
 	}
 
 	if err := service.storage.RemovePermission(permission); err != nil {

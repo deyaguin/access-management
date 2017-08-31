@@ -11,6 +11,7 @@ type Api struct {
 	policyService           services.PolicyService
 	permissionService       services.PermissionService
 	permissionsCheckService services.PermissionsCheckService
+	address string
 }
 
 func NewAPI(
@@ -19,6 +20,7 @@ func NewAPI(
 	policyService services.PolicyService,
 	permissionService services.PermissionService,
 	permissionsCheckService services.PermissionsCheckService,
+	address string,
 ) {
 	api := &Api{
 		userService,
@@ -26,6 +28,7 @@ func NewAPI(
 		policyService,
 		permissionService,
 		permissionsCheckService,
+		address,
 	}
 	e := echo.New()
 
@@ -62,5 +65,5 @@ func NewAPI(
 	e.HTTPErrorHandler = api.errorHandler
 
 	e.POST("/check_permissions", api.userPermissions)
-	e.Logger.Fatal(e.Start(":1535"))
+	e.Logger.Fatal(e.Start(api.address))
 }

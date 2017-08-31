@@ -15,21 +15,25 @@ type UserService interface {
 
 	AttachPoliciesByUser(*models.User, *[]models.Policy) error
 	DetachPolicyByUser(int, int) error
-	GetPoliciesByUser(int) (*[]models.Policy, error)
-	GetGroupsByUser(int) (*[]models.Group, error)
+	GetPoliciesByUser(int, int, int) (*items, error)
+	GetGroupsByUser(int, int, int) (*items, error)
 }
 
 type userService struct {
 	storage storage.DB
 }
 
-func NewUserService(storage storage.DB) UserService {
+func NewUserService(
+	storage storage.DB,
+) UserService {
 	return &userService{
 		storage,
 	}
 }
 
-func (service *userService) CreateUser(userCreating *models.User) (*models.User, error) {
+func (service *userService) CreateUser(
+	userCreating *models.User,
+) (*models.User, error) {
 	if err := validator.Validate(userCreating); err != nil {
 		return nil, NewValidationError(err.Error())
 	}
@@ -44,7 +48,9 @@ func (service *userService) CreateUser(userCreating *models.User) (*models.User,
 	return user, nil
 }
 
-func (service *userService) GetUser(id int) (*models.User, error) {
+func (service *userService) GetUser(
+	id int,
+) (*models.User, error) {
 	user, err := service.storage.GetUser(id)
 	if err != nil {
 		return nil, NewEntityNotFoundError("user", id)
@@ -53,7 +59,10 @@ func (service *userService) GetUser(id int) (*models.User, error) {
 	return user, nil
 }
 
-func (service *userService) GetUsers(page, perPage int) (*items, error) {
+func (service *userService) GetUsers(
+	page int,
+	perPage int,
+) (*items, error) {
 	users, err := service.storage.GetUsers(page, perPage)
 	if err != nil {
 		return nil, err
@@ -72,7 +81,9 @@ func (service *userService) GetUsers(page, perPage int) (*items, error) {
 	return response, nil
 }
 
-func (service *userService) UpdateUser(userUpdating *models.User) (*models.User, error) {
+func (service *userService) UpdateUser(
+	userUpdating *models.User,
+) (*models.User, error) {
 	user, err := service.storage.GetUser(userUpdating.ID)
 	if err != nil {
 		return nil, NewEntityNotFoundError("user", userUpdating.ID)
@@ -90,7 +101,9 @@ func (service *userService) UpdateUser(userUpdating *models.User) (*models.User,
 	return user, nil
 }
 
-func (service *userService) RemoveUser(userId int) error {
+func (service *userService) RemoveUser(
+	userId int,
+) error {
 	user, err := service.storage.GetUser(userId)
 	if err != nil {
 		return NewEntityNotFoundError("user", userId)
@@ -103,7 +116,10 @@ func (service *userService) RemoveUser(userId int) error {
 	return nil
 }
 
-func (service *userService) AttachPoliciesByUser(user *models.User, policies *[]models.Policy) error {
+func (service *userService) AttachPoliciesByUser(
+	user *models.User,
+	policies *[]models.Policy,
+) error {
 	if _, err := service.storage.GetUser(user.ID); err != nil {
 		return NewEntityNotFoundError("user", user.ID)
 	}
@@ -121,7 +137,10 @@ func (service *userService) AttachPoliciesByUser(user *models.User, policies *[]
 	return nil
 }
 
-func (service *userService) DetachPolicyByUser(userId, policyId int) error {
+func (service *userService) DetachPolicyByUser(
+	userId int,
+	policyId int,
+) error {
 	user, err := service.storage.GetUser(userId)
 	if err != nil {
 		return NewEntityNotFoundError("user", userId)
@@ -139,30 +158,56 @@ func (service *userService) DetachPolicyByUser(userId, policyId int) error {
 	return nil
 }
 
-func (service *userService) GetPoliciesByUser(userId int) (*[]models.Policy, error) {
+func (service *userService) GetPoliciesByUser(
+	userId int,
+	page int,
+	perPage int,
+) (*items, error) {
 	user, err := service.storage.GetUser(userId)
 	if err != nil {
 		return nil, NewEntityNotFoundError("user", userId)
 	}
 
-	policies, err := service.storage.GetPoliciesByUser(user)
+	policies, count, err := service.storage.GetPoliciesByUser(
+		user,
+		&page,
+		&perPage,
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	return policies, nil
+	items := &items{
+		policies,
+		count,
+	}
+
+	return items, nil
 }
 
-func (service *userService) GetGroupsByUser(userId int) (*[]models.Group, error) {
+func (service *userService) GetGroupsByUser(
+	userId int,
+	page int,
+	perPage int,
+) (*items, error) {
 	user, err := service.storage.GetUser(userId)
 	if err != nil {
 		return nil, NewEntityNotFoundError("user", userId)
 	}
 
-	groups, err := service.storage.GetGroupsByUser(user)
+	groups, count, err := service.storage.GetGroupsByUser(
+		user,
+		&page,
+		&perPage,
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	return groups, err
+	items := &items{
+		groups,
+		count,
+	}
+
+	return items, err
 }

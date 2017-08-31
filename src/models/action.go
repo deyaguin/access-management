@@ -7,7 +7,7 @@ type Action struct {
 	CreatedAt   time.Time    `json:"createdAt"`
 	UpdatedAt   time.Time    `json:"updatedAt"`
 	DeletedAt   *time.Time   `json:"-"`
-	Name        string       `json:"name" validate:"nonzero"`
+	Name        *string      `json:"name" validate:"nonzero"`
 	Permissions []Permission `json:"-"`
 }
 
@@ -17,5 +17,7 @@ func (a *Action) Equals(action *Action) bool {
 }
 
 func (a *Action) SetFields(action *Action) {
-	a.Name = action.Name
+	if action.Name != nil {
+		a.Name = action.Name
+	}
 }

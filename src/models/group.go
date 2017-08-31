@@ -9,7 +9,7 @@ type Group struct {
 	CreatedAt time.Time  `json:"createdAt"`
 	UpdatedAt time.Time  `json:"updatedAt"`
 	DeletedAt *time.Time `json:"-"`
-	Name      string     `json:"name" validate:"nonzero"`
+	Name      *string    `json:"name" validate:"nonzero"`
 	Users     []User     `gorm:"many2many:user_groups;save_associations:false" json:"-"`
 	Policies  []Policy   `gorm:"many2many:group_policies;save_associations:false" json:"-"`
 }
@@ -20,5 +20,7 @@ func (g *Group) Equals(group *Group) bool {
 }
 
 func (g *Group) SetFields(group *Group) {
-	g.Name = group.Name
+	if group.Name != nil {
+		g.Name = group.Name
+	}
 }
