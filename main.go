@@ -29,5 +29,6 @@ func main() {
 		policyService,
 		permissionService,
 		permissionsCheckService,
+		":1535",
 	)
 }

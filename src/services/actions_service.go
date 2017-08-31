@@ -18,13 +18,17 @@ type actionService struct {
 	storage storage.DB
 }
 
-func NewActionService(storage storage.DB) ActionService {
+func NewActionService(
+	storage storage.DB,
+) ActionService {
 	return &actionService{
 		storage,
 	}
 }
 
-func (service *actionService) CreateAction(actionCreating *models.Action) (*models.Action, error) {
+func (service *actionService) CreateAction(
+	actionCreating *models.Action,
+) (*models.Action, error) {
 	if err := validator.Validate(actionCreating); err != nil {
 		return nil, NewValidationError(err.Error())
 	}
@@ -39,7 +43,9 @@ func (service *actionService) CreateAction(actionCreating *models.Action) (*mode
 	return action, nil
 }
 
-func (service *actionService) GetAction(id int) (*models.Action, error) {
+func (service *actionService) GetAction(
+	id int,
+) (*models.Action, error) {
 	action, err := service.storage.GetAction(id)
 	if err != nil {
 		return nil, NewEntityNotFoundError("action", id)
@@ -57,7 +63,9 @@ func (service *actionService) GetActions() (*[]models.Action, error) {
 	return action, nil
 }
 
-func (service *actionService) UpdateAction(actionUpdating *models.Action) (*models.Action, error) {
+func (service *actionService) UpdateAction(
+	actionUpdating *models.Action,
+) (*models.Action, error) {
 	action, err := service.storage.GetAction(actionUpdating.ID)
 	if err != nil {
 		return nil, err
@@ -72,9 +80,14 @@ func (service *actionService) UpdateAction(actionUpdating *models.Action) (*mode
 	return action, nil
 }
 
-func (service *actionService) RemoveAction(action *models.Action) error {
+func (service *actionService) RemoveAction(
+	action *models.Action,
+) error {
 	if _, err := service.storage.GetAction(action.ID); err != nil {
-		return NewEntityNotFoundError("action", action.ID)
+		return NewEntityNotFoundError(
+			"action",
+			action.ID,
+		)
 	}
 
 	if err := service.storage.RemoveAction(action); err != nil {

@@ -129,7 +129,17 @@ func (a *Api) getUsersByGroup(c echo.Context) error {
 		return NewInvalidQueryError("GroupID", c.Param("id"))
 	}
 
-	users, err := a.groupService.GetUsersByGroup(id)
+	page, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil {
+		return NewInvalidQueryError("page", c.QueryParam("page"))
+	}
+
+	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
+	if err != nil {
+		return NewInvalidQueryError("per_page", c.Param("page"))
+	}
+
+	users, err := a.groupService.GetUsersByGroup(id, page, perPage)
 	if err != nil {
 		return err
 	}
@@ -176,12 +186,22 @@ func (a *Api) detachPolicyByGroup(c echo.Context) error {
 }
 
 func (a *Api) getPoliciesByGroupHandler(c echo.Context) error {
+	page, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil {
+		return NewInvalidQueryError("page", c.QueryParam("page"))
+	}
+
+	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
+	if err != nil {
+		return NewInvalidQueryError("per_page", c.QueryParam("per_page"))
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return NewInvalidQueryError("GroupID", c.Param("id"))
 	}
 
-	policies, err := a.groupService.GetPoliciesByGroup(id)
+	policies, err := a.groupService.GetPoliciesByGroup(id, page, perPage)
 	if err != nil {
 		return err
 	}

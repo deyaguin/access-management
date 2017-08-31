@@ -18,20 +18,6 @@
 			"id": "8aab98b8-5f5c-70fb-69da-533b4383247e"
 		},
 		{
-			"name": "groupPolicy",
-			"description": "",
-			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
-			"order": [
-				"985c09ff-d667-0b10-7121-38d6237b6555",
-				"5dd383ed-5b3c-1c4e-7103-802b321ca0f1",
-				"14999713-28a0-5a28-02b9-a30eefc11ceb"
-			],
-			"owner": 0,
-			"folder": "08c19fac-0927-dff6-3aed-dbaef1dd5e61",
-			"folders_order": [],
-			"id": "a901754e-df40-3844-d432-0cbc043a6933"
-		},
-		{
 			"name": "groups",
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
@@ -40,7 +26,13 @@
 				"67422769-5fd7-2c64-9a81-0998580b8d21",
 				"ffb00fa8-66b0-534b-8354-f5f804de226b",
 				"b08ea246-353b-cbd3-afdf-d68e1da3aaf6",
-				"880eda23-53f7-9427-704e-ca3a873792c6"
+				"880eda23-53f7-9427-704e-ca3a873792c6",
+				"422c1a43-4cfe-2bc5-22de-f2ca80347264",
+				"35a1a36c-d7cd-1006-dcec-681b6371dc12",
+				"40a8f53f-ff76-ae6b-e0a3-d196686f511e",
+				"985c09ff-d667-0b10-7121-38d6237b6555",
+				"14999713-28a0-5a28-02b9-a30eefc11ceb",
+				"5dd383ed-5b3c-1c4e-7103-802b321ca0f1"
 			],
 			"owner": 0,
 			"folder": "8aab98b8-5f5c-70fb-69da-533b4383247e",
@@ -57,26 +49,15 @@
 				"074d4413-9064-7a10-a470-ee00acf17869",
 				"542a2dce-4b82-9bdf-0661-597f3f8cc2a5",
 				"8356fc89-50f5-ece1-11da-fc60078b0b20",
-				"d152d979-ced1-d6d7-788a-77c1155b332f"
-			],
-			"owner": 0,
-			"folder": "8aab98b8-5f5c-70fb-69da-533b4383247e",
-			"folders_order": [],
-			"id": "5f10daef-5b92-a213-755e-57c1441279f7"
-		},
-		{
-			"name": "policyPermission",
-			"description": "",
-			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
-			"order": [
+				"d152d979-ced1-d6d7-788a-77c1155b332f",
 				"77d8fb8d-602d-a28f-dac2-9a29d43b12f7",
 				"959aab1f-ce61-1e6c-f224-26a56d769fb6",
 				"2908bf9e-5e97-5168-d27c-b0e720ade062"
 			],
 			"owner": 0,
-			"folder": "08c19fac-0927-dff6-3aed-dbaef1dd5e61",
+			"folder": "8aab98b8-5f5c-70fb-69da-533b4383247e",
 			"folders_order": [],
-			"id": "f073c723-8b36-78f1-a300-0e13a209e09a"
+			"id": "5f10daef-5b92-a213-755e-57c1441279f7"
 		},
 		{
 			"name": "services",
@@ -86,41 +67,8 @@
 				"40d034e5-3df7-a9a4-9606-76ae10918310"
 			],
 			"owner": 0,
-			"folders_order": [
-				"04deeb8c-c40d-a097-682e-1d32dff1d853",
-				"db08a9f1-c2ee-d480-2627-eca5a64a3d8f",
-				"a901754e-df40-3844-d432-0cbc043a6933",
-				"f073c723-8b36-78f1-a300-0e13a209e09a"
-			],
+			"folders_order": [],
 			"id": "08c19fac-0927-dff6-3aed-dbaef1dd5e61"
-		},
-		{
-			"name": "userGroup",
-			"description": "",
-			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
-			"order": [
-				"422c1a43-4cfe-2bc5-22de-f2ca80347264",
-				"35a1a36c-d7cd-1006-dcec-681b6371dc12",
-				"40a8f53f-ff76-ae6b-e0a3-d196686f511e"
-			],
-			"owner": 0,
-			"folder": "08c19fac-0927-dff6-3aed-dbaef1dd5e61",
-			"folders_order": [],
-			"id": "04deeb8c-c40d-a097-682e-1d32dff1d853"
-		},
-		{
-			"name": "userPolicy",
-			"description": "",
-			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
-			"order": [
-				"1f4cafe9-195e-a0c2-1cbd-897274404f8c",
-				"5d00d246-1a10-187b-fb74-cac7aec2cec3",
-				"cad9d571-bc1b-9eca-1185-b70a1cdac077"
-			],
-			"owner": 0,
-			"folder": "08c19fac-0927-dff6-3aed-dbaef1dd5e61",
-			"folders_order": [],
-			"id": "db08a9f1-c2ee-d480-2627-eca5a64a3d8f"
 		},
 		{
 			"name": "users",
@@ -131,7 +79,10 @@
 				"ebb2393a-aad9-6685-8f00-5d964c1aa311",
 				"83997fae-8f44-8cb9-2e79-c11bd1c944ca",
 				"6d84e41c-2b5b-cc2f-a5c2-45233cee51be",
-				"77311b6b-4509-7ce2-a765-7e64d9ddfaad"
+				"77311b6b-4509-7ce2-a765-7e64d9ddfaad",
+				"1f4cafe9-195e-a0c2-1cbd-897274404f8c",
+				"5d00d246-1a10-187b-fb74-cac7aec2cec3",
+				"cad9d571-bc1b-9eca-1185-b70a1cdac077"
 			],
 			"owner": 0,
 			"folder": "8aab98b8-5f5c-70fb-69da-533b4383247e",
@@ -174,6 +125,7 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "5f10daef-5b92-a213-755e-57c1441279f7",
 			"rawModeData": "{\n\t\"name\": \"\",\n\t\"description\": \"\"\n}"
 		},
 		{
@@ -203,7 +155,7 @@
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"folder": "a901754e-df40-3844-d432-0cbc043a6933",
+			"folder": "60a0cc56-7348-c22b-a83f-bfab0565786e",
 			"rawModeData": "{\n\t\"policies\": [{\n\t\t\"id\": 80\n\t}]\n}"
 		},
 		{
@@ -233,6 +185,7 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "a2fce448-1b7f-17be-4625-390836dfef79",
 			"rawModeData": "{\n\t\"name\": \"tee\"\n}"
 		},
 		{
@@ -262,6 +215,7 @@
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "a2fce448-1b7f-17be-4625-390836dfef79",
 			"rawModeData": "{\n\t\"policies\": [{\n\t\t\"id\": 79\n\t}]\n}"
 		},
 		{
@@ -291,6 +245,7 @@
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "5f10daef-5b92-a213-755e-57c1441279f7",
 			"rawModeData": ""
 		},
 		{
@@ -305,6 +260,7 @@
 				}
 			],
 			"url": "http://{{host}}/groups/17/users",
+			"folder": "60a0cc56-7348-c22b-a83f-bfab0565786e",
 			"queryParams": [],
 			"preRequestScript": "",
 			"pathVariables": {},
@@ -315,13 +271,12 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1503900376483,
+			"time": 1504158445170,
 			"name": "addUsersToGroup",
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"folder": "04deeb8c-c40d-a097-682e-1d32dff1d853",
-			"rawModeData": "{\n\t\"users\": [{\n\t\t\"id\": 29\n\t}]\n}\n"
+			"rawModeData": "{\n\t\"users\": [{\n\t\t\"id\": 38\n\t}]\n}\n"
 		},
 		{
 			"id": "3932a4c0-19e2-0a71-ecdf-65bc7d169fe3",
@@ -382,7 +337,7 @@
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"folder": "04deeb8c-c40d-a097-682e-1d32dff1d853",
+			"folder": "60a0cc56-7348-c22b-a83f-bfab0565786e",
 			"rawModeData": "{\n\t\"users\": [{\n\t\t\"id\": 20\n\t}]\n}\n"
 		},
 		{
@@ -412,6 +367,7 @@
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "08c19fac-0927-dff6-3aed-dbaef1dd5e61",
 			"rawModeData": "{\n\t\"resourse\": \"docs\",\n\t\"action\": 1,\n\t\"id\": 29\n}\n"
 		},
 		{
@@ -425,8 +381,24 @@
 					"enabled": true
 				}
 			],
-			"url": "http://{{host}}/groups/17/users",
-			"queryParams": [],
+			"url": "http://{{host}}/groups/17/users?page=1&per_page=1",
+			"folder": "60a0cc56-7348-c22b-a83f-bfab0565786e",
+			"queryParams": [
+				{
+					"key": "page",
+					"value": "1",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "per_page",
+					"value": "1",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
 			"preRequestScript": "",
 			"pathVariables": {},
 			"pathVariableData": [],
@@ -436,7 +408,7 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1503904135915,
+			"time": 1504165921611,
 			"name": "getUsersByGroup",
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
@@ -454,7 +426,8 @@
 					"enabled": true
 				}
 			],
-			"url": "http://{{host}}/policies",
+			"url": "http://{{host}}/policies/80",
+			"folder": "5f10daef-5b92-a213-755e-57c1441279f7",
 			"queryParams": [],
 			"preRequestScript": "",
 			"pathVariables": {},
@@ -465,12 +438,12 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1503663728872,
+			"time": 1504165920589,
 			"name": "updatePolicy",
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"rawModeData": "{\n\t\"name\": \"p2\"\n}"
+			"rawModeData": "{\n\t\"name\": \"czxcxz\"\n}"
 		},
 		{
 			"id": "55768481-fff1-9730-cc95-52519f9c987d",
@@ -499,6 +472,7 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "60a0cc56-7348-c22b-a83f-bfab0565786e",
 			"rawModeData": "{\n\t\"name\": \"g3\"\n}"
 		},
 		{
@@ -528,7 +502,7 @@
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"folder": "db08a9f1-c2ee-d480-2627-eca5a64a3d8f",
+			"folder": "a2fce448-1b7f-17be-4625-390836dfef79",
 			"rawModeData": "{\n\t\"policies\": [{\n\t\t\"id\": 79\n\t}]\n}"
 		},
 		{
@@ -558,7 +532,7 @@
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"folder": "a901754e-df40-3844-d432-0cbc043a6933",
+			"folder": "60a0cc56-7348-c22b-a83f-bfab0565786e",
 			"rawModeData": "{\n\t\"policies\": [{\n\t\t\"id\": 80\n\t}]\n}"
 		},
 		{
@@ -588,6 +562,7 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "60a0cc56-7348-c22b-a83f-bfab0565786e",
 			"rawModeData": "{\n\t\"name\": \"g3\"\n}"
 		},
 		{
@@ -617,6 +592,7 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "a2fce448-1b7f-17be-4625-390836dfef79",
 			"rawModeData": "{\n\t\"name\": \"sm\"\n}"
 		},
 		{
@@ -646,6 +622,7 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "a2fce448-1b7f-17be-4625-390836dfef79",
 			"rawModeData": ""
 		},
 		{
@@ -675,6 +652,7 @@
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "5f10daef-5b92-a213-755e-57c1441279f7",
 			"rawModeData": "{\n\t\"permissions\": [{\n\t\t\"id\": 162\n\t}]\n}\n"
 		},
 		{
@@ -704,6 +682,7 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "5f10daef-5b92-a213-755e-57c1441279f7",
 			"rawModeData": ""
 		},
 		{
@@ -728,12 +707,13 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1503997425552,
+			"time": 1504081316935,
 			"name": "createUser",
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"rawModeData": "{\n\t\"name\": \"20\"\n}"
+			"folder": "a2fce448-1b7f-17be-4625-390836dfef79",
+			"rawModeData": "{\n}"
 		},
 		{
 			"id": "880eda23-53f7-9427-704e-ca3a873792c6",
@@ -762,6 +742,7 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "60a0cc56-7348-c22b-a83f-bfab0565786e",
 			"rawModeData": ""
 		},
 		{
@@ -791,6 +772,7 @@
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "5f10daef-5b92-a213-755e-57c1441279f7",
 			"rawModeData": "{\n\t\"permissions\": [{\n\t\t\"resourse\": \"docs\",\n\t\t\"actionId\": 1,\n\t\t\"access\": true\n\t}]\n}\n"
 		},
 		{
@@ -821,8 +803,7 @@
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
 			"isFromCollection": true,
-			"collectionRequestId": "985c09ff-d667-0b10-7121-38d6237b6555",
-			"folder": "a901754e-df40-3844-d432-0cbc043a6933",
+			"folder": "60a0cc56-7348-c22b-a83f-bfab0565786e",
 			"rawModeData": "{\n\t\"policies\": [{\n\t\t\"id\": 80\n\t}]\n}"
 		},
 		{
@@ -852,6 +833,7 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "60a0cc56-7348-c22b-a83f-bfab0565786e",
 			"rawModeData": "{\n\t\"name\": \"g3\"\n}"
 		},
 		{
@@ -881,7 +863,7 @@
 			"description": "?page=n\nstatus=",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
-			"folder": "db08a9f1-c2ee-d480-2627-eca5a64a3d8f",
+			"folder": "a2fce448-1b7f-17be-4625-390836dfef79",
 			"rawModeData": "{\n\t\"policies\": [{\n\t\t\"id\": 79\n\t}]\n}"
 		},
 		{
@@ -911,6 +893,7 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "5f10daef-5b92-a213-755e-57c1441279f7",
 			"rawModeData": "{\n\t\"name\": \"p2\"\n}"
 		},
 		{
@@ -940,6 +923,7 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "5f10daef-5b92-a213-755e-57c1441279f7",
 			"rawModeData": "{\n\t\"name\": \"p2\"\n}"
 		},
 		{
@@ -977,6 +961,7 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "a2fce448-1b7f-17be-4625-390836dfef79",
 			"rawModeData": "{\n\t\"name\": \"tee\"\n}"
 		},
 		{
@@ -1006,6 +991,7 @@
 			"description": "",
 			"collectionId": "25bba9d4-6f1f-51da-42ad-54c731be55bb",
 			"responses": [],
+			"folder": "60a0cc56-7348-c22b-a83f-bfab0565786e",
 			"rawModeData": "{\n\t\"name\": \"\"\n}"
 		}
 	]

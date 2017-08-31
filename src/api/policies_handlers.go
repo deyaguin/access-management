@@ -35,7 +35,7 @@ func (a *Api) getPolicies(c echo.Context) error {
 
 	policies, err := a.policyService.GetPolicies(page, perPage)
 	if err != nil {
-		return NewInvalidQueryError("GroupID", string(3))
+		return err
 	}
 
 	return c.JSON(http.StatusOK, policies)
@@ -44,7 +44,7 @@ func (a *Api) getPolicies(c echo.Context) error {
 func (a *Api) getPolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", string(id))
+		return NewInvalidQueryError("PolicyID", c.Param("id"))
 	}
 
 	policy, err := a.policyService.GetPolicy(id)
@@ -125,12 +125,22 @@ func (a *Api) removePermissionFromPolicy(c echo.Context) error {
 }
 
 func (a *Api) getPermissionsByPolicy(c echo.Context) error {
+	page, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil {
+		return NewInvalidQueryError("page", c.QueryParam("page"))
+	}
+
+	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
+	if err != nil {
+		return NewInvalidQueryError("per_page", c.QueryParam("per_page"))
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return NewInvalidQueryError("PolicyID", c.Param("id"))
 	}
 
-	permissions, err := a.policyService.GetPermissionsByPolicy(id)
+	permissions, err := a.policyService.GetPermissionsByPolicy(id, page, perPage)
 	if err != nil {
 		return err
 	}

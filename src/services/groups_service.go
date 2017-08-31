@@ -15,23 +15,27 @@ type GroupService interface {
 
 	AddUsersToGroup(*models.Group, *[]models.User) error
 	RemoveUserFromGroup(int, int) error
-	GetUsersByGroup(int) (*[]models.User, error)
+	GetUsersByGroup(int, int, int) (*items, error)
 	AttachPoliciesByGroup(*models.Group, *[]models.Policy) error
 	DetachPolicyByGroup(int, int) error
-	GetPoliciesByGroup(int) (*[]models.Policy, error)
+	GetPoliciesByGroup(int, int, int) (*items, error)
 }
 
 type groupService struct {
 	storage storage.DB
 }
 
-func NewGroupService(storage storage.DB) GroupService {
+func NewGroupService(
+	storage storage.DB,
+) GroupService {
 	return &groupService{
 		storage,
 	}
 }
 
-func (service *groupService) CreateGroup(groupCreating *models.Group) (*models.Group, error) {
+func (service *groupService) CreateGroup(
+	groupCreating *models.Group,
+) (*models.Group, error) {
 	if err := validator.Validate(groupCreating); err != nil {
 		return nil, NewValidationError(err.Error())
 	}
@@ -46,7 +50,9 @@ func (service *groupService) CreateGroup(groupCreating *models.Group) (*models.G
 	return group, nil
 }
 
-func (service *groupService) GetGroup(id int) (*models.Group, error) {
+func (service *groupService) GetGroup(
+	id int,
+) (*models.Group, error) {
 	group, err := service.storage.GetGroup(id)
 	if err != nil {
 		return nil, NewEntityNotFoundError("group", id)
@@ -55,7 +61,10 @@ func (service *groupService) GetGroup(id int) (*models.Group, error) {
 	return group, nil
 }
 
-func (service *groupService) GetGroups(page, perPage int) (*items, error) {
+func (service *groupService) GetGroups(
+	page int,
+	perPage int,
+) (*items, error) {
 	groups, err := service.storage.GetGroups(page, perPage)
 	if err != nil {
 		return nil, err
@@ -66,15 +75,17 @@ func (service *groupService) GetGroups(page, perPage int) (*items, error) {
 		return nil, err
 	}
 
-	response := &items{
+	items := &items{
 		groups,
 		count,
 	}
 
-	return response, nil
+	return items, nil
 }
 
-func (service *groupService) UpdateGroup(groupUpdating *models.Group) (*models.Group, error) {
+func (service *groupService) UpdateGroup(
+	groupUpdating *models.Group,
+) (*models.Group, error) {
 	group, err := service.storage.GetGroup(groupUpdating.ID)
 	if err != nil {
 		return nil, NewEntityNotFoundError("group", groupUpdating.ID)
@@ -105,7 +116,10 @@ func (service *groupService) RemoveGroup(id int) error {
 	return nil
 }
 
-func (service *groupService) AddUsersToGroup(group *models.Group, users *[]models.User) error {
+func (service *groupService) AddUsersToGroup(
+	group *models.Group,
+	users *[]models.User,
+) error {
 	if _, err := service.storage.GetGroup(group.ID); err != nil {
 		return NewEntityNotFoundError("group", group.ID)
 	}
@@ -123,7 +137,10 @@ func (service *groupService) AddUsersToGroup(group *models.Group, users *[]model
 	return nil
 }
 
-func (service *groupService) RemoveUserFromGroup(groupId, userId int) error {
+func (service *groupService) RemoveUserFromGroup(
+	groupId int,
+	userId int,
+) error {
 	group, err := service.storage.GetGroup(groupId)
 	if err != nil {
 		return NewEntityNotFoundError("group", groupId)
@@ -141,28 +158,50 @@ func (service *groupService) RemoveUserFromGroup(groupId, userId int) error {
 	return nil
 }
 
-func (service *groupService) GetUsersByGroup(groupId int) (*[]models.User, error) {
+func (service *groupService) GetUsersByGroup(
+	groupId int,
+	page int,
+	perPage int,
+) (*items, error) {
 	group, err := service.storage.GetGroup(groupId)
 	if err != nil {
 		return nil, NewEntityNotFoundError("group", groupId)
 	}
 
-	users, err := service.storage.GetUsersByGroup(group)
+	users, count, err := service.storage.GetUsersByGroup(
+		group,
+		&page,
+		&perPage,
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	return users, nil
+	items := &items{
+		users,
+		count,
+	}
+
+	return items, nil
 }
 
-func (service *groupService) AttachPoliciesByGroup(group *models.Group, policies *[]models.Policy) error {
+func (service *groupService) AttachPoliciesByGroup(
+	group *models.Group,
+	policies *[]models.Policy,
+) error {
 	if _, err := service.storage.GetGroup(group.ID); err != nil {
-		return NewEntityNotFoundError("group", group.ID)
+		return NewEntityNotFoundError(
+			"group",
+			group.ID,
+		)
 	}
 
 	for _, policy := range *policies {
 		if _, err := service.storage.GetPolicy(policy.ID); err != nil {
-			return NewEntityNotFoundError("policy", policy.ID)
+			return NewEntityNotFoundError(
+				"policy",
+				policy.ID,
+			)
 		}
 		if policy.ID == 0 {
 			return *new(error)
@@ -176,7 +215,10 @@ func (service *groupService) AttachPoliciesByGroup(group *models.Group, policies
 	return nil
 }
 
-func (service *groupService) DetachPolicyByGroup(groupId, policyId int) error {
+func (service *groupService) DetachPolicyByGroup(
+	groupId int,
+	policyId int,
+) error {
 	group, err := service.storage.GetGroup(groupId)
 	if err != nil {
 		return NewEntityNotFoundError("group", groupId)
@@ -194,16 +236,29 @@ func (service *groupService) DetachPolicyByGroup(groupId, policyId int) error {
 	return nil
 }
 
-func (service *groupService) GetPoliciesByGroup(groupId int) (*[]models.Policy, error) {
+func (service *groupService) GetPoliciesByGroup(
+	groupId int,
+	page int,
+	perPage int,
+) (*items, error) {
 	group, err := service.storage.GetGroup(groupId)
 	if err != nil {
 		return nil, NewEntityNotFoundError("group", groupId)
 	}
 
-	policies, err := service.storage.GetPoliciesByGroup(group)
+	policies, count, err := service.storage.GetPoliciesByGroup(
+		group,
+		&page,
+		&perPage,
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	return policies, nil
+	items := &items{
+		policies,
+		count,
+	}
+
+	return items, nil
 }

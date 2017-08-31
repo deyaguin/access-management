@@ -125,12 +125,22 @@ func (a *Api) detachPolicyByUser(c echo.Context) error {
 }
 
 func (a *Api) getPoliciesByUser(c echo.Context) error {
+	page, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil {
+		return NewInvalidQueryError("page", c.QueryParam("page"))
+	}
+
+	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
+	if err != nil {
+		return NewInvalidQueryError("per_page", c.QueryParam("per_page"))
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return NewInvalidQueryError("UserID", c.Param("id"))
 	}
 
-	policies, err := a.userService.GetPoliciesByUser(id)
+	policies, err := a.userService.GetPoliciesByUser(id, page, perPage)
 	if err != nil {
 		return err
 	}
