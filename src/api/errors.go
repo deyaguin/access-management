@@ -8,10 +8,17 @@ type InvalidQueryError struct {
 }
 
 func (err *InvalidQueryError) Error() string {
-	return fmt.Sprintf("Value %s of param %s is not valid", err.ParamValue, err.ParamName)
+	return fmt.Sprintf(
+		"Value %s of param %s is not valid",
+		err.ParamValue,
+		err.ParamName,
+	)
 }
 
-func NewInvalidQueryError(paramName, paramValue string) *InvalidQueryError {
+func NewInvalidQueryError(
+	paramName string,
+	paramValue string,
+) *InvalidQueryError {
 	return &InvalidQueryError{
 		paramName,
 		paramValue,
@@ -28,6 +35,6 @@ func (err *UnprocessableBodyError) Error() string {
 
 func NewUnprocessableBodyError() *UnprocessableBodyError {
 	return &UnprocessableBodyError{
-		//message,
+	//message,
 	}
 }

@@ -25,12 +25,22 @@ func (a *Api) createUser(c echo.Context) error {
 func (a *Api) getUsers(c echo.Context) error {
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
-		return NewInvalidQueryError("page", c.QueryParam("page"))
+		return NewInvalidQueryError(
+			"page",
+			c.QueryParam("page"),
+		)
 	}
 
 	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
 	if err != nil {
-		return NewInvalidQueryError("per_page", c.QueryParam("per_page"))
+		return NewInvalidQueryError(
+			"per_page",
+			c.QueryParam("per_page"),
+		)
+	}
+
+	if err := checkPaginationParams(page, perPage); err != nil {
+		return err
 	}
 
 	users, err := a.userService.GetUsers(page, perPage)
@@ -44,7 +54,10 @@ func (a *Api) getUsers(c echo.Context) error {
 func (a *Api) getUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("UserID", c.Param("id"))
+		return NewInvalidQueryError(
+			"UserID",
+			c.Param("id"),
+		)
 	}
 
 	user, err := a.userService.GetUser(id)
@@ -58,7 +71,10 @@ func (a *Api) getUser(c echo.Context) error {
 func (a *Api) updateUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("UserID", c.Param("id"))
+		return NewInvalidQueryError(
+			"UserID",
+			c.Param("id"),
+		)
 	}
 
 	userUpdating := &models.User{ID: id}
@@ -77,7 +93,10 @@ func (a *Api) updateUser(c echo.Context) error {
 func (a *Api) removeUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("UserID", c.Param("id"))
+		return NewInvalidQueryError(
+			"UserID",
+			c.Param("id"),
+		)
 	}
 
 	if err := a.userService.RemoveUser(id); err != nil {
@@ -90,7 +109,10 @@ func (a *Api) removeUser(c echo.Context) error {
 func (a *Api) attachPoliciesByUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("UserID", c.Param("id"))
+		return NewInvalidQueryError(
+			"UserID",
+			c.Param("id"),
+		)
 	}
 	user := &models.User{ID: id}
 
@@ -99,7 +121,10 @@ func (a *Api) attachPoliciesByUser(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	if err = a.userService.AttachPoliciesByUser(user, policies.Policies); err != nil {
+	if err = a.userService.AttachPoliciesByUser(
+		user,
+		policies.Policies,
+	); err != nil {
 		return err
 	}
 
@@ -109,15 +134,24 @@ func (a *Api) attachPoliciesByUser(c echo.Context) error {
 func (a *Api) detachPolicyByUser(c echo.Context) error {
 	userId, err := strconv.Atoi(c.Param("userId"))
 	if err != nil {
-		return NewInvalidQueryError("UserID", c.Param("userId"))
+		return NewInvalidQueryError(
+			"UserID",
+			c.Param("userId"),
+		)
 	}
 
 	policyId, err := strconv.Atoi(c.Param("policyId"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", c.Param("policyId"))
+		return NewInvalidQueryError(
+			"PolicyID",
+			c.Param("policyId"),
+		)
 	}
 
-	if err = a.userService.DetachPolicyByUser(userId, policyId); err != nil {
+	if err = a.userService.DetachPolicyByUser(
+		userId,
+		policyId,
+	); err != nil {
 		return err
 	}
 
@@ -127,20 +161,37 @@ func (a *Api) detachPolicyByUser(c echo.Context) error {
 func (a *Api) getPoliciesByUser(c echo.Context) error {
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
-		return NewInvalidQueryError("page", c.QueryParam("page"))
+		return NewInvalidQueryError(
+			"page",
+			c.QueryParam("page"),
+		)
 	}
 
 	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
 	if err != nil {
-		return NewInvalidQueryError("per_page", c.QueryParam("per_page"))
+		return NewInvalidQueryError(
+			"per_page",
+			c.QueryParam("per_page"),
+		)
+	}
+
+	if err := checkPaginationParams(page, perPage); err != nil {
+		return err
 	}
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("UserID", c.Param("id"))
+		return NewInvalidQueryError(
+			"UserID",
+			c.Param("id"),
+		)
 	}
 
-	policies, err := a.userService.GetPoliciesByUser(id, page, perPage)
+	policies, err := a.userService.GetPoliciesByUser(
+		id,
+		page,
+		perPage,
+	)
 	if err != nil {
 		return err
 	}

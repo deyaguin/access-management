@@ -13,6 +13,7 @@ func (a *Api) createGroup(c echo.Context) error {
 	if err := c.Bind(groupCreating); err != nil {
 		return NewUnprocessableBodyError()
 	}
+
 	group, err := a.groupService.CreateGroup(groupCreating)
 	if err != nil {
 		return err
@@ -24,12 +25,21 @@ func (a *Api) createGroup(c echo.Context) error {
 func (a *Api) getGroups(c echo.Context) error {
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
-		return NewInvalidQueryError("page", c.QueryParam("page"))
+		return NewInvalidQueryError(
+			"page",
+			c.QueryParam("page"),
+		)
 	}
 
 	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
 	if err != nil {
-		return NewInvalidQueryError("per_page", c.QueryParam("per_page"))
+		return NewInvalidQueryError("per_page",
+			c.QueryParam("per_page"),
+		)
+	}
+
+	if err := checkPaginationParams(page, perPage); err != nil {
+		return err
 	}
 
 	groups, err := a.groupService.GetGroups(page, perPage)
@@ -41,12 +51,15 @@ func (a *Api) getGroups(c echo.Context) error {
 }
 
 func (a *Api) getGroup(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
-		return NewInvalidQueryError("GroupID", c.Param("id"))
+		return NewInvalidQueryError(
+			"groupID",
+			c.Param("groupID"),
+		)
 	}
 
-	groups, err := a.groupService.GetGroup(id)
+	groups, err := a.groupService.GetGroup(groupID)
 	if err != nil {
 		return err
 	}
@@ -55,12 +68,15 @@ func (a *Api) getGroup(c echo.Context) error {
 }
 
 func (a *Api) updateGroup(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
-		return NewInvalidQueryError("GroupID", c.Param("id"))
+		return NewInvalidQueryError(
+			"groupID",
+			c.Param("groupID"),
+		)
 	}
 
-	groupUpdating := &models.Group{ID: id}
+	groupUpdating := &models.Group{ID: groupID}
 	if err := c.Bind(groupUpdating); err != nil {
 		return NewUnprocessableBodyError()
 	}
@@ -74,12 +90,15 @@ func (a *Api) updateGroup(c echo.Context) error {
 }
 
 func (a *Api) removeGroup(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
-		return NewInvalidQueryError("GroupID", c.Param("id"))
+		return NewInvalidQueryError(
+			"groupID",
+			c.Param("groupID"),
+		)
 	}
 
-	if err := a.groupService.RemoveGroup(id); err != nil {
+	if err := a.groupService.RemoveGroup(groupID); err != nil {
 		return err
 	}
 
@@ -87,11 +106,14 @@ func (a *Api) removeGroup(c echo.Context) error {
 }
 
 func (a *Api) addUsersToGroup(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
-		return NewInvalidQueryError("GroupID", c.Param("id"))
+		return NewInvalidQueryError(
+			"groupID",
+			c.Param("groupID"),
+		)
 	}
-	group := &models.Group{ID: id}
+	group := &models.Group{ID: groupID}
 
 	users := new(users)
 	if err = c.Bind(users); err != nil {
@@ -108,12 +130,18 @@ func (a *Api) addUsersToGroup(c echo.Context) error {
 func (a *Api) removeUserFromGroup(c echo.Context) error {
 	groupId, err := strconv.Atoi(c.Param("groupId"))
 	if err != nil {
-		return NewInvalidQueryError("GroupID", c.Param("groupId"))
+		return NewInvalidQueryError(
+			"groupID",
+			c.Param("groupId"),
+		)
 	}
 
 	userId, err := strconv.Atoi(c.Param("userId"))
 	if err != nil {
-		return NewInvalidQueryError("UserID", c.Param("userId"))
+		return NewInvalidQueryError(
+			"userID",
+			c.Param("userId"),
+		)
 	}
 
 	if err = a.groupService.RemoveUserFromGroup(groupId, userId); err != nil {
@@ -124,22 +152,39 @@ func (a *Api) removeUserFromGroup(c echo.Context) error {
 }
 
 func (a *Api) getUsersByGroup(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
-		return NewInvalidQueryError("GroupID", c.Param("id"))
+		return NewInvalidQueryError(
+			"groupID",
+			c.Param("groupID"),
+		)
 	}
 
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
-		return NewInvalidQueryError("page", c.QueryParam("page"))
+		return NewInvalidQueryError(
+			"page",
+			c.QueryParam("page"),
+		)
 	}
 
 	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
 	if err != nil {
-		return NewInvalidQueryError("per_page", c.Param("page"))
+		return NewInvalidQueryError(
+			"per_page",
+			c.Param("page"),
+		)
 	}
 
-	users, err := a.groupService.GetUsersByGroup(id, page, perPage)
+	if err := checkPaginationParams(page, perPage); err != nil {
+		return err
+	}
+
+	users, err := a.groupService.GetUsersByGroup(
+		groupID,
+		page,
+		perPage,
+	)
 	if err != nil {
 		return err
 	}
@@ -148,11 +193,14 @@ func (a *Api) getUsersByGroup(c echo.Context) error {
 }
 
 func (a *Api) attachPoliciesByGroup(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
-		return NewInvalidQueryError("GroupID", c.Param("id"))
+		return NewInvalidQueryError(
+			"groupID",
+			c.Param("groupID"),
+		)
 	}
-	group := &models.Group{ID: id}
+	group := &models.Group{ID: groupID}
 
 
 	policies := new(policies)
@@ -160,7 +208,10 @@ func (a *Api) attachPoliciesByGroup(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	if err = a.groupService.AttachPoliciesByGroup(group, policies.Policies); err != nil {
+	if err = a.groupService.AttachPoliciesByGroup(
+		group,
+		policies.Policies,
+	); err != nil {
 		return err
 	}
 
@@ -170,12 +221,18 @@ func (a *Api) attachPoliciesByGroup(c echo.Context) error {
 func (a *Api) detachPolicyByGroup(c echo.Context) error {
 	groupId, err := strconv.Atoi(c.Param("groupId"))
 	if err != nil {
-		return NewInvalidQueryError("GroupID", c.Param("groupId"))
+		return NewInvalidQueryError(
+			"groupID",
+			c.Param("groupId"),
+		)
 	}
 
 	policyId, err := strconv.Atoi(c.Param("policyId"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", c.Param("policyId"))
+		return NewInvalidQueryError(
+			"policyID",
+			c.Param("policyId"),
+		)
 	}
 
 	if err = a.groupService.DetachPolicyByGroup(groupId, policyId); err != nil {
@@ -186,22 +243,39 @@ func (a *Api) detachPolicyByGroup(c echo.Context) error {
 }
 
 func (a *Api) getPoliciesByGroupHandler(c echo.Context) error {
+
+	groupID, err := strconv.Atoi(c.Param("groupID"))
+	if err != nil {
+		return NewInvalidQueryError(
+			"groupID",
+			c.Param("groupID"),
+		)
+	}
+
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
-		return NewInvalidQueryError("page", c.QueryParam("page"))
+		return NewInvalidQueryError(
+			"page",
+			c.QueryParam("page"),
+		)
 	}
 
 	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
 	if err != nil {
-		return NewInvalidQueryError("per_page", c.QueryParam("per_page"))
+		return NewInvalidQueryError(
+			"per_page",
+			c.QueryParam("per_page"),
+		)
 	}
 
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		return NewInvalidQueryError("GroupID", c.Param("id"))
+	if err := checkPaginationParams(page, perPage); err != nil {
+		return err
 	}
 
-	policies, err := a.groupService.GetPoliciesByGroup(id, page, perPage)
+	policies, err := a.groupService.GetPoliciesByGroup(
+		groupID,
+		page,
+		perPage,)
 	if err != nil {
 		return err
 	}

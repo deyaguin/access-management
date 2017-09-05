@@ -10,7 +10,10 @@ import (
 func (a *Api) updatePermission(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("PermissionID", c.Param("id"))
+		return NewInvalidQueryError(
+			"PermissionID",
+			c.Param("id"),
+		)
 	}
 
 	permissionUpdating := &models.Permission{ID: id}

@@ -44,18 +44,18 @@ func (service *groupService) CreateGroup(
 	group.SetFields(groupCreating)
 
 	if err := service.storage.CreateGroup(group); err != nil {
-		return nil, err
+		return nil, NewEntityCreateError(err.Error())
 	}
 
 	return group, nil
 }
 
 func (service *groupService) GetGroup(
-	id int,
+	groupID int,
 ) (*models.Group, error) {
-	group, err := service.storage.GetGroup(id)
+	group, err := service.storage.GetGroup(groupID)
 	if err != nil {
-		return nil, NewEntityNotFoundError("group", id)
+		return nil, NewEntityNotFoundError("group", groupID)
 	}
 
 	return group, nil
@@ -67,12 +67,12 @@ func (service *groupService) GetGroups(
 ) (*items, error) {
 	groups, err := service.storage.GetGroups(page, perPage)
 	if err != nil {
-		return nil, err
+		return nil, NewGetEntitiesError(err.Error())
 	}
 
 	count, err := service.storage.GetGroupsCount()
 	if err != nil {
-		return nil, err
+		return nil, NewGetEntitiesError(err.Error())
 	}
 
 	items := &items{
@@ -97,20 +97,22 @@ func (service *groupService) UpdateGroup(
 
 	group.SetFields(groupUpdating)
 	if err := service.storage.UpdateGroup(group); err != nil {
-		return nil, err
+		return nil, NewEntityUpdateError(err.Error())
 	}
 
 	return group, nil
 }
 
-func (service *groupService) RemoveGroup(id int) error {
-	group, err := service.storage.GetGroup(id)
+func (service *groupService) RemoveGroup(
+	groupID int,
+) error {
+	group, err := service.storage.GetGroup(groupID)
 	if err != nil {
-		return NewEntityNotFoundError("group", id)
+		return NewEntityNotFoundError("group", groupID)
 	}
 
 	if err := service.storage.RemoveGroup(group); err != nil {
-		return err
+		return NewEntityRemoveError(err.Error())
 	}
 
 	return nil
@@ -131,41 +133,41 @@ func (service *groupService) AddUsersToGroup(
 	}
 
 	if err := service.storage.AddUsersToGroup(group, users); err != nil {
-		return err
+		return NewEntityCreateError(err.Error())
 	}
 
 	return nil
 }
 
 func (service *groupService) RemoveUserFromGroup(
-	groupId int,
-	userId int,
+	groupID int,
+	userID int,
 ) error {
-	group, err := service.storage.GetGroup(groupId)
+	group, err := service.storage.GetGroup(groupID)
 	if err != nil {
-		return NewEntityNotFoundError("group", groupId)
+		return NewEntityNotFoundError("group", groupID)
 	}
 
-	user, err := service.storage.GetUser(userId)
+	user, err := service.storage.GetUser(userID)
 	if err != nil {
-		return NewEntityNotFoundError("user", userId)
+		return NewEntityNotFoundError("user", userID)
 	}
 
 	if err := service.storage.RemoveUserFromGroup(group, user); err != nil {
-		return err
+		return NewEntityRemoveError(err.Error())
 	}
 
 	return nil
 }
 
 func (service *groupService) GetUsersByGroup(
-	groupId int,
+	groupID int,
 	page int,
 	perPage int,
 ) (*items, error) {
-	group, err := service.storage.GetGroup(groupId)
+	group, err := service.storage.GetGroup(groupID)
 	if err != nil {
-		return nil, NewEntityNotFoundError("group", groupId)
+		return nil, NewEntityNotFoundError("group", groupID)
 	}
 
 	users, count, err := service.storage.GetUsersByGroup(
@@ -174,7 +176,7 @@ func (service *groupService) GetUsersByGroup(
 		&perPage,
 	)
 	if err != nil {
-		return nil, err
+		return nil, NewGetEntitiesError(err.Error())
 	}
 
 	items := &items{
@@ -203,47 +205,44 @@ func (service *groupService) AttachPoliciesByGroup(
 				policy.ID,
 			)
 		}
-		if policy.ID == 0 {
-			return *new(error)
-		}
 	}
 
 	if err := service.storage.AttachPoliciesByGroup(group, policies); err != nil {
-		return err
+		return NewEntityCreateError(err.Error())
 	}
 
 	return nil
 }
 
 func (service *groupService) DetachPolicyByGroup(
-	groupId int,
-	policyId int,
+	groupID int,
+	policyID int,
 ) error {
-	group, err := service.storage.GetGroup(groupId)
+	group, err := service.storage.GetGroup(groupID)
 	if err != nil {
-		return NewEntityNotFoundError("group", groupId)
+		return NewEntityNotFoundError("group", groupID)
 	}
 
-	policy, err := service.storage.GetPolicy(policyId)
+	policy, err := service.storage.GetPolicy(policyID)
 	if err != nil {
-		return NewEntityNotFoundError("policy", policyId)
+		return NewEntityNotFoundError("policy", policyID)
 	}
 
 	if err := service.storage.DetachPolicyByGroup(group, policy); err != nil {
-		return err
+		return NewEntityRemoveError(err.Error())
 	}
 
 	return nil
 }
 
 func (service *groupService) GetPoliciesByGroup(
-	groupId int,
+	groupID int,
 	page int,
 	perPage int,
 ) (*items, error) {
-	group, err := service.storage.GetGroup(groupId)
+	group, err := service.storage.GetGroup(groupID)
 	if err != nil {
-		return nil, NewEntityNotFoundError("group", groupId)
+		return nil, NewEntityNotFoundError("group", groupID)
 	}
 
 	policies, count, err := service.storage.GetPoliciesByGroup(
@@ -252,7 +251,7 @@ func (service *groupService) GetPoliciesByGroup(
 		&perPage,
 	)
 	if err != nil {
-		return nil, err
+		return nil, NewGetEntitiesError(err.Error())
 	}
 
 	items := &items{

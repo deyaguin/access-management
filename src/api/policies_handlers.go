@@ -25,12 +25,22 @@ func (a *Api) createPolicy(c echo.Context) error {
 func (a *Api) getPolicies(c echo.Context) error {
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
-		return NewInvalidQueryError("page", c.QueryParam("page"))
+		return NewInvalidQueryError(
+			"page",
+			c.QueryParam("page"),
+		)
 	}
 
 	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
 	if err != nil {
-		return NewInvalidQueryError("per_page", c.QueryParam("per_page"))
+		return NewInvalidQueryError(
+			"per_page",
+			c.QueryParam("per_page"),
+		)
+	}
+
+	if err := checkPaginationParams(page, perPage); err != nil {
+		return err
 	}
 
 	policies, err := a.policyService.GetPolicies(page, perPage)
@@ -44,7 +54,10 @@ func (a *Api) getPolicies(c echo.Context) error {
 func (a *Api) getPolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", c.Param("id"))
+		return NewInvalidQueryError(
+			"PolicyID",
+			c.Param("id"),
+		)
 	}
 
 	policy, err := a.policyService.GetPolicy(id)
@@ -58,7 +71,10 @@ func (a *Api) getPolicy(c echo.Context) error {
 func (a *Api) updatePolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", c.Param("id"))
+		return NewInvalidQueryError(
+			"PolicyID",
+			c.Param("id"),
+		)
 	}
 
 	policyUpdating := &models.Policy{ID: id}
@@ -77,7 +93,10 @@ func (a *Api) updatePolicy(c echo.Context) error {
 func (a *Api) removePolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", c.Param("id"))
+		return NewInvalidQueryError(
+			"PolicyID",
+			c.Param("id"),
+		)
 	}
 
 	if err := a.policyService.RemovePolicy(id); err != nil {
@@ -90,7 +109,10 @@ func (a *Api) removePolicy(c echo.Context) error {
 func (a *Api) addPermissionsToPolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", c.Param("id"))
+		return NewInvalidQueryError(
+			"PolicyID",
+			c.Param("id"),
+		)
 	}
 	policy := &models.Policy{ID: id}
 
@@ -99,7 +121,10 @@ func (a *Api) addPermissionsToPolicy(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	if err = a.policyService.AddPermissionsToPolicy(policy, permissions.Permissions); err != nil {
+	if err = a.policyService.AddPermissionsToPolicy(
+		policy,
+		permissions.Permissions,
+	); err != nil {
 		return err
 	}
 
@@ -109,15 +134,24 @@ func (a *Api) addPermissionsToPolicy(c echo.Context) error {
 func (a *Api) removePermissionFromPolicy(c echo.Context) error {
 	policyId, err := strconv.Atoi(c.Param("policyId"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", c.Param("policyId"))
+		return NewInvalidQueryError(
+			"PolicyID",
+			c.Param("policyId"),
+		)
 	}
 
 	permissionId, err := strconv.Atoi(c.Param("permissionId"))
 	if err != nil {
-		return NewInvalidQueryError("PermissionID", c.Param("permissionId"))
+		return NewInvalidQueryError(
+			"PermissionID",
+			c.Param("permissionId"),
+		)
 	}
 
-	if err = a.policyService.RemovePermissionFromPolicy(policyId, permissionId); err != nil {
+	if err = a.policyService.RemovePermissionFromPolicy(
+		policyId,
+		permissionId,
+	); err != nil {
 		return err
 	}
 
@@ -127,20 +161,37 @@ func (a *Api) removePermissionFromPolicy(c echo.Context) error {
 func (a *Api) getPermissionsByPolicy(c echo.Context) error {
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
-		return NewInvalidQueryError("page", c.QueryParam("page"))
+		return NewInvalidQueryError(
+			"page",
+			c.QueryParam("page"),
+		)
 	}
 
 	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
 	if err != nil {
-		return NewInvalidQueryError("per_page", c.QueryParam("per_page"))
+		return NewInvalidQueryError(
+			"per_page",
+			c.QueryParam("per_page"),
+		)
+	}
+
+	if err := checkPaginationParams(page, perPage); err != nil {
+		return err
 	}
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return NewInvalidQueryError("PolicyID", c.Param("id"))
+		return NewInvalidQueryError(
+			"PolicyID",
+			c.Param("id"),
+		)
 	}
 
-	permissions, err := a.policyService.GetPermissionsByPolicy(id, page, perPage)
+	permissions, err := a.policyService.GetPermissionsByPolicy(
+		id,
+		page,
+		perPage,
+	)
 	if err != nil {
 		return err
 	}

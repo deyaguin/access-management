@@ -40,25 +40,25 @@ func (service *permissionService) UpdatePermission(
 
 	permission.SetFields(permissionUpdating)
 	if err := service.storage.UpdatePermission(permission); err != nil {
-		return nil, err
+		return nil, NewEntityUpdateError(err.Error())
 	}
 
 	return permission, nil
 }
 
 func (service *permissionService) RemovePermission(
-	permissionId int,
+	permissionID int,
 ) error {
-	permission, err := service.storage.GetPermission(permissionId)
+	permission, err := service.storage.GetPermission(permissionID)
 	if err != nil {
 		return NewEntityNotFoundError(
 			"permission",
-			permissionId,
+			permissionID,
 		)
 	}
 
 	if err := service.storage.RemovePermission(permission); err != nil {
-		return err
+		return NewEntityRemoveError(err.Error())
 	}
 
 	return nil

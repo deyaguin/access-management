@@ -7,9 +7,7 @@ import (
 func (dataBase SqlDB) CreatePolicy(
 	policy *models.Policy,
 ) error {
-	err := dataBase.db.
-		Create(policy).Error
-
+	err := dataBase.Create(policy).Error
 	return err
 }
 
@@ -19,9 +17,7 @@ func (dataBase SqlDB) GetPolicies(
 ) (*[]models.Policy, error) {
 	policies := new([]models.Policy)
 
-	err := dataBase.db.
-		Limit(perPage).Offset(page * perPage).
-		Find(policies).Error
+	err := dataBase.Limit(perPage).Offset((page - 1) * perPage).Find(policies).Error
 
 	return policies, err
 }
@@ -29,9 +25,7 @@ func (dataBase SqlDB) GetPolicies(
 func (dataBase SqlDB) GetPoliciesCount() (int, error) {
 	var count int
 
-	err := dataBase.db.
-		Table("policies").
-		Count(&count).Error
+	err := dataBase.Table("policies").Count(&count).Error
 
 	return count, err
 }
@@ -41,8 +35,7 @@ func (dataBase SqlDB) GetPolicy(
 ) (*models.Policy, error) {
 	policy := new(models.Policy)
 
-	err := dataBase.db.
-		Where(id).Find(policy).Error
+	err := dataBase.Where(id).Find(policy).Error
 
 	return policy, err
 }
@@ -50,8 +43,7 @@ func (dataBase SqlDB) GetPolicy(
 func (dataBase SqlDB) UpdatePolicy(
 	policy *models.Policy,
 ) error {
-	err := dataBase.db.
-		Save(policy).Error
+	err := dataBase.Save(policy).Error
 
 	return err
 }
@@ -59,8 +51,7 @@ func (dataBase SqlDB) UpdatePolicy(
 func (dataBase SqlDB) RemovePolicy(
 	policy *models.Policy,
 ) error {
-	err := dataBase.db.
-		Delete(policy).Error
+	err := dataBase.Delete(policy).Error
 
 	return err
 }
@@ -69,8 +60,7 @@ func (dataBase SqlDB) AddPermissionsToPolicy(
 	policy *models.Policy,
 	permissions *[]models.Permission,
 ) error {
-	err := dataBase.db.
-		Model(policy).Association("permissions").
+	err := dataBase.Model(policy).Association("permissions").
 		Append(permissions).Error
 
 	return err
@@ -84,8 +74,7 @@ func (dataBase SqlDB) GetUsersByPolicy(
 	users := new([]models.User)
 
 	if page == nil || perPage == nil {
-		err := dataBase.db.
-			Model(policy).Related(users, "users").Error
+		err := dataBase.Model(policy).Related(users, "users").Error
 		if err != nil {
 			return nil, 0, err
 		}
@@ -93,13 +82,10 @@ func (dataBase SqlDB) GetUsersByPolicy(
 		return users, 0, nil
 	}
 
-	err := dataBase.db.
-		Limit(*perPage).Offset(*page**perPage).
+	err := dataBase.Limit(*perPage).Offset((*page - 1) * (*perPage)).
 		Model(policy).Related(users, "users").Error
 
-	count := dataBase.db.
-		Model(policy).Association("users").
-		Count()
+	count := dataBase.Model(policy).Association("users").Count()
 
 	return users, count, err
 }
@@ -112,8 +98,7 @@ func (dataBase SqlDB) GetGroupsByPolicy(
 	groups := new([]models.Group)
 
 	if page == nil || perPage == nil {
-		err := dataBase.db.
-			Model(policy).Related(groups, "groups").Error
+		err := dataBase.Model(policy).Related(groups, "groups").Error
 		if err != nil {
 			return nil, 0, err
 		}
@@ -121,27 +106,13 @@ func (dataBase SqlDB) GetGroupsByPolicy(
 		return groups, 0, nil
 	}
 
-	err := dataBase.db.
-		Limit(*perPage).Offset(*page**perPage).
+	err := dataBase.Limit(*perPage).Offset((*page - 1) * (*perPage)).
 		Model(policy).Related(groups, "groups").Error
 
-	count := dataBase.db.
-		Model(policy).Association("groups").
-		Count()
+	count := dataBase.Model(policy).Association("groups").Count()
 
 	return groups, count, err
 }
-
-//func (dataBase SqlDB) GetPermissionsByPolicy(
-//	policy *models.Policy,
-//) (*[]models.Permission, error) {
-//	permissions := new([]models.Permission)
-//
-//	err := dataBase.db.
-//		Model(policy).Related(permissions, "permissions").Error
-//
-//	return permissions, err
-//}
 
 func (dataBase SqlDB) GetPermissionsByPolicy(
 	policy *models.Policy,
@@ -151,8 +122,7 @@ func (dataBase SqlDB) GetPermissionsByPolicy(
 	permissions := new([]models.Permission)
 
 	if page == nil || perPage == nil {
-		err := dataBase.db.
-			Model(policy).Related(permissions, "permissions").Error
+		err := dataBase.Model(policy).Related(permissions, "permissions").Error
 		if err != nil {
 			return nil, 0, err
 		}
@@ -160,13 +130,10 @@ func (dataBase SqlDB) GetPermissionsByPolicy(
 		return permissions, 0, nil
 	}
 
-	err := dataBase.db.
-		Limit(*perPage).Offset(*page * *perPage).
+	err := dataBase.Limit(*perPage).Offset((*page - 1) * (*perPage)).
 		Model(policy).Related(permissions, "permissions").Error
 
-	count := dataBase.db.
-		Model(policy).Association("permissions").
-		Count()
+	count := dataBase.Model(policy).Association("permissions").Count()
 
 	return permissions, count, err
 }

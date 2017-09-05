@@ -42,18 +42,19 @@ func (service *userService) CreateUser(
 	user.SetFields(userCreating)
 
 	if err := service.storage.CreateUser(user); err != nil {
-		return nil, err
+		return nil, NewEntityCreateError(err.Error())
 	}
 
 	return user, nil
 }
 
 func (service *userService) GetUser(
-	id int,
+	userID int,
 ) (*models.User, error) {
-	user, err := service.storage.GetUser(id)
+	user, err := service.storage.GetUser(userID)
 	if err != nil {
-		return nil, NewEntityNotFoundError("user", id)
+
+		return nil, NewEntityNotFoundError("user", userID)
 	}
 
 	return user, nil
@@ -70,7 +71,7 @@ func (service *userService) GetUsers(
 
 	count, err := service.storage.GetUsersCount()
 	if err != nil {
-		return nil, err
+		return nil, NewGetEntitiesError(err.Error())
 	}
 
 	response := &items{
@@ -95,22 +96,22 @@ func (service *userService) UpdateUser(
 
 	user.SetFields(userUpdating)
 	if err := service.storage.UpdateUser(user); err != nil {
-		return nil, err
+		return nil, NewEntityUpdateError(err.Error())
 	}
 
 	return user, nil
 }
 
 func (service *userService) RemoveUser(
-	userId int,
+	userID int,
 ) error {
-	user, err := service.storage.GetUser(userId)
+	user, err := service.storage.GetUser(userID)
 	if err != nil {
-		return NewEntityNotFoundError("user", userId)
+		return NewEntityNotFoundError("user", userID)
 	}
 
 	if err := service.storage.RemoveUser(user); err != nil {
-		return err
+		return NewEntityRemoveError(err.Error())
 	}
 
 	return nil
@@ -131,41 +132,41 @@ func (service *userService) AttachPoliciesByUser(
 	}
 
 	if err := service.storage.AttachPoliciesByUser(user, policies); err != nil {
-		return err
+		return NewEntityCreateError(err.Error())
 	}
 
 	return nil
 }
 
 func (service *userService) DetachPolicyByUser(
-	userId int,
-	policyId int,
+	userID int,
+	policyID int,
 ) error {
-	user, err := service.storage.GetUser(userId)
+	user, err := service.storage.GetUser(userID)
 	if err != nil {
-		return NewEntityNotFoundError("user", userId)
+		return NewEntityNotFoundError("user", userID)
 	}
 
-	policy, err := service.storage.GetPolicy(policyId)
+	policy, err := service.storage.GetPolicy(policyID)
 	if err != nil {
-		return NewEntityNotFoundError("policy", policyId)
+		return NewEntityNotFoundError("policy", policyID)
 	}
 
 	if err := service.storage.DetachPolicyByUser(user, policy); err != nil {
-		return err
+		return NewEntityRemoveError(err.Error())
 	}
 
 	return nil
 }
 
 func (service *userService) GetPoliciesByUser(
-	userId int,
+	userID int,
 	page int,
 	perPage int,
 ) (*items, error) {
-	user, err := service.storage.GetUser(userId)
+	user, err := service.storage.GetUser(userID)
 	if err != nil {
-		return nil, NewEntityNotFoundError("user", userId)
+		return nil, NewEntityNotFoundError("user", userID)
 	}
 
 	policies, count, err := service.storage.GetPoliciesByUser(
@@ -174,7 +175,7 @@ func (service *userService) GetPoliciesByUser(
 		&perPage,
 	)
 	if err != nil {
-		return nil, err
+		return nil, NewGetEntitiesError(err.Error())
 	}
 
 	items := &items{
@@ -186,13 +187,13 @@ func (service *userService) GetPoliciesByUser(
 }
 
 func (service *userService) GetGroupsByUser(
-	userId int,
+	userID int,
 	page int,
 	perPage int,
 ) (*items, error) {
-	user, err := service.storage.GetUser(userId)
+	user, err := service.storage.GetUser(userID)
 	if err != nil {
-		return nil, NewEntityNotFoundError("user", userId)
+		return nil, NewEntityNotFoundError("user", userID)
 	}
 
 	groups, count, err := service.storage.GetGroupsByUser(
@@ -201,7 +202,7 @@ func (service *userService) GetGroupsByUser(
 		&perPage,
 	)
 	if err != nil {
-		return nil, err
+		return nil, NewGetEntitiesError(err.Error())
 	}
 
 	items := &items{

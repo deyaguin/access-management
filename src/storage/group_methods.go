@@ -7,9 +7,7 @@ import (
 func (dataBase SqlDB) CreateGroup(
 	group *models.Group,
 ) error {
-	err := dataBase.db.
-		Create(group).Error
-
+	err := dataBase.Create(group).Error
 	return err
 }
 
@@ -19,9 +17,7 @@ func (dataBase SqlDB) GetGroups(
 ) (*[]models.Group, error) {
 	groups := new([]models.Group)
 
-	err := dataBase.db.
-		Limit(perPage).Offset(page * perPage).
-		Find(groups).Error
+	err := dataBase.Limit(perPage).Offset((page - 1) * perPage).Find(groups).Error
 
 	return groups, err
 }
@@ -29,9 +25,7 @@ func (dataBase SqlDB) GetGroups(
 func (dataBase SqlDB) GetGroupsCount() (int, error) {
 	var count int
 
-	err := dataBase.db.
-		Table("groups").
-		Count(&count).Error
+	err := dataBase.Table("groups").Count(&count).Error
 
 	return count, err
 }
@@ -41,8 +35,7 @@ func (dataBase SqlDB) GetGroup(
 ) (*models.Group, error) {
 	group := new(models.Group)
 
-	err := dataBase.db.
-		Where(id).Find(group).Error
+	err := dataBase.Where(id).Find(group).Error
 
 	return group, err
 }
@@ -50,8 +43,7 @@ func (dataBase SqlDB) GetGroup(
 func (dataBase SqlDB) UpdateGroup(
 	group *models.Group,
 ) error {
-	err := dataBase.db.
-		Save(group).Error
+	err := dataBase.Save(group).Error
 
 	return err
 }
@@ -59,8 +51,7 @@ func (dataBase SqlDB) UpdateGroup(
 func (dataBase SqlDB) RemoveGroup(
 	group *models.Group,
 ) error {
-	err := dataBase.db.
-		Delete(group).Error
+	err := dataBase.Delete(group).Error
 
 	return err
 }
@@ -69,9 +60,7 @@ func (dataBase SqlDB) AddUsersToGroup(
 	group *models.Group,
 	users *[]models.User,
 ) error {
-	err := dataBase.db.
-		Model(group).Association("users").
-		Append(users).Error
+	err := dataBase.Model(group).Association("users").Append(users).Error
 
 	return err
 }
@@ -80,9 +69,7 @@ func (dataBase SqlDB) RemoveUserFromGroup(
 	group *models.Group,
 	user *models.User,
 ) error {
-	err := dataBase.db.
-		Model(group).Association("users").
-		Delete(user).Error
+	err := dataBase.Model(group).Association("users").Delete(user).Error
 
 	return err
 }
@@ -95,8 +82,7 @@ func (dataBase SqlDB) GetUsersByGroup(
 	users := new([]models.User)
 
 	if page == nil || perPage == nil {
-		err := dataBase.db.
-			Model(group).Related(users, "users").Error
+		err := dataBase.Model(group).Related(users, "users").Error
 		if err != nil {
 			return nil, 0, err
 		}
@@ -104,13 +90,10 @@ func (dataBase SqlDB) GetUsersByGroup(
 		return users, 0, nil
 	}
 
-	err := dataBase.db.
-		Limit(*perPage).Offset(*page**perPage).
+	err := dataBase.Limit(*perPage).Offset((*page - 1) * (*perPage)).
 		Model(group).Related(users, "users").Error
 
-	count := dataBase.db.
-		Model(group).Association("users").
-		Count()
+	count := dataBase.Model(group).Association("users").Count()
 
 	return users, count, err
 }
@@ -119,8 +102,7 @@ func (dataBase SqlDB) AttachPoliciesByGroup(
 	group *models.Group,
 	policies *[]models.Policy,
 ) error {
-	err := dataBase.db.
-		Model(group).Association("policies").
+	err := dataBase.Model(group).Association("policies").
 		Append(policies).Error
 
 	return err
@@ -130,8 +112,7 @@ func (dataBase SqlDB) DetachPolicyByGroup(
 	group *models.Group,
 	policy *models.Policy,
 ) error {
-	err := dataBase.db.
-		Model(group).Association("policies").
+	err := dataBase.Model(group).Association("policies").
 		Delete(policy).Error
 
 	return err
@@ -145,8 +126,7 @@ func (dataBase SqlDB) GetPoliciesByGroup(
 	policies := new([]models.Policy)
 
 	if page == nil || perPage == nil {
-		err := dataBase.db.
-			Model(group).Related(policies, "policies").Error
+		err := dataBase.Model(group).Related(policies, "policies").Error
 		if err != nil {
 			return nil, 0, err
 		}
@@ -154,13 +134,10 @@ func (dataBase SqlDB) GetPoliciesByGroup(
 		return policies, 0, nil
 	}
 
-	err := dataBase.db.
-		Limit(*perPage).Offset(*page**perPage).
+	err := dataBase.Limit(*perPage).Offset((*page - 1) * (*perPage)).
 		Model(group).Related(policies, "policies").Error
 
-	count := dataBase.db.
-		Model(group).Association("policies").
-		Count()
+	count := dataBase.Model(group).Association("policies").Count()
 
 	return policies, count, err
 }

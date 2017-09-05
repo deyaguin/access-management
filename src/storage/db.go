@@ -3,7 +3,11 @@ package storage
 import (
 	"github.com/jinzhu/gorm"
 	"gitlab/nefco/access-management-system/src/models"
+	"gitlab/nefco/access-management-system/src/logger"
+	"go.uber.org/zap"
 )
+
+var Log *zap.Logger = logger.NewLogger()
 
 type DB interface {
 	CreateUser(*models.User) error
@@ -53,17 +57,23 @@ type DB interface {
 }
 
 type SqlDB struct {
-	db *gorm.DB
+	*gorm.DB
 }
 
-func SqlDBCreator(vendor, url string) (DB, error) {
+func SqlDBCreator(vendor, url string) DB {
 	db, err := gorm.Open(vendor, url)
 	if err != nil {
-		return nil, err
+		Log.Error(
+			"DB start failed",
+			zap.Error(err),
+		)
 	}
-	db.LogMode(true)
+
+	Log.Info("DB start successfully")
+
 	DB := &SqlDB{
 		db,
 	}
-	return DB, err
+
+	return DB
 }

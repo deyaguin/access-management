@@ -3,7 +3,11 @@ package api
 import (
 	"github.com/labstack/echo"
 	"gitlab/nefco/access-management-system/src/services"
+	"gitlab/nefco/access-management-system/src/logger"
+	"go.uber.org/zap"
 )
+
+var Log *zap.Logger = logger.NewLogger()
 
 type Api struct {
 	userService             services.UserService
@@ -39,9 +43,9 @@ func NewAPI(
 	e.DELETE("/users/:id", api.removeUser)
 	e.POST("/groups", api.createGroup)
 	e.GET("/groups", api.getGroups)
-	e.GET("/groups/:id", api.getGroup)
-	e.PATCH("/groups/:id", api.updateGroup)
-	e.DELETE("/groups/:id", api.removeGroup)
+	e.GET("/groups/:groupId", api.getGroup)
+	e.PATCH("/groups/:groupId", api.updateGroup)
+	e.DELETE("/groups/:groupId", api.removeGroup)
 	e.POST("/policies", api.createPolicy)
 	e.GET("/policies", api.getPolicies)
 	e.GET("/policies/:id", api.getPolicy)
@@ -49,8 +53,8 @@ func NewAPI(
 	e.DELETE("/policies/:id", api.removePolicy)
 	e.PATCH("/permissions/:id", api.updatePermission)
 
-	e.PUT("/groups/:id/users", api.addUsersToGroup)
-	e.GET("/groups/:id/users", api.getUsersByGroup)
+	e.PUT("/groups/:groupId/users", api.addUsersToGroup)
+	e.GET("/groups/:groupId/users", api.getUsersByGroup)
 	e.DELETE("/groups/:groupId/users/:userId", api.removeUserFromGroup)
 	e.PUT("/policies/:id/permissions", api.addPermissionsToPolicy)
 	e.GET("/policies/:id/permissions", api.getPermissionsByPolicy)
@@ -62,8 +66,18 @@ func NewAPI(
 	e.GET("/groups/:id/policies", api.getPoliciesByGroupHandler)
 	e.DELETE("/groups/:groupId/policies/:policyId", api.detachPolicyByGroup)
 
+	e.POST("/check_permissions", api.userPermissions)
+
 	e.HTTPErrorHandler = api.errorHandler
 
-	e.POST("/check_permissions", api.userPermissions)
-	e.Logger.Fatal(e.Start(api.address))
+	err := e.Start(api.address)
+
+	if err != nil {
+		Log.Fatal(
+			"Api start failed",
+			zap.Error(err),
+		)
+	}
+
+	Log.Info("Api start successfully")
 }

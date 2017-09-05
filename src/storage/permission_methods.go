@@ -7,9 +7,7 @@ import (
 func (dataBase SqlDB) CreatePermission(
 	permission *models.Permission,
 ) error {
-	err := dataBase.db.
-		Create(permission).Error
-
+	err := dataBase.Create(permission).Error
 	return err
 }
 
@@ -18,8 +16,7 @@ func (dataBase SqlDB) GetPermission(
 ) (*models.Permission, error) {
 	permissions := new(models.Permission)
 
-	err := dataBase.db.
-		Where(id).Find(permissions).Error
+	err := dataBase.Where(id).Find(permissions).Error
 
 	return permissions, err
 }
@@ -27,15 +24,13 @@ func (dataBase SqlDB) GetPermission(
 func (dataBase SqlDB) UpdatePermission(
 	permission *models.Permission,
 ) error {
-	err := dataBase.db.
-		Save(permission).Error
+	err := dataBase.Save(permission).Error
 	return err
 }
 
 func (dataBase SqlDB) RemovePermission(
 	permission *models.Permission,
 ) error {
-	err := dataBase.db.
-		Delete(permission).Error
+	err := dataBase.Delete(permission).Error
 	return err
 }

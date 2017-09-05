@@ -7,7 +7,9 @@ import (
 func (dataBase SqlDB) CreateUser(
 	user *models.User,
 ) error {
-	return dataBase.db.Create(user).Error
+	err := dataBase.Create(user).Error
+
+	return err
 }
 
 func (dataBase SqlDB) GetUsers(
@@ -16,9 +18,7 @@ func (dataBase SqlDB) GetUsers(
 ) (*[]models.User, error) {
 	users := new([]models.User)
 
-	err := dataBase.db.
-		Limit(perPage).Offset(page * perPage).
-		Find(users).Error
+	err := dataBase.Limit(perPage).Offset((page - 1) * perPage).Find(users).Error
 
 	return users, err
 }
@@ -26,9 +26,7 @@ func (dataBase SqlDB) GetUsers(
 func (dataBase SqlDB) GetUsersCount() (int, error) {
 	var count int
 
-	err := dataBase.db.
-		Table("users").
-		Count(&count).Error
+	err := dataBase.Table("users").Count(&count).Error
 
 	return count, err
 }
@@ -38,8 +36,7 @@ func (dataBase SqlDB) GetUser(
 ) (*models.User, error) {
 	user := new(models.User)
 
-	err := dataBase.db.
-		Where(id).Find(user).Error
+	err := dataBase.Where(id).Find(user).Error
 
 	return user, err
 }
@@ -47,23 +44,24 @@ func (dataBase SqlDB) GetUser(
 func (dataBase SqlDB) UpdateUser(
 	user *models.User,
 ) error {
-	return dataBase.db.
-		Save(user).Error
+	err := dataBase.Save(user).Error
+
+	return err
 }
 
 func (dataBase SqlDB) RemoveUser(
 	user *models.User,
 ) error {
-	return dataBase.db.
-		Delete(user).Error
+	err := dataBase.Delete(user).Error
+
+	return err
 }
 
 func (dataBase SqlDB) AttachPoliciesByUser(
 	user *models.User,
 	policies *[]models.Policy,
 ) error {
-	err := dataBase.db.
-		Model(user).Association("policies").
+	err := dataBase.Model(user).Association("policies").
 		Append(policies).Error
 
 	return err
@@ -73,23 +71,11 @@ func (dataBase SqlDB) DetachPolicyByUser(
 	user *models.User,
 	policy *models.Policy,
 ) error {
-	err := dataBase.db.
-		Model(user).Association("policies").
+	err := dataBase.Model(user).Association("policies").
 		Delete(policy).Error
 
 	return err
 }
-
-//func (dataBase SqlDB) GetPoliciesByUser(
-//	user *models.User,
-//) (*[]models.Policy, error) {
-//	policies := new([]models.Policy)
-//
-//	err := dataBase.db.
-//		Model(user).Related(policies, "policies").Error
-//
-//	return policies, err
-//}
 
 func (dataBase SqlDB) GetPoliciesByUser(
 	user *models.User,
@@ -99,8 +85,7 @@ func (dataBase SqlDB) GetPoliciesByUser(
 	policies := new([]models.Policy)
 
 	if page == nil || perPage == nil {
-		err := dataBase.db.
-			Model(user).Related(policies, "policies").Error
+		err := dataBase.Model(user).Related(policies, "policies").Error
 		if err != nil {
 			return nil, 0, err
 		}
@@ -108,27 +93,13 @@ func (dataBase SqlDB) GetPoliciesByUser(
 		return policies, 0, nil
 	}
 
-	err := dataBase.db.
-		Limit(*perPage).Offset(*page * *perPage).
+	err := dataBase.Limit(*perPage).Offset((*page - 1) * (*perPage)).
 		Model(user).Related(policies, "policies").Error
 
-	count := dataBase.db.
-		Model(user).Association("policies").
-		Count()
+	count := dataBase.Model(user).Association("policies").Count()
 
 	return policies, count, err
 }
-
-//func (dataBase SqlDB) GetGroupsByUser(
-//	user *models.User,
-//) (*[]models.Group, error) {
-//	groups := new([]models.Group)
-//
-//	err := dataBase.db.
-//		Model(user).Related(groups, "groups").Error
-//
-//	return groups, err
-//}
 
 func (dataBase SqlDB) GetGroupsByUser(
 	user *models.User,
@@ -138,8 +109,7 @@ func (dataBase SqlDB) GetGroupsByUser(
 	groups := new([]models.Group)
 
 	if page == nil || perPage == nil {
-		err := dataBase.db.
-			Model(user).Related(groups, "groups").Error
+		err := dataBase.Model(user).Related(groups, "groups").Error
 		if err != nil {
 			return nil, 0, err
 		}
@@ -147,13 +117,10 @@ func (dataBase SqlDB) GetGroupsByUser(
 		return groups, 0, nil
 	}
 
-	err := dataBase.db.
-		Limit(*perPage).Offset(*page * *perPage).
+	err := dataBase.Limit(*perPage).Offset((*page - 1) * (*perPage)).
 		Model(user).Related(groups, "groups").Error
 
-	count := dataBase.db.
-		Model(user).Association("groups").
-		Count()
+	count := dataBase.Model(user).Association("groups").Count()
 
 	return groups, count, err
 }

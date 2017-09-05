@@ -1,12 +1,13 @@
 package storage
 
-import "gitlab/nefco/access-management-system/src/models"
+import (
+	"gitlab/nefco/access-management-system/src/models"
+)
 
 func (dataBase SqlDB) CreateAction(
 	action *models.Action,
 ) error {
-	err := dataBase.db.
-		Create(action).Error
+	err := dataBase.Create(action).Error
 
 	return err
 }
@@ -16,23 +17,21 @@ func (dataBase SqlDB) GetAction(
 ) (*models.Action, error) {
 	action := new(models.Action)
 
-	err := dataBase.db.
-		Where(id).Find(action).Error
+	err := dataBase.Where(id).Find(action).Error
 
 	return action, err
 }
 
 func (dataBase SqlDB) GetActions() (*[]models.Action, error) {
 	actions := new([]models.Action)
-	err := dataBase.db.Find(actions).Error
+	err := dataBase.Find(actions).Error
 	return actions, err
 }
 
 func (dataBase SqlDB) UpdateAction(
 	action *models.Action,
 ) error {
-	err := dataBase.db.
-		Save(action).Error
+	err := dataBase.Save(action).Error
 
 	return err
 }
@@ -40,8 +39,7 @@ func (dataBase SqlDB) UpdateAction(
 func (dataBase SqlDB) RemoveAction(
 	action *models.Action,
 ) error {
-	err := dataBase.db.
-		Delete(action).Error
+	err := dataBase.Delete(action).Error
 
 	return err
 }
