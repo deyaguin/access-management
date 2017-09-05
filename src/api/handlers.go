@@ -26,7 +26,7 @@ func checkPaginationParams(page, perPage int) error {
 		return services.NewValidationError("page not valid")
 	}
 
-	if perPage > page || perPage < 1 {
+	if perPage < 1 {
 		return services.NewValidationError("perPage not valid")
 	}
 

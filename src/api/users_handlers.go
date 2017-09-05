@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func (a *Api) createUser(c echo.Context) error {
+func (a *API) createUser(c echo.Context) error {
 	userCreating := &models.User{}
 
 	if err := c.Bind(userCreating); err != nil {
@@ -22,7 +22,7 @@ func (a *Api) createUser(c echo.Context) error {
 	return c.JSON(http.StatusCreated, user)
 }
 
-func (a *Api) getUsers(c echo.Context) error {
+func (a *API) getUsers(c echo.Context) error {
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -51,7 +51,7 @@ func (a *Api) getUsers(c echo.Context) error {
 	return c.JSON(http.StatusOK, users)
 }
 
-func (a *Api) getUser(c echo.Context) error {
+func (a *API) getUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -68,7 +68,7 @@ func (a *Api) getUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
-func (a *Api) updateUser(c echo.Context) error {
+func (a *API) updateUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -90,7 +90,7 @@ func (a *Api) updateUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
-func (a *Api) removeUser(c echo.Context) error {
+func (a *API) removeUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -106,7 +106,7 @@ func (a *Api) removeUser(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (a *Api) attachPoliciesByUser(c echo.Context) error {
+func (a *API) attachPoliciesByUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -131,7 +131,7 @@ func (a *Api) attachPoliciesByUser(c echo.Context) error {
 	return c.NoContent(http.StatusCreated)
 }
 
-func (a *Api) detachPolicyByUser(c echo.Context) error {
+func (a *API) detachPolicyByUser(c echo.Context) error {
 	userId, err := strconv.Atoi(c.Param("userId"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -158,7 +158,7 @@ func (a *Api) detachPolicyByUser(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (a *Api) getPoliciesByUser(c echo.Context) error {
+func (a *API) getPoliciesByUser(c echo.Context) error {
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
 		return NewInvalidQueryError(

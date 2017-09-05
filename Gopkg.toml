@@ -33,7 +33,7 @@
   name = "gopkg.in/validator.v2"
 
 [[constraint]]
-  name = "go.uber.org/zap"
+  name = "github.com/uber-go/zap"
   version = "1.5.0"
 
 [[constraint]]

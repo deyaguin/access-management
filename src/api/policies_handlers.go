@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func (a *Api) createPolicy(c echo.Context) error {
+func (a *API) createPolicy(c echo.Context) error {
 	policyCreating := &models.Policy{}
 
 	if err := c.Bind(policyCreating); err != nil {
@@ -22,7 +22,7 @@ func (a *Api) createPolicy(c echo.Context) error {
 	return c.JSON(http.StatusCreated, policy)
 }
 
-func (a *Api) getPolicies(c echo.Context) error {
+func (a *API) getPolicies(c echo.Context) error {
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -51,7 +51,7 @@ func (a *Api) getPolicies(c echo.Context) error {
 	return c.JSON(http.StatusOK, policies)
 }
 
-func (a *Api) getPolicy(c echo.Context) error {
+func (a *API) getPolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -68,7 +68,7 @@ func (a *Api) getPolicy(c echo.Context) error {
 	return c.JSON(http.StatusOK, policy)
 }
 
-func (a *Api) updatePolicy(c echo.Context) error {
+func (a *API) updatePolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -90,7 +90,7 @@ func (a *Api) updatePolicy(c echo.Context) error {
 	return c.JSON(http.StatusOK, policy)
 }
 
-func (a *Api) removePolicy(c echo.Context) error {
+func (a *API) removePolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -106,7 +106,7 @@ func (a *Api) removePolicy(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (a *Api) addPermissionsToPolicy(c echo.Context) error {
+func (a *API) addPermissionsToPolicy(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -131,7 +131,7 @@ func (a *Api) addPermissionsToPolicy(c echo.Context) error {
 	return c.NoContent(http.StatusCreated)
 }
 
-func (a *Api) removePermissionFromPolicy(c echo.Context) error {
+func (a *API) removePermissionFromPolicy(c echo.Context) error {
 	policyId, err := strconv.Atoi(c.Param("policyId"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -158,7 +158,7 @@ func (a *Api) removePermissionFromPolicy(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (a *Api) getPermissionsByPolicy(c echo.Context) error {
+func (a *API) getPermissionsByPolicy(c echo.Context) error {
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
 		return NewInvalidQueryError(

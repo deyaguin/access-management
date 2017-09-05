@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func (a *Api) userPermissions(c echo.Context) error {
+func (a *API) userPermissions(c echo.Context) error {
 	checkingParams := new(services.CheckingParams)
 	if err := c.Bind(checkingParams); err != nil {
 		return NewUnprocessableBodyError()

@@ -6,7 +6,7 @@ import (
 	"gopkg.in/validator.v2"
 )
 
-type ActionService interface {
+type ActionsService interface {
 	CreateAction(*models.Action) (*models.Action, error)
 	GetAction(int) (*models.Action, error)
 	GetActions() (*[]models.Action, error)
@@ -20,7 +20,7 @@ type actionService struct {
 
 func NewActionService(
 	storage storage.DB,
-) ActionService {
+) ActionsService {
 	return &actionService{
 		storage,
 	}

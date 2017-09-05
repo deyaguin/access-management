@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func (a *Api) createGroup(c echo.Context) error {
+func (a *API) createGroup(c echo.Context) error {
 	groupCreating := &models.Group{}
 
 	if err := c.Bind(groupCreating); err != nil {
@@ -22,7 +22,7 @@ func (a *Api) createGroup(c echo.Context) error {
 	return c.JSON(http.StatusCreated, group)
 }
 
-func (a *Api) getGroups(c echo.Context) error {
+func (a *API) getGroups(c echo.Context) error {
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -50,7 +50,7 @@ func (a *Api) getGroups(c echo.Context) error {
 	return c.JSON(http.StatusOK, groups)
 }
 
-func (a *Api) getGroup(c echo.Context) error {
+func (a *API) getGroup(c echo.Context) error {
 	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -67,7 +67,7 @@ func (a *Api) getGroup(c echo.Context) error {
 	return c.JSON(http.StatusOK, groups)
 }
 
-func (a *Api) updateGroup(c echo.Context) error {
+func (a *API) updateGroup(c echo.Context) error {
 	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -89,7 +89,7 @@ func (a *Api) updateGroup(c echo.Context) error {
 	return c.JSON(http.StatusOK, group)
 }
 
-func (a *Api) removeGroup(c echo.Context) error {
+func (a *API) removeGroup(c echo.Context) error {
 	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -105,7 +105,7 @@ func (a *Api) removeGroup(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (a *Api) addUsersToGroup(c echo.Context) error {
+func (a *API) addUsersToGroup(c echo.Context) error {
 	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -127,7 +127,7 @@ func (a *Api) addUsersToGroup(c echo.Context) error {
 	return c.NoContent(http.StatusCreated)
 }
 
-func (a *Api) removeUserFromGroup(c echo.Context) error {
+func (a *API) removeUserFromGroup(c echo.Context) error {
 	groupId, err := strconv.Atoi(c.Param("groupId"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -151,7 +151,7 @@ func (a *Api) removeUserFromGroup(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (a *Api) getUsersByGroup(c echo.Context) error {
+func (a *API) getUsersByGroup(c echo.Context) error {
 	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -192,7 +192,7 @@ func (a *Api) getUsersByGroup(c echo.Context) error {
 	return c.JSON(http.StatusOK, users)
 }
 
-func (a *Api) attachPoliciesByGroup(c echo.Context) error {
+func (a *API) attachPoliciesByGroup(c echo.Context) error {
 	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -201,7 +201,6 @@ func (a *Api) attachPoliciesByGroup(c echo.Context) error {
 		)
 	}
 	group := &models.Group{ID: groupID}
-
 
 	policies := new(policies)
 	if err = c.Bind(policies); err != nil {
@@ -218,7 +217,7 @@ func (a *Api) attachPoliciesByGroup(c echo.Context) error {
 	return c.NoContent(http.StatusCreated)
 }
 
-func (a *Api) detachPolicyByGroup(c echo.Context) error {
+func (a *API) detachPolicyByGroup(c echo.Context) error {
 	groupId, err := strconv.Atoi(c.Param("groupId"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -242,7 +241,7 @@ func (a *Api) detachPolicyByGroup(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (a *Api) getPoliciesByGroupHandler(c echo.Context) error {
+func (a *API) getPoliciesByGroupHandler(c echo.Context) error {
 
 	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
@@ -275,7 +274,7 @@ func (a *Api) getPoliciesByGroupHandler(c echo.Context) error {
 	policies, err := a.groupService.GetPoliciesByGroup(
 		groupID,
 		page,
-		perPage,)
+		perPage)
 	if err != nil {
 		return err
 	}

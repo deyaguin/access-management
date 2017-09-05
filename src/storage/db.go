@@ -2,8 +2,8 @@ package storage
 
 import (
 	"github.com/jinzhu/gorm"
-	"gitlab/nefco/access-management-system/src/models"
 	"gitlab/nefco/access-management-system/src/logger"
+	"gitlab/nefco/access-management-system/src/models"
 	"go.uber.org/zap"
 )
 

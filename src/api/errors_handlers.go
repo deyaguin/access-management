@@ -2,17 +2,17 @@ package api
 
 import (
 	"github.com/labstack/echo"
-	"gitlab/nefco/access-management-system/src/services"
-	"net/http"
-	"go.uber.org/zap"
 	"github.com/labstack/gommon/log"
+	"gitlab/nefco/access-management-system/src/services"
+	"go.uber.org/zap"
+	"net/http"
 )
 
 type errorBody struct {
 	Message string `json:"message"`
 }
 
-func (a *Api) errorHandler(
+func (a *API) errorHandler(
 	err error,
 	c echo.Context,
 ) {
@@ -46,20 +46,24 @@ func (a *Api) errorHandler(
 			"entity create error",
 			zap.Error(err),
 		)
+		c.NoContent(http.StatusInternalServerError)
 	case *services.EntityUpdateError:
 		Log.Error(
 			"entity update error",
 			zap.Error(err),
 		)
+		c.NoContent(http.StatusInternalServerError)
 	case *services.EntityRemoveError:
 		Log.Error(
 			"entity remove error",
 			zap.Error(err),
 		)
+		c.NoContent(http.StatusInternalServerError)
 	case *services.GetEntitiesError:
 		log.Error(
 			"get entities error",
 			zap.Error(err),
 		)
+		c.NoContent(http.StatusNotFound)
 	}
 }

@@ -82,7 +82,7 @@ func (dataBase SqlDB) GetUsersByPolicy(
 		return users, 0, nil
 	}
 
-	err := dataBase.Limit(*perPage).Offset((*page - 1) * (*perPage)).
+	err := dataBase.Limit(*perPage).Offset((*page-1)*(*perPage)).
 		Model(policy).Related(users, "users").Error
 
 	count := dataBase.Model(policy).Association("users").Count()
@@ -106,7 +106,7 @@ func (dataBase SqlDB) GetGroupsByPolicy(
 		return groups, 0, nil
 	}
 
-	err := dataBase.Limit(*perPage).Offset((*page - 1) * (*perPage)).
+	err := dataBase.Limit(*perPage).Offset((*page-1)*(*perPage)).
 		Model(policy).Related(groups, "groups").Error
 
 	count := dataBase.Model(policy).Association("groups").Count()
@@ -130,7 +130,7 @@ func (dataBase SqlDB) GetPermissionsByPolicy(
 		return permissions, 0, nil
 	}
 
-	err := dataBase.Limit(*perPage).Offset((*page - 1) * (*perPage)).
+	err := dataBase.Limit(*perPage).Offset((*page-1)*(*perPage)).
 		Model(policy).Related(permissions, "permissions").Error
 
 	count := dataBase.Model(policy).Association("permissions").Count()

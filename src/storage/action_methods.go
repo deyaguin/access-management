@@ -22,9 +22,14 @@ func (dataBase SqlDB) GetAction(
 	return action, err
 }
 
-func (dataBase SqlDB) GetActions() (*[]models.Action, error) {
+func (dataBase SqlDB) GetActions(
+	page int,
+	perPage int,
+) (*[]models.Action, error) {
 	actions := new([]models.Action)
-	err := dataBase.Find(actions).Error
+
+	err := dataBase.Limit(perPage).Offset((page - 1) * perPage).Find(actions).Error
+
 	return actions, err
 }
 

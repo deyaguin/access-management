@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func (a *Api) updatePermission(c echo.Context) error {
+func (a *API) updatePermission(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -29,6 +29,6 @@ func (a *Api) updatePermission(c echo.Context) error {
 	return c.JSON(http.StatusOK, permission)
 }
 
-func (a *Api) RemovePermission(c echo.Context) error {
+func (a *API) RemovePermission(c echo.Context) error {
 	return *new(error)
 }
