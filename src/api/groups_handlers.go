@@ -14,7 +14,7 @@ func (a *API) createGroup(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	group, err := a.groupService.CreateGroup(groupCreating)
+	group, err := a.groupsService.CreateGroup(groupCreating)
 	if err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func (a *API) getGroups(c echo.Context) error {
 		return err
 	}
 
-	groups, err := a.groupService.GetGroups(page, perPage)
+	groups, err := a.groupsService.GetGroups(page, perPage)
 	if err != nil {
 		return err
 	}
@@ -59,12 +59,12 @@ func (a *API) getGroup(c echo.Context) error {
 		)
 	}
 
-	groups, err := a.groupService.GetGroup(groupID)
+	group, err := a.groupsService.GetGroup(groupID)
 	if err != nil {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, groups)
+	return c.JSON(http.StatusOK, group)
 }
 
 func (a *API) updateGroup(c echo.Context) error {
@@ -81,7 +81,7 @@ func (a *API) updateGroup(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	group, err := a.groupService.UpdateGroup(groupUpdating)
+	group, err := a.groupsService.UpdateGroup(groupUpdating)
 	if err != nil {
 		return err
 	}
@@ -98,7 +98,7 @@ func (a *API) removeGroup(c echo.Context) error {
 		)
 	}
 
-	if err := a.groupService.RemoveGroup(groupID); err != nil {
+	if err := a.groupsService.RemoveGroup(groupID); err != nil {
 		return err
 	}
 
@@ -120,7 +120,7 @@ func (a *API) addUsersToGroup(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	if err = a.groupService.AddUsersToGroup(group, users.Users); err != nil {
+	if err = a.groupsService.AddUsersToGroup(group, users.Users); err != nil {
 		return err
 	}
 
@@ -128,11 +128,11 @@ func (a *API) addUsersToGroup(c echo.Context) error {
 }
 
 func (a *API) removeUserFromGroup(c echo.Context) error {
-	groupId, err := strconv.Atoi(c.Param("groupId"))
+	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"groupID",
-			c.Param("groupId"),
+			c.Param("groupID"),
 		)
 	}
 
@@ -144,7 +144,7 @@ func (a *API) removeUserFromGroup(c echo.Context) error {
 		)
 	}
 
-	if err = a.groupService.RemoveUserFromGroup(groupId, userId); err != nil {
+	if err = a.groupsService.RemoveUserFromGroup(groupID, userId); err != nil {
 		return err
 	}
 
@@ -180,7 +180,7 @@ func (a *API) getUsersByGroup(c echo.Context) error {
 		return err
 	}
 
-	users, err := a.groupService.GetUsersByGroup(
+	users, err := a.groupsService.GetUsersByGroup(
 		groupID,
 		page,
 		perPage,
@@ -207,7 +207,7 @@ func (a *API) attachPoliciesByGroup(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	if err = a.groupService.AttachPoliciesByGroup(
+	if err = a.groupsService.AttachPoliciesByGroup(
 		group,
 		policies.Policies,
 	); err != nil {
@@ -218,11 +218,11 @@ func (a *API) attachPoliciesByGroup(c echo.Context) error {
 }
 
 func (a *API) detachPolicyByGroup(c echo.Context) error {
-	groupId, err := strconv.Atoi(c.Param("groupId"))
+	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"groupID",
-			c.Param("groupId"),
+			c.Param("groupID"),
 		)
 	}
 
@@ -234,7 +234,7 @@ func (a *API) detachPolicyByGroup(c echo.Context) error {
 		)
 	}
 
-	if err = a.groupService.DetachPolicyByGroup(groupId, policyId); err != nil {
+	if err = a.groupsService.DetachPolicyByGroup(groupID, policyId); err != nil {
 		return err
 	}
 
@@ -271,7 +271,7 @@ func (a *API) getPoliciesByGroupHandler(c echo.Context) error {
 		return err
 	}
 
-	policies, err := a.groupService.GetPoliciesByGroup(
+	policies, err := a.groupsService.GetPoliciesByGroup(
 		groupID,
 		page,
 		perPage)

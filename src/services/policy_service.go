@@ -6,7 +6,7 @@ import (
 	"gopkg.in/validator.v2"
 )
 
-type PolicyService interface {
+type PoliciesService interface {
 	CreatePolicy(*models.Policy) (*models.Policy, error)
 	GetPolicy(int) (*models.Policy, error)
 	GetPolicies(int, int) (*items, error)
@@ -20,19 +20,19 @@ type PolicyService interface {
 	GetPermissionsByPolicy(int, int, int) (*items, error)
 }
 
-type policyService struct {
+type policiesService struct {
 	storage storage.DB
 }
 
-func NewPolicyService(
+func NewPoliciesService(
 	storage storage.DB,
-) PolicyService {
-	return &policyService{
+) PoliciesService {
+	return &policiesService{
 		storage,
 	}
 }
 
-func (service *policyService) CreatePolicy(
+func (service *policiesService) CreatePolicy(
 	policyCreating *models.Policy,
 ) (*models.Policy, error) {
 	if err := validator.Validate(policyCreating); err != nil {
@@ -48,7 +48,7 @@ func (service *policyService) CreatePolicy(
 	return policy, nil
 }
 
-func (service *policyService) GetPolicy(
+func (service *policiesService) GetPolicy(
 	policyID int,
 ) (*models.Policy, error) {
 	policy, err := service.storage.GetPolicy(policyID)
@@ -59,7 +59,7 @@ func (service *policyService) GetPolicy(
 	return policy, nil
 }
 
-func (service *policyService) GetPolicies(
+func (service *policiesService) GetPolicies(
 	page int,
 	perPage int,
 ) (*items, error) {
@@ -81,7 +81,7 @@ func (service *policyService) GetPolicies(
 	return response, nil
 }
 
-func (service *policyService) UpdatePolicy(
+func (service *policiesService) UpdatePolicy(
 	policyUpdating *models.Policy,
 ) (*models.Policy, error) {
 	policy, err := service.storage.GetPolicy(policyUpdating.ID)
@@ -101,7 +101,7 @@ func (service *policyService) UpdatePolicy(
 	return policy, nil
 }
 
-func (service *policyService) RemovePolicy(
+func (service *policiesService) RemovePolicy(
 	policyID int,
 ) error {
 	policy, err := service.storage.GetPolicy(policyID)
@@ -116,7 +116,7 @@ func (service *policyService) RemovePolicy(
 	return nil
 }
 
-func (service *policyService) AddPermissionsToPolicy(
+func (service *policiesService) AddPermissionsToPolicy(
 	policy *models.Policy,
 	permissions *[]models.Permission,
 ) error {
@@ -144,7 +144,7 @@ func (service *policyService) AddPermissionsToPolicy(
 	return nil
 }
 
-func (service *policyService) RemovePermissionFromPolicy(
+func (service *policiesService) RemovePermissionFromPolicy(
 	policyID int,
 	permissionID int,
 ) error {
@@ -165,7 +165,7 @@ func (service *policyService) RemovePermissionFromPolicy(
 	return nil
 }
 
-func (service *policyService) GetPermissionsByPolicy(
+func (service *policiesService) GetPermissionsByPolicy(
 	policyID int,
 	page int,
 	perPage int,
@@ -192,7 +192,7 @@ func (service *policyService) GetPermissionsByPolicy(
 	return items, nil
 }
 
-func (service *policyService) GetUsersByPolicy(
+func (service *policiesService) GetUsersByPolicy(
 	policyID int,
 	page int,
 	perPage int,
@@ -219,7 +219,7 @@ func (service *policyService) GetUsersByPolicy(
 	return items, nil
 }
 
-func (service *policyService) GetGroupsByPolicy(
+func (service *policiesService) GetGroupsByPolicy(
 	policyID int,
 	page int,
 	perPage int,

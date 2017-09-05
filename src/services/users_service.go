@@ -6,7 +6,7 @@ import (
 	"gopkg.in/validator.v2"
 )
 
-type UserService interface {
+type UsersService interface {
 	CreateUser(*models.User) (*models.User, error)
 	GetUser(int) (*models.User, error)
 	GetUsers(int, int) (*items, error)
@@ -19,19 +19,19 @@ type UserService interface {
 	GetGroupsByUser(int, int, int) (*items, error)
 }
 
-type userService struct {
+type usersService struct {
 	storage storage.DB
 }
 
-func NewUserService(
+func NewUsersService(
 	storage storage.DB,
-) UserService {
-	return &userService{
+) UsersService {
+	return &usersService{
 		storage,
 	}
 }
 
-func (service *userService) CreateUser(
+func (service *usersService) CreateUser(
 	userCreating *models.User,
 ) (*models.User, error) {
 	if err := validator.Validate(userCreating); err != nil {
@@ -48,7 +48,7 @@ func (service *userService) CreateUser(
 	return user, nil
 }
 
-func (service *userService) GetUser(
+func (service *usersService) GetUser(
 	userID int,
 ) (*models.User, error) {
 	user, err := service.storage.GetUser(userID)
@@ -60,7 +60,7 @@ func (service *userService) GetUser(
 	return user, nil
 }
 
-func (service *userService) GetUsers(
+func (service *usersService) GetUsers(
 	page int,
 	perPage int,
 ) (*items, error) {
@@ -82,7 +82,7 @@ func (service *userService) GetUsers(
 	return response, nil
 }
 
-func (service *userService) UpdateUser(
+func (service *usersService) UpdateUser(
 	userUpdating *models.User,
 ) (*models.User, error) {
 	user, err := service.storage.GetUser(userUpdating.ID)
@@ -102,7 +102,7 @@ func (service *userService) UpdateUser(
 	return user, nil
 }
 
-func (service *userService) RemoveUser(
+func (service *usersService) RemoveUser(
 	userID int,
 ) error {
 	user, err := service.storage.GetUser(userID)
@@ -117,7 +117,7 @@ func (service *userService) RemoveUser(
 	return nil
 }
 
-func (service *userService) AttachPoliciesByUser(
+func (service *usersService) AttachPoliciesByUser(
 	user *models.User,
 	policies *[]models.Policy,
 ) error {
@@ -138,7 +138,7 @@ func (service *userService) AttachPoliciesByUser(
 	return nil
 }
 
-func (service *userService) DetachPolicyByUser(
+func (service *usersService) DetachPolicyByUser(
 	userID int,
 	policyID int,
 ) error {
@@ -159,7 +159,7 @@ func (service *userService) DetachPolicyByUser(
 	return nil
 }
 
-func (service *userService) GetPoliciesByUser(
+func (service *usersService) GetPoliciesByUser(
 	userID int,
 	page int,
 	perPage int,
@@ -186,7 +186,7 @@ func (service *userService) GetPoliciesByUser(
 	return items, nil
 }
 
-func (service *userService) GetGroupsByUser(
+func (service *usersService) GetGroupsByUser(
 	userID int,
 	page int,
 	perPage int,

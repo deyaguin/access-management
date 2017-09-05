@@ -10,29 +10,29 @@ import (
 var Log *zap.Logger = logger.NewLogger()
 
 type API struct {
-	userService             services.UserService
-	groupService            services.GroupService
-	policyService           services.PolicyService
-	permissionService       services.PermissionService
+	usersService            services.UsersService
+	groupsService           services.GroupsService
+	policiesService         services.PoliciesService
+	permissionsService      services.PermissionsService
 	permissionsCheckService services.PermissionsCheckService
 	actionsService          services.ActionsService
 	address                 string
 }
 
 func NewAPI(
-	userService services.UserService,
-	groupService services.GroupService,
-	policyService services.PolicyService,
-	permissionService services.PermissionService,
+	usersService services.UsersService,
+	groupsService services.GroupsService,
+	policiesService services.PoliciesService,
+	permissionsService services.PermissionsService,
 	permissionsCheckService services.PermissionsCheckService,
 	actionsService services.ActionsService,
 	address string,
 ) {
 	api := &API{
-		userService,
-		groupService,
-		policyService,
-		permissionService,
+		usersService,
+		groupsService,
+		policiesService,
+		permissionsService,
 		permissionsCheckService,
 		actionsService,
 		address,
@@ -41,34 +41,40 @@ func NewAPI(
 
 	e.POST("/users", api.createUser)
 	e.GET("/users", api.getUsers)
-	e.GET("/users/:id", api.getUser)
-	e.PATCH("/users/:id", api.updateUser)
-	e.DELETE("/users/:id", api.removeUser)
-	e.PUT("/users/:id/policies", api.attachPoliciesByUser)
-	e.GET("/users/:id/policies", api.getPoliciesByUser)
-	e.DELETE("users/:userId/policies/:policyId", api.detachPolicyByUser)
+	e.GET("/users/:userID", api.getUser)
+	e.PATCH("/users/:userID", api.updateUser)
+	e.DELETE("/users/:userID", api.removeUser)
+	e.PUT("/users/:userID/policies", api.attachPoliciesByUser)
+	e.GET("/users/:userID/policies", api.getPoliciesByUser)
+	e.DELETE("users/:userID/policies/:policyID", api.detachPolicyByUser)
 
 	e.POST("/groups", api.createGroup)
 	e.GET("/groups", api.getGroups)
-	e.GET("/groups/:groupId", api.getGroup)
-	e.PATCH("/groups/:groupId", api.updateGroup)
-	e.DELETE("/groups/:groupId", api.removeGroup)
-	e.PUT("/groups/:groupId/users", api.addUsersToGroup)
-	e.GET("/groups/:groupId/users", api.getUsersByGroup)
-	e.DELETE("/groups/:groupId/users/:userId", api.removeUserFromGroup)
-	e.PUT("/groups/:id/policies", api.attachPoliciesByGroup)
-	e.GET("/groups/:id/policies", api.getPoliciesByGroupHandler)
-	e.DELETE("/groups/:groupId/policies/:policyId", api.detachPolicyByGroup)
+	e.GET("/groups/:groupID", api.getGroup)
+	e.PATCH("/groups/:groupID", api.updateGroup)
+	e.DELETE("/groups/:groupID", api.removeGroup)
+	e.PUT("/groups/:groupID/users", api.addUsersToGroup)
+	e.GET("/groups/:groupID/users", api.getUsersByGroup)
+	e.DELETE("/groups/:groupID/users/:userID", api.removeUserFromGroup)
+	e.PUT("/groups/:groupID/policies", api.attachPoliciesByGroup)
+	e.GET("/groups/:groupID/policies", api.getPoliciesByGroupHandler)
+	e.DELETE("/groups/:groupID/policies/:policyID", api.detachPolicyByGroup)
 
 	e.POST("/policies", api.createPolicy)
 	e.GET("/policies", api.getPolicies)
-	e.GET("/policies/:id", api.getPolicy)
-	e.PATCH("/policies/:id", api.updatePolicy)
-	e.DELETE("/policies/:id", api.removePolicy)
-	e.PATCH("/permissions/:id", api.updatePermission)
-	e.PUT("/policies/:id/permissions", api.addPermissionsToPolicy)
-	e.GET("/policies/:id/permissions", api.getPermissionsByPolicy)
-	e.DELETE("/policies/:policyId/permissions/:permissionId", api.removePermissionFromPolicy)
+	e.GET("/policies/:policyID", api.getPolicy)
+	e.PATCH("/policies/:policyID", api.updatePolicy)
+	e.DELETE("/policies/:policyID", api.removePolicy)
+	e.PATCH("/permissions/:policyID", api.updatePermission)
+	e.PUT("/policies/:policyID/permissions", api.addPermissionsToPolicy)
+	e.GET("/policies/:policyID/permissions", api.getPermissionsByPolicy)
+	e.DELETE("/policies/:policyID/permissions/:permissionID", api.removePermissionFromPolicy)
+
+	e.POST("/actions", api.createAction)
+	e.GET("/actions", api.getActions)
+	e.GET("/actions/:actionID", api.getAction)
+	e.PATCH("/actions/:actionID", api.updateAction)
+	e.DELETE("/actions/actionID", api.removeAction)
 
 	e.POST("/check_permissions", api.userPermissions)
 

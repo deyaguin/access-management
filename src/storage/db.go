@@ -50,7 +50,7 @@ type DB interface {
 	GetGroupsByPolicy(*models.Policy, *int, *int) (*[]models.Group, int, error)
 
 	CreateAction(*models.Action) error
-	GetActions() (*[]models.Action, error)
+	GetActions(int, int) (*[]models.Action, error)
 	GetAction(int) (*models.Action, error)
 	UpdateAction(*models.Action) error
 	RemoveAction(*models.Action) error

@@ -6,7 +6,7 @@ import (
 	"gopkg.in/validator.v2"
 )
 
-type GroupService interface {
+type GroupsService interface {
 	CreateGroup(*models.Group) (*models.Group, error)
 	GetGroup(int) (*models.Group, error)
 	GetGroups(int, int) (*items, error)
@@ -21,19 +21,19 @@ type GroupService interface {
 	GetPoliciesByGroup(int, int, int) (*items, error)
 }
 
-type groupService struct {
+type groupsService struct {
 	storage storage.DB
 }
 
-func NewGroupService(
+func NewGroupsService(
 	storage storage.DB,
-) GroupService {
-	return &groupService{
+) GroupsService {
+	return &groupsService{
 		storage,
 	}
 }
 
-func (service *groupService) CreateGroup(
+func (service *groupsService) CreateGroup(
 	groupCreating *models.Group,
 ) (*models.Group, error) {
 	if err := validator.Validate(groupCreating); err != nil {
@@ -50,7 +50,7 @@ func (service *groupService) CreateGroup(
 	return group, nil
 }
 
-func (service *groupService) GetGroup(
+func (service *groupsService) GetGroup(
 	groupID int,
 ) (*models.Group, error) {
 	group, err := service.storage.GetGroup(groupID)
@@ -61,7 +61,7 @@ func (service *groupService) GetGroup(
 	return group, nil
 }
 
-func (service *groupService) GetGroups(
+func (service *groupsService) GetGroups(
 	page int,
 	perPage int,
 ) (*items, error) {
@@ -83,7 +83,7 @@ func (service *groupService) GetGroups(
 	return items, nil
 }
 
-func (service *groupService) UpdateGroup(
+func (service *groupsService) UpdateGroup(
 	groupUpdating *models.Group,
 ) (*models.Group, error) {
 	group, err := service.storage.GetGroup(groupUpdating.ID)
@@ -103,7 +103,7 @@ func (service *groupService) UpdateGroup(
 	return group, nil
 }
 
-func (service *groupService) RemoveGroup(
+func (service *groupsService) RemoveGroup(
 	groupID int,
 ) error {
 	group, err := service.storage.GetGroup(groupID)
@@ -118,7 +118,7 @@ func (service *groupService) RemoveGroup(
 	return nil
 }
 
-func (service *groupService) AddUsersToGroup(
+func (service *groupsService) AddUsersToGroup(
 	group *models.Group,
 	users *[]models.User,
 ) error {
@@ -139,7 +139,7 @@ func (service *groupService) AddUsersToGroup(
 	return nil
 }
 
-func (service *groupService) RemoveUserFromGroup(
+func (service *groupsService) RemoveUserFromGroup(
 	groupID int,
 	userID int,
 ) error {
@@ -160,7 +160,7 @@ func (service *groupService) RemoveUserFromGroup(
 	return nil
 }
 
-func (service *groupService) GetUsersByGroup(
+func (service *groupsService) GetUsersByGroup(
 	groupID int,
 	page int,
 	perPage int,
@@ -187,7 +187,7 @@ func (service *groupService) GetUsersByGroup(
 	return items, nil
 }
 
-func (service *groupService) AttachPoliciesByGroup(
+func (service *groupsService) AttachPoliciesByGroup(
 	group *models.Group,
 	policies *[]models.Policy,
 ) error {
@@ -214,7 +214,7 @@ func (service *groupService) AttachPoliciesByGroup(
 	return nil
 }
 
-func (service *groupService) DetachPolicyByGroup(
+func (service *groupsService) DetachPolicyByGroup(
 	groupID int,
 	policyID int,
 ) error {
@@ -235,7 +235,7 @@ func (service *groupService) DetachPolicyByGroup(
 	return nil
 }
 
-func (service *groupService) GetPoliciesByGroup(
+func (service *groupsService) GetPoliciesByGroup(
 	groupID int,
 	page int,
 	perPage int,

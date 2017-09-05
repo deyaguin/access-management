@@ -1,10 +1,10 @@
 package services
 
 //type servicesConf struct {
-//	userService             UserService
-//	groupService            GroupService
-//	policyService           PolicyService
-//	permissionService       PermissionService
+//	usersService             UsersService
+//	groupsService            GroupsService
+//	policiesService           PoliciesService
+//	permissionsService       PermissionsService
 //	permissionsCheckService PermissionsCheckService
 //}
 //

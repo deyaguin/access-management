@@ -42,8 +42,65 @@ func (a *API) getActions(c echo.Context) error {
 		return err
 	}
 
-	//actions, err := a.actionsService.GetActions(page, perPage)
-	//if err != nil {
-	//
-	//}
+	actions, err := a.actionsService.GetActions(page, perPage)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, actions)
+}
+
+func (a *API) getAction(c echo.Context) error {
+	actionId, err := strconv.Atoi(c.Param("actionID"))
+	if err != nil {
+		return NewInvalidQueryError(
+			"actionID",
+			c.Param("actionID"),
+		)
+	}
+
+	action, err := a.actionsService.GetAction(actionId)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, action)
+}
+
+func (a *API) updateAction(c echo.Context) error {
+	actionID, err := strconv.Atoi(c.Param("actionID"))
+	if err != nil {
+		return NewInvalidQueryError(
+			"actionID",
+			c.Param("actionID"),
+		)
+	}
+
+	actionUpdating := &models.Action{ID: actionID}
+	if err := c.Bind(actionUpdating); err != nil {
+		return NewUnprocessableBodyError()
+	}
+
+	group, err := a.actionsService.UpdateAction(actionUpdating)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, group)
+}
+
+func (a *API) removeAction(c echo.Context) error {
+	actionID, err := strconv.Atoi(c.Param("actionID"))
+	if err != nil {
+		return NewInvalidQueryError(
+			"actionID",
+			c.Param("actionID"),
+		)
+	}
+
+	if err := a.actionsService.RemoveAction(actionID); err != nil {
+		return err
+	}
+
+	return c.NoContent(http.StatusOK)
 }

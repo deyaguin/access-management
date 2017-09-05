@@ -9,24 +9,24 @@ import (
 type ActionsService interface {
 	CreateAction(*models.Action) (*models.Action, error)
 	GetAction(int) (*models.Action, error)
-	GetActions() (*[]models.Action, error)
+	GetActions(int, int) (*[]models.Action, error)
 	UpdateAction(*models.Action) (*models.Action, error)
-	RemoveAction(*models.Action) error
+	RemoveAction(int) error
 }
 
-type actionService struct {
+type actionsService struct {
 	storage storage.DB
 }
 
-func NewActionService(
+func NewActionsService(
 	storage storage.DB,
 ) ActionsService {
-	return &actionService{
+	return &actionsService{
 		storage,
 	}
 }
 
-func (service *actionService) CreateAction(
+func (service *actionsService) CreateAction(
 	actionCreating *models.Action,
 ) (*models.Action, error) {
 	if err := validator.Validate(actionCreating); err != nil {
@@ -43,7 +43,7 @@ func (service *actionService) CreateAction(
 	return action, nil
 }
 
-func (service *actionService) GetAction(
+func (service *actionsService) GetAction(
 	actionID int,
 ) (*models.Action, error) {
 	action, err := service.storage.GetAction(actionID)
@@ -54,16 +54,19 @@ func (service *actionService) GetAction(
 	return action, nil
 }
 
-func (service *actionService) GetActions() (*[]models.Action, error) {
-	action, err := service.storage.GetActions()
+func (service *actionsService) GetActions(
+	page int,
+	perPage int,
+) (*[]models.Action, error) {
+	actions, err := service.storage.GetActions(page, perPage)
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	return action, nil
+	return actions, nil
 }
 
-func (service *actionService) UpdateAction(
+func (service *actionsService) UpdateAction(
 	actionUpdating *models.Action,
 ) (*models.Action, error) {
 	action, err := service.storage.GetAction(actionUpdating.ID)
@@ -86,14 +89,12 @@ func (service *actionService) UpdateAction(
 	return action, nil
 }
 
-func (service *actionService) RemoveAction(
-	action *models.Action,
+func (service *actionsService) RemoveAction(
+	actionID int,
 ) error {
-	if _, err := service.storage.GetAction(action.ID); err != nil {
-		return NewEntityNotFoundError(
-			"action",
-			action.ID,
-		)
+	action, err := service.storage.GetAction(actionID)
+	if err != nil {
+		return NewEntityNotFoundError("action", actionID)
 	}
 
 	if err := service.storage.RemoveAction(action); err != nil {

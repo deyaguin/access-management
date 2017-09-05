@@ -14,7 +14,7 @@ func (a *API) createUser(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	user, err := a.userService.CreateUser(userCreating)
+	user, err := a.usersService.CreateUser(userCreating)
 	if err != nil {
 		return err
 	}
@@ -43,7 +43,7 @@ func (a *API) getUsers(c echo.Context) error {
 		return err
 	}
 
-	users, err := a.userService.GetUsers(page, perPage)
+	users, err := a.usersService.GetUsers(page, perPage)
 	if err != nil {
 		return err
 	}
@@ -52,15 +52,15 @@ func (a *API) getUsers(c echo.Context) error {
 }
 
 func (a *API) getUser(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"UserID",
-			c.Param("id"),
+			c.Param("userID"),
 		)
 	}
 
-	user, err := a.userService.GetUser(id)
+	user, err := a.usersService.GetUser(userID)
 	if err != nil {
 		return err
 	}
@@ -69,20 +69,20 @@ func (a *API) getUser(c echo.Context) error {
 }
 
 func (a *API) updateUser(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"UserID",
-			c.Param("id"),
+			c.Param("userID"),
 		)
 	}
 
-	userUpdating := &models.User{ID: id}
+	userUpdating := &models.User{ID: userID}
 	if err := c.Bind(userUpdating); err != nil {
 		return NewUnprocessableBodyError()
 	}
 
-	user, err := a.userService.UpdateUser(userUpdating)
+	user, err := a.usersService.UpdateUser(userUpdating)
 	if err != nil {
 		return err
 	}
@@ -91,15 +91,15 @@ func (a *API) updateUser(c echo.Context) error {
 }
 
 func (a *API) removeUser(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"UserID",
-			c.Param("id"),
+			c.Param("userID"),
 		)
 	}
 
-	if err := a.userService.RemoveUser(id); err != nil {
+	if err := a.usersService.RemoveUser(userID); err != nil {
 		return err
 	}
 
@@ -107,21 +107,21 @@ func (a *API) removeUser(c echo.Context) error {
 }
 
 func (a *API) attachPoliciesByUser(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"UserID",
-			c.Param("id"),
+			c.Param("userID"),
 		)
 	}
-	user := &models.User{ID: id}
+	user := &models.User{ID: userID}
 
 	policies := new(policies)
 	if err = c.Bind(policies); err != nil {
 		return NewUnprocessableBodyError()
 	}
 
-	if err = a.userService.AttachPoliciesByUser(
+	if err = a.usersService.AttachPoliciesByUser(
 		user,
 		policies.Policies,
 	); err != nil {
@@ -132,11 +132,11 @@ func (a *API) attachPoliciesByUser(c echo.Context) error {
 }
 
 func (a *API) detachPolicyByUser(c echo.Context) error {
-	userId, err := strconv.Atoi(c.Param("userId"))
+	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"UserID",
-			c.Param("userId"),
+			c.Param("userID"),
 		)
 	}
 
@@ -148,8 +148,8 @@ func (a *API) detachPolicyByUser(c echo.Context) error {
 		)
 	}
 
-	if err = a.userService.DetachPolicyByUser(
-		userId,
+	if err = a.usersService.DetachPolicyByUser(
+		userID,
 		policyId,
 	); err != nil {
 		return err
@@ -179,16 +179,16 @@ func (a *API) getPoliciesByUser(c echo.Context) error {
 		return err
 	}
 
-	id, err := strconv.Atoi(c.Param("id"))
+	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"UserID",
-			c.Param("id"),
+			c.Param("userID"),
 		)
 	}
 
-	policies, err := a.userService.GetPoliciesByUser(
-		id,
+	policies, err := a.usersService.GetPoliciesByUser(
+		userID,
 		page,
 		perPage,
 	)

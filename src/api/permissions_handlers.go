@@ -8,20 +8,20 @@ import (
 )
 
 func (a *API) updatePermission(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	permissionID, err := strconv.Atoi(c.Param("permissionID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"PermissionID",
-			c.Param("id"),
+			c.Param("permissionID"),
 		)
 	}
 
-	permissionUpdating := &models.Permission{ID: id}
+	permissionUpdating := &models.Permission{ID: permissionID}
 	if err := c.Bind(permissionUpdating); err != nil {
 		return NewUnprocessableBodyError()
 	}
 
-	permission, err := a.permissionService.UpdatePermission(permissionUpdating)
+	permission, err := a.permissionsService.UpdatePermission(permissionUpdating)
 	if err != nil {
 		return err
 	}

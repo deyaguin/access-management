@@ -17,18 +17,18 @@ func main() {
 	)
 	//pgDB := storage.SqlDBCreator("sqlite3", "test.db")
 
-	userService := services.NewUserService(pgDB)
-	groupService := services.NewGroupService(pgDB)
-	policyService := services.NewPolicyService(pgDB)
-	permissionService := services.NewPermissionService(pgDB)
+	usersService := services.NewUsersService(pgDB)
+	groupsService := services.NewGroupsService(pgDB)
+	policiesService := services.NewPoliciesService(pgDB)
+	permissionsService := services.NewPermissionsService(pgDB)
 	permissionsCheckService := services.NewPermissionsCheckService(pgDB)
-	actionsService := services.ActionsService(pgDB)
+	actionsService := services.NewActionsService(pgDB)
 
 	api.NewAPI(
-		userService,
-		groupService,
-		policyService,
-		permissionService,
+		usersService,
+		groupsService,
+		policiesService,
+		permissionsService,
 		permissionsCheckService,
 		actionsService,
 		":1535",

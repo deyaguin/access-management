@@ -6,24 +6,24 @@ import (
 	"gopkg.in/validator.v2"
 )
 
-type PermissionService interface {
+type PermissionsService interface {
 	UpdatePermission(*models.Permission) (*models.Permission, error)
 	RemovePermission(int) error
 }
 
-type permissionService struct {
+type permissionsService struct {
 	storage storage.DB
 }
 
-func NewPermissionService(
+func NewPermissionsService(
 	storage storage.DB,
-) PermissionService {
-	return &permissionService{
+) PermissionsService {
+	return &permissionsService{
 		storage,
 	}
 }
 
-func (service *permissionService) UpdatePermission(
+func (service *permissionsService) UpdatePermission(
 	permissionUpdating *models.Permission,
 ) (*models.Permission, error) {
 	permission, err := service.storage.GetPermission(permissionUpdating.ID)
@@ -46,7 +46,7 @@ func (service *permissionService) UpdatePermission(
 	return permission, nil
 }
 
-func (service *permissionService) RemovePermission(
+func (service *permissionsService) RemovePermission(
 	permissionID int,
 ) error {
 	permission, err := service.storage.GetPermission(permissionID)

@@ -14,7 +14,7 @@ func (a *API) createPolicy(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	policy, err := a.policyService.CreatePolicy(policyCreating)
+	policy, err := a.policiesService.CreatePolicy(policyCreating)
 	if err != nil {
 		return err
 	}
@@ -43,7 +43,7 @@ func (a *API) getPolicies(c echo.Context) error {
 		return err
 	}
 
-	policies, err := a.policyService.GetPolicies(page, perPage)
+	policies, err := a.policiesService.GetPolicies(page, perPage)
 	if err != nil {
 		return err
 	}
@@ -52,15 +52,15 @@ func (a *API) getPolicies(c echo.Context) error {
 }
 
 func (a *API) getPolicy(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	policyID, err := strconv.Atoi(c.Param("policyID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"PolicyID",
-			c.Param("id"),
+			c.Param("policyID"),
 		)
 	}
 
-	policy, err := a.policyService.GetPolicy(id)
+	policy, err := a.policiesService.GetPolicy(policyID)
 	if err != nil {
 		return err
 	}
@@ -69,20 +69,20 @@ func (a *API) getPolicy(c echo.Context) error {
 }
 
 func (a *API) updatePolicy(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	policyID, err := strconv.Atoi(c.Param("policyID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"PolicyID",
-			c.Param("id"),
+			c.Param("policyID"),
 		)
 	}
 
-	policyUpdating := &models.Policy{ID: id}
+	policyUpdating := &models.Policy{ID: policyID}
 	if err := c.Bind(policyUpdating); err != nil {
 		return NewUnprocessableBodyError()
 	}
 
-	policy, err := a.policyService.UpdatePolicy(policyUpdating)
+	policy, err := a.policiesService.UpdatePolicy(policyUpdating)
 	if err != nil {
 		return err
 	}
@@ -91,15 +91,15 @@ func (a *API) updatePolicy(c echo.Context) error {
 }
 
 func (a *API) removePolicy(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	policyID, err := strconv.Atoi(c.Param("policyID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"PolicyID",
-			c.Param("id"),
+			c.Param("policyID"),
 		)
 	}
 
-	if err := a.policyService.RemovePolicy(id); err != nil {
+	if err := a.policiesService.RemovePolicy(policyID); err != nil {
 		return err
 	}
 
@@ -107,21 +107,21 @@ func (a *API) removePolicy(c echo.Context) error {
 }
 
 func (a *API) addPermissionsToPolicy(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	policyID, err := strconv.Atoi(c.Param("policyID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"PolicyID",
-			c.Param("id"),
+			c.Param("policyID"),
 		)
 	}
-	policy := &models.Policy{ID: id}
+	policy := &models.Policy{ID: policyID}
 
 	permissions := new(permissions)
 	if err = c.Bind(permissions); err != nil {
 		return NewUnprocessableBodyError()
 	}
 
-	if err = a.policyService.AddPermissionsToPolicy(
+	if err = a.policiesService.AddPermissionsToPolicy(
 		policy,
 		permissions.Permissions,
 	); err != nil {
@@ -132,11 +132,11 @@ func (a *API) addPermissionsToPolicy(c echo.Context) error {
 }
 
 func (a *API) removePermissionFromPolicy(c echo.Context) error {
-	policyId, err := strconv.Atoi(c.Param("policyId"))
+	policyID, err := strconv.Atoi(c.Param("policyID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"PolicyID",
-			c.Param("policyId"),
+			c.Param("policyID"),
 		)
 	}
 
@@ -148,8 +148,8 @@ func (a *API) removePermissionFromPolicy(c echo.Context) error {
 		)
 	}
 
-	if err = a.policyService.RemovePermissionFromPolicy(
-		policyId,
+	if err = a.policiesService.RemovePermissionFromPolicy(
+		policyID,
 		permissionId,
 	); err != nil {
 		return err
@@ -179,16 +179,16 @@ func (a *API) getPermissionsByPolicy(c echo.Context) error {
 		return err
 	}
 
-	id, err := strconv.Atoi(c.Param("id"))
+	policyID, err := strconv.Atoi(c.Param("policyID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"PolicyID",
-			c.Param("id"),
+			c.Param("policyID"),
 		)
 	}
 
-	permissions, err := a.policyService.GetPermissionsByPolicy(
-		id,
+	permissions, err := a.policiesService.GetPermissionsByPolicy(
+		policyID,
 		page,
 		perPage,
 	)
