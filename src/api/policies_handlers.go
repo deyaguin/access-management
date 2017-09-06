@@ -14,7 +14,7 @@ func (a *API) createPolicy(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	policy, err := a.policiesService.CreatePolicy(policyCreating)
+	policy, err := a.CreatePolicy(policyCreating)
 	if err != nil {
 		return err
 	}
@@ -43,7 +43,7 @@ func (a *API) getPolicies(c echo.Context) error {
 		return err
 	}
 
-	policies, err := a.policiesService.GetPolicies(page, perPage)
+	policies, err := a.GetPolicies(page, perPage)
 	if err != nil {
 		return err
 	}
@@ -60,7 +60,7 @@ func (a *API) getPolicy(c echo.Context) error {
 		)
 	}
 
-	policy, err := a.policiesService.GetPolicy(policyID)
+	policy, err := a.GetPolicy(policyID)
 	if err != nil {
 		return err
 	}
@@ -82,7 +82,7 @@ func (a *API) updatePolicy(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	policy, err := a.policiesService.UpdatePolicy(policyUpdating)
+	policy, err := a.UpdatePolicy(policyUpdating)
 	if err != nil {
 		return err
 	}
@@ -99,7 +99,7 @@ func (a *API) removePolicy(c echo.Context) error {
 		)
 	}
 
-	if err := a.policiesService.RemovePolicy(policyID); err != nil {
+	if err := a.RemovePolicy(policyID); err != nil {
 		return err
 	}
 
@@ -121,7 +121,7 @@ func (a *API) addPermissionsToPolicy(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	if err = a.policiesService.AddPermissionsToPolicy(
+	if err = a.AddPermissionsToPolicy(
 		policy,
 		permissions.Permissions,
 	); err != nil {
@@ -148,7 +148,7 @@ func (a *API) removePermissionFromPolicy(c echo.Context) error {
 		)
 	}
 
-	if err = a.policiesService.RemovePermissionFromPolicy(
+	if err = a.RemovePermissionFromPolicy(
 		policyID,
 		permissionId,
 	); err != nil {
@@ -187,7 +187,7 @@ func (a *API) getPermissionsByPolicy(c echo.Context) error {
 		)
 	}
 
-	permissions, err := a.policiesService.GetPermissionsByPolicy(
+	permissions, err := a.GetPermissionsByPolicy(
 		policyID,
 		page,
 		perPage,

@@ -24,13 +24,17 @@ func main() {
 	permissionsCheckService := services.NewPermissionsCheckService(pgDB)
 	actionsService := services.NewActionsService(pgDB)
 
-	api.NewAPI(
+	servicesConf := services.NewServicesConf(
 		usersService,
 		groupsService,
 		policiesService,
 		permissionsService,
 		permissionsCheckService,
 		actionsService,
+	)
+
+	api.NewAPI(
+		servicesConf,
 		":1535",
 	)
 }

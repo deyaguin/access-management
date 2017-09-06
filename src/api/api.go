@@ -10,31 +10,16 @@ import (
 var Log *zap.Logger = logger.NewLogger()
 
 type API struct {
-	usersService            services.UsersService
-	groupsService           services.GroupsService
-	policiesService         services.PoliciesService
-	permissionsService      services.PermissionsService
-	permissionsCheckService services.PermissionsCheckService
-	actionsService          services.ActionsService
-	address                 string
+	*services.ServicesConf
+	address string
 }
 
 func NewAPI(
-	usersService services.UsersService,
-	groupsService services.GroupsService,
-	policiesService services.PoliciesService,
-	permissionsService services.PermissionsService,
-	permissionsCheckService services.PermissionsCheckService,
-	actionsService services.ActionsService,
+	servicesConf *services.ServicesConf,
 	address string,
 ) {
 	api := &API{
-		usersService,
-		groupsService,
-		policiesService,
-		permissionsService,
-		permissionsCheckService,
-		actionsService,
+		servicesConf,
 		address,
 	}
 	e := echo.New()

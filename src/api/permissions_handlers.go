@@ -21,7 +21,7 @@ func (a *API) updatePermission(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	permission, err := a.permissionsService.UpdatePermission(permissionUpdating)
+	permission, err := a.UpdatePermission(permissionUpdating)
 	if err != nil {
 		return err
 	}

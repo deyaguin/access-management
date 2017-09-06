@@ -14,7 +14,7 @@ func (a *API) createAction(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	action, err := a.actionsService.CreateAction(actionCreating)
+	action, err := a.CreateAction(actionCreating)
 	if err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func (a *API) getActions(c echo.Context) error {
 		return err
 	}
 
-	actions, err := a.actionsService.GetActions(page, perPage)
+	actions, err := a.GetActions(page, perPage)
 	if err != nil {
 		return err
 	}
@@ -59,7 +59,7 @@ func (a *API) getAction(c echo.Context) error {
 		)
 	}
 
-	action, err := a.actionsService.GetAction(actionId)
+	action, err := a.GetAction(actionId)
 	if err != nil {
 		return err
 	}
@@ -81,7 +81,7 @@ func (a *API) updateAction(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	group, err := a.actionsService.UpdateAction(actionUpdating)
+	group, err := a.UpdateAction(actionUpdating)
 	if err != nil {
 		return err
 	}
@@ -98,7 +98,7 @@ func (a *API) removeAction(c echo.Context) error {
 		)
 	}
 
-	if err := a.actionsService.RemoveAction(actionID); err != nil {
+	if err := a.RemoveAction(actionID); err != nil {
 		return err
 	}
 

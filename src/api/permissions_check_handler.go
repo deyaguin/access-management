@@ -12,7 +12,7 @@ func (a *API) userPermissions(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	access, err := a.permissionsCheckService.CheckPermissions(checkingParams)
+	access, err := a.CheckPermissions(checkingParams)
 	if err != nil {
 		return err
 	}

@@ -14,7 +14,7 @@ func (a *API) createUser(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	user, err := a.usersService.CreateUser(userCreating)
+	user, err := a.CreateUser(userCreating)
 	if err != nil {
 		return err
 	}
@@ -43,7 +43,7 @@ func (a *API) getUsers(c echo.Context) error {
 		return err
 	}
 
-	users, err := a.usersService.GetUsers(page, perPage)
+	users, err := a.GetUsers(page, perPage)
 	if err != nil {
 		return err
 	}
@@ -60,7 +60,7 @@ func (a *API) getUser(c echo.Context) error {
 		)
 	}
 
-	user, err := a.usersService.GetUser(userID)
+	user, err := a.GetUser(userID)
 	if err != nil {
 		return err
 	}
@@ -82,7 +82,7 @@ func (a *API) updateUser(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	user, err := a.usersService.UpdateUser(userUpdating)
+	user, err := a.UpdateUser(userUpdating)
 	if err != nil {
 		return err
 	}
@@ -99,7 +99,7 @@ func (a *API) removeUser(c echo.Context) error {
 		)
 	}
 
-	if err := a.usersService.RemoveUser(userID); err != nil {
+	if err := a.RemoveUser(userID); err != nil {
 		return err
 	}
 
@@ -121,7 +121,7 @@ func (a *API) attachPoliciesByUser(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	if err = a.usersService.AttachPoliciesByUser(
+	if err = a.AttachPoliciesByUser(
 		user,
 		policies.Policies,
 	); err != nil {
@@ -148,7 +148,7 @@ func (a *API) detachPolicyByUser(c echo.Context) error {
 		)
 	}
 
-	if err = a.usersService.DetachPolicyByUser(
+	if err = a.DetachPolicyByUser(
 		userID,
 		policyId,
 	); err != nil {
@@ -187,7 +187,7 @@ func (a *API) getPoliciesByUser(c echo.Context) error {
 		)
 	}
 
-	policies, err := a.usersService.GetPoliciesByUser(
+	policies, err := a.GetPoliciesByUser(
 		userID,
 		page,
 		perPage,

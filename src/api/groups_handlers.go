@@ -14,7 +14,7 @@ func (a *API) createGroup(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	group, err := a.groupsService.CreateGroup(groupCreating)
+	group, err := a.CreateGroup(groupCreating)
 	if err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func (a *API) getGroups(c echo.Context) error {
 		return err
 	}
 
-	groups, err := a.groupsService.GetGroups(page, perPage)
+	groups, err := a.GetGroups(page, perPage)
 	if err != nil {
 		return err
 	}
@@ -59,7 +59,7 @@ func (a *API) getGroup(c echo.Context) error {
 		)
 	}
 
-	group, err := a.groupsService.GetGroup(groupID)
+	group, err := a.GetGroup(groupID)
 	if err != nil {
 		return err
 	}
@@ -81,7 +81,7 @@ func (a *API) updateGroup(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	group, err := a.groupsService.UpdateGroup(groupUpdating)
+	group, err := a.UpdateGroup(groupUpdating)
 	if err != nil {
 		return err
 	}
@@ -98,7 +98,7 @@ func (a *API) removeGroup(c echo.Context) error {
 		)
 	}
 
-	if err := a.groupsService.RemoveGroup(groupID); err != nil {
+	if err := a.RemoveGroup(groupID); err != nil {
 		return err
 	}
 
@@ -120,7 +120,7 @@ func (a *API) addUsersToGroup(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	if err = a.groupsService.AddUsersToGroup(group, users.Users); err != nil {
+	if err = a.AddUsersToGroup(group, users.Users); err != nil {
 		return err
 	}
 
@@ -144,7 +144,7 @@ func (a *API) removeUserFromGroup(c echo.Context) error {
 		)
 	}
 
-	if err = a.groupsService.RemoveUserFromGroup(groupID, userId); err != nil {
+	if err = a.RemoveUserFromGroup(groupID, userId); err != nil {
 		return err
 	}
 
@@ -180,7 +180,7 @@ func (a *API) getUsersByGroup(c echo.Context) error {
 		return err
 	}
 
-	users, err := a.groupsService.GetUsersByGroup(
+	users, err := a.GetUsersByGroup(
 		groupID,
 		page,
 		perPage,
@@ -207,7 +207,7 @@ func (a *API) attachPoliciesByGroup(c echo.Context) error {
 		return NewUnprocessableBodyError()
 	}
 
-	if err = a.groupsService.AttachPoliciesByGroup(
+	if err = a.AttachPoliciesByGroup(
 		group,
 		policies.Policies,
 	); err != nil {
@@ -234,7 +234,7 @@ func (a *API) detachPolicyByGroup(c echo.Context) error {
 		)
 	}
 
-	if err = a.groupsService.DetachPolicyByGroup(groupID, policyId); err != nil {
+	if err = a.DetachPolicyByGroup(groupID, policyId); err != nil {
 		return err
 	}
 
@@ -271,7 +271,7 @@ func (a *API) getPoliciesByGroupHandler(c echo.Context) error {
 		return err
 	}
 
-	policies, err := a.groupsService.GetPoliciesByGroup(
+	policies, err := a.GetPoliciesByGroup(
 		groupID,
 		page,
 		perPage)
