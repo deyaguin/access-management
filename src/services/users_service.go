@@ -3,13 +3,14 @@ package services
 import (
 	"gitlab/nefco/access-management-system/src/models"
 	"gitlab/nefco/access-management-system/src/storage"
+
 	"gopkg.in/validator.v2"
 )
 
 type UsersService interface {
 	CreateUser(*models.User) (*models.User, error)
 	GetUser(int) (*models.User, error)
-	GetUsers(int, int) (*items, error)
+	GetUsers(int, int, string) (*items, error)
 	UpdateUser(*models.User) (*models.User, error)
 	RemoveUser(int) error
 
@@ -63,20 +64,23 @@ func (service *usersService) GetUser(
 func (service *usersService) GetUsers(
 	page int,
 	perPage int,
+	userName string,
 ) (*items, error) {
-	users, err := service.storage.GetUsers(page, perPage)
+	users, err := service.storage.GetUsers(page, perPage, userName)
 	if err != nil {
 		return nil, err
 	}
 
-	count, err := service.storage.GetUsersCount()
+	total, err := service.storage.GetUsersTotal()
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
 	response := &items{
 		users,
-		count,
+		total,
+		perPage,
+		page,
 	}
 
 	return response, nil
@@ -181,6 +185,8 @@ func (service *usersService) GetPoliciesByUser(
 	items := &items{
 		policies,
 		count,
+		perPage,
+		page,
 	}
 
 	return items, nil
@@ -208,6 +214,8 @@ func (service *usersService) GetGroupsByUser(
 	items := &items{
 		groups,
 		count,
+		perPage,
+		page,
 	}
 
 	return items, err

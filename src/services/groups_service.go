@@ -78,6 +78,8 @@ func (service *groupsService) GetGroups(
 	items := &items{
 		groups,
 		count,
+		perPage,
+		page,
 	}
 
 	return items, nil
@@ -182,6 +184,8 @@ func (service *groupsService) GetUsersByGroup(
 	items := &items{
 		users,
 		count,
+		perPage,
+		page,
 	}
 
 	return items, nil
@@ -257,6 +261,8 @@ func (service *groupsService) GetPoliciesByGroup(
 	items := &items{
 		policies,
 		count,
+		perPage,
+		page,
 	}
 
 	return items, nil

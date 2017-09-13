@@ -1,9 +1,10 @@
 package storage
 
 import (
-	"github.com/jinzhu/gorm"
 	"gitlab/nefco/access-management-system/src/logger"
 	"gitlab/nefco/access-management-system/src/models"
+
+	"github.com/jinzhu/gorm"
 	"go.uber.org/zap"
 )
 
@@ -11,8 +12,8 @@ var Log *zap.Logger = logger.NewLogger()
 
 type DB interface {
 	CreateUser(*models.User) error
-	GetUsers(int, int) (*[]models.User, error)
-	GetUsersCount() (int, error)
+	GetUsers(int, int, string) (*[]models.User, error)
+	GetUsersTotal() (int, error)
 	GetUser(int) (*models.User, error)
 	UpdateUser(*models.User) error
 	RemoveUser(*models.User) error

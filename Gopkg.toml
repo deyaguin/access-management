@@ -39,3 +39,7 @@
 [[constraint]]
   name = "github.com/mattn/go-sqlite3"
   version = "1.2.0"
+
+[[constraint]]
+  name = "github.com/dgrijalva/jwt-go"
+  version = "3.0.0"

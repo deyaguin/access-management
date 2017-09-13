@@ -5,6 +5,7 @@ import (
 	"gitlab/nefco/access-management-system/src/logger"
 	"gitlab/nefco/access-management-system/src/services"
 	"go.uber.org/zap"
+	"github.com/labstack/echo/middleware"
 )
 
 var Log *zap.Logger = logger.NewLogger()
@@ -23,6 +24,8 @@ func NewAPI(
 		address,
 	}
 	e := echo.New()
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{}))
 
 	e.POST("/users", api.createUser)
 	e.GET("/users", api.getUsers)
@@ -74,5 +77,5 @@ func NewAPI(
 		)
 	}
 
-	Log.Info("API start successfully")
+	Log.Info("API started successfully")
 }

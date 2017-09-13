@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"fmt"
 	"gitlab/nefco/access-management-system/src/models"
 )
 
@@ -15,15 +16,26 @@ func (dataBase SqlDB) CreateUser(
 func (dataBase SqlDB) GetUsers(
 	page int,
 	perPage int,
+	userName string,
 ) (*[]models.User, error) {
 	users := new([]models.User)
 
-	err := dataBase.Limit(perPage).Offset((page - 1) * perPage).Find(users).Error
+	if userName == "" {
+		if err := dataBase.Limit(perPage).Offset((page - 1) * perPage).
+			Find(users).Error; err != nil {
+			return nil, err
+		}
 
+		return users, nil
+	}
+
+	err := dataBase.Where("name = ?", userName).
+		Limit(perPage).Offset((page - 1) * perPage).Find(users).Error
+	fmt.Print(users)
 	return users, err
 }
 
-func (dataBase SqlDB) GetUsersCount() (int, error) {
+func (dataBase SqlDB) GetUsersTotal() (int, error) {
 	var count int
 
 	err := dataBase.Table("users").Count(&count).Error

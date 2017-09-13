@@ -5,6 +5,8 @@ import (
 	"github.com/labstack/gommon/log"
 	"gitlab/nefco/access-management-system/src/models"
 	"gopkg.in/gormigrate.v1"
+	//_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 type Migration struct {
@@ -47,8 +49,8 @@ func (migration *Migration) Init() {
 		log.Fatal(err)
 	}
 
-	//pgDB.LogMode(true)
 	sqliteDB.LogMode(true)
+	//sqliteDB.LogMode(true)
 
 	//m := gormigrate.New(pgDB, gormigrate.DefaultOptions, []*gormigrate.Migration{
 	//	migrate1,

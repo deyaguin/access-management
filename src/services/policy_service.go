@@ -76,6 +76,8 @@ func (service *policiesService) GetPolicies(
 	response := &items{
 		policies,
 		count,
+		perPage,
+		page,
 	}
 
 	return response, nil
@@ -187,6 +189,8 @@ func (service *policiesService) GetPermissionsByPolicy(
 	items := &items{
 		permissions,
 		count,
+		perPage,
+		page,
 	}
 
 	return items, nil
@@ -214,6 +218,8 @@ func (service *policiesService) GetUsersByPolicy(
 	items := &items{
 		users,
 		count,
+		perPage,
+		page,
 	}
 
 	return items, nil
@@ -241,6 +247,8 @@ func (service *policiesService) GetGroupsByPolicy(
 	items := &items{
 		groups,
 		count,
+		perPage,
+		page,
 	}
 
 	return items, nil

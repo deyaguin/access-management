@@ -28,6 +28,8 @@ func NewServicesConf(
 }
 
 type items struct {
-	Item  interface{} `json:"items"`
-	Count int         `json:"count"`
+	Items       interface{} `json:"items"`
+	Total       int         `json:"total"`
+	PerPage     int         `json:"per_page"`
+	CurrentPage int         `json:"current_page"`
 }

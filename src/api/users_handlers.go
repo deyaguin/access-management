@@ -1,10 +1,11 @@
 package api
 
 import (
-	"github.com/labstack/echo"
 	"gitlab/nefco/access-management-system/src/models"
 	"net/http"
 	"strconv"
+
+	"github.com/labstack/echo"
 )
 
 func (a *API) createUser(c echo.Context) error {
@@ -23,6 +24,14 @@ func (a *API) createUser(c echo.Context) error {
 }
 
 func (a *API) getUsers(c echo.Context) error {
+	if c.QueryParam("page") == "" || c.QueryParam("per_page") == "" {
+		users, err := a.GetUsers(1, 10, "")
+		if err != nil {
+			return err
+		}
+
+		return c.JSON(http.StatusOK, users)
+	}
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -43,7 +52,9 @@ func (a *API) getUsers(c echo.Context) error {
 		return err
 	}
 
-	users, err := a.GetUsers(page, perPage)
+	userName := c.QueryParam("user_name")
+
+	users, err := a.GetUsers(page, perPage, userName)
 	if err != nil {
 		return err
 	}
