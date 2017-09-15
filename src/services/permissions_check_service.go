@@ -57,10 +57,10 @@ func (service *permissionsCheckService) getUserPermissions(
 ) ([]models.Permission, error) {
 	var permissions []models.Permission
 
-	policies, _, err := service.storage.GetPoliciesByUser(user, nil, nil)
+	policies, err := service.storage.GetPoliciesByUser(user)
 	if err == nil {
 		for _, policy := range *policies {
-			permission, _, err := service.storage.GetPermissionsByPolicy(&policy, nil, nil)
+			permission, err := service.storage.GetPermissionsByPolicy(&policy)
 			permissions = append(permissions, *permission...)
 			if err != nil {
 				return permissions, err
@@ -79,14 +79,14 @@ func (service *permissionsCheckService) getGroupPermissions(
 		permissions []models.Permission
 	)
 
-	groups, _, err := service.storage.GetGroupsByUser(user, nil, nil)
+	groups, err := service.storage.GetGroupsByUser(user)
 
 	if err != nil {
 		return nil, err
 	}
 
 	for _, group := range *groups {
-		policy, _, err := service.storage.GetPoliciesByGroup(&group, nil, nil)
+		policy, err := service.storage.GetPoliciesByGroup(&group)
 		policies = append(policies, *policy...)
 		if err != nil {
 			return nil, err
@@ -94,7 +94,7 @@ func (service *permissionsCheckService) getGroupPermissions(
 	}
 
 	for _, policy := range policies {
-		permission, _, err := service.storage.GetPermissionsByPolicy(&policy, nil, nil)
+		permission, err := service.storage.GetPermissionsByPolicy(&policy)
 		permissions = append(permissions, *permission...)
 		if err != nil {
 			return nil, err
@@ -104,7 +104,10 @@ func (service *permissionsCheckService) getGroupPermissions(
 	return permissions, nil
 }
 
-func (service *permissionsCheckService) comparePermissions(permissions *[]models.Permission, checkingParams *CheckingParams) (bool, bool) {
+func (service *permissionsCheckService) comparePermissions(
+	permissions *[]models.Permission,
+	checkingParams *CheckingParams,
+) (bool, bool) {
 	result := false
 	has := false
 	for _, p := range *permissions {

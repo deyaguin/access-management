@@ -32,6 +32,7 @@ func (a *API) getUsers(c echo.Context) error {
 
 		return c.JSON(http.StatusOK, users)
 	}
+
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -170,26 +171,6 @@ func (a *API) detachPolicyByUser(c echo.Context) error {
 }
 
 func (a *API) getPoliciesByUser(c echo.Context) error {
-	page, err := strconv.Atoi(c.QueryParam("page"))
-	if err != nil {
-		return NewInvalidQueryError(
-			"page",
-			c.QueryParam("page"),
-		)
-	}
-
-	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
-	if err != nil {
-		return NewInvalidQueryError(
-			"per_page",
-			c.QueryParam("per_page"),
-		)
-	}
-
-	if err := checkPaginationParams(page, perPage); err != nil {
-		return err
-	}
-
 	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -198,14 +179,27 @@ func (a *API) getPoliciesByUser(c echo.Context) error {
 		)
 	}
 
-	policies, err := a.GetPoliciesByUser(
-		userID,
-		page,
-		perPage,
-	)
+	policies, err := a.GetPoliciesByUser(userID)
 	if err != nil {
 		return err
 	}
 
 	return c.JSON(http.StatusOK, policies)
+}
+
+func (a *API) getGroupsByUser(c echo.Context) error {
+	userID, err := strconv.Atoi(c.Param("userID"))
+	if err != nil {
+		return NewInvalidQueryError(
+			"UserID",
+			c.Param("userID"),
+		)
+	}
+
+	groups, err := a.GetGroupsByUser(userID)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, groups)
 }

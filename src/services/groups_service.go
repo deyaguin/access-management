@@ -3,22 +3,23 @@ package services
 import (
 	"gitlab/nefco/access-management-system/src/models"
 	"gitlab/nefco/access-management-system/src/storage"
+
 	"gopkg.in/validator.v2"
 )
 
 type GroupsService interface {
 	CreateGroup(*models.Group) (*models.Group, error)
 	GetGroup(int) (*models.Group, error)
-	GetGroups(int, int) (*items, error)
+	GetGroups(int, int, string) (*items, error)
 	UpdateGroup(*models.Group) (*models.Group, error)
 	RemoveGroup(int) error
 
 	AddUsersToGroup(*models.Group, *[]models.User) error
 	RemoveUserFromGroup(int, int) error
-	GetUsersByGroup(int, int, int) (*items, error)
+	GetUsersByGroup(int) (*pureItems, error)
 	AttachPoliciesByGroup(*models.Group, *[]models.Policy) error
 	DetachPolicyByGroup(int, int) error
-	GetPoliciesByGroup(int, int, int) (*items, error)
+	GetPoliciesByGroup(int) (*pureItems, error)
 }
 
 type groupsService struct {
@@ -64,8 +65,9 @@ func (service *groupsService) GetGroup(
 func (service *groupsService) GetGroups(
 	page int,
 	perPage int,
+	name string,
 ) (*items, error) {
-	groups, err := service.storage.GetGroups(page, perPage)
+	groups, err := service.storage.GetGroups(page, perPage, name)
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}
@@ -164,31 +166,20 @@ func (service *groupsService) RemoveUserFromGroup(
 
 func (service *groupsService) GetUsersByGroup(
 	groupID int,
-	page int,
-	perPage int,
-) (*items, error) {
+) (*pureItems, error) {
 	group, err := service.storage.GetGroup(groupID)
 	if err != nil {
 		return nil, NewEntityNotFoundError("group", groupID)
 	}
 
-	users, count, err := service.storage.GetUsersByGroup(
-		group,
-		&page,
-		&perPage,
-	)
+	users, err := service.storage.GetUsersByGroup(group)
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	items := &items{
-		users,
-		count,
-		perPage,
-		page,
-	}
+	result := &pureItems{users}
 
-	return items, nil
+	return result, nil
 }
 
 func (service *groupsService) AttachPoliciesByGroup(
@@ -241,29 +232,18 @@ func (service *groupsService) DetachPolicyByGroup(
 
 func (service *groupsService) GetPoliciesByGroup(
 	groupID int,
-	page int,
-	perPage int,
-) (*items, error) {
+) (*pureItems, error) {
 	group, err := service.storage.GetGroup(groupID)
 	if err != nil {
 		return nil, NewEntityNotFoundError("group", groupID)
 	}
 
-	policies, count, err := service.storage.GetPoliciesByGroup(
-		group,
-		&page,
-		&perPage,
-	)
+	policies, err := service.storage.GetPoliciesByGroup(group)
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	items := &items{
-		policies,
-		count,
-		perPage,
-		page,
-	}
+	result := &pureItems{policies}
 
-	return items, nil
+	return result, nil
 }

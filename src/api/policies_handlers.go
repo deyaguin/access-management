@@ -23,6 +23,15 @@ func (a *API) createPolicy(c echo.Context) error {
 }
 
 func (a *API) getPolicies(c echo.Context) error {
+	if c.QueryParam("page") == "" || c.QueryParam("per_page") == "" {
+		policies, err := a.GetPolicies(1, 10, "")
+		if err != nil {
+			return err
+		}
+
+		return c.JSON(http.StatusOK, policies)
+	}
+
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -43,7 +52,9 @@ func (a *API) getPolicies(c echo.Context) error {
 		return err
 	}
 
-	policies, err := a.GetPolicies(page, perPage)
+	policyName := c.QueryParam("policy_name")
+
+	policies, err := a.GetPolicies(page, perPage, policyName)
 	if err != nil {
 		return err
 	}
@@ -159,26 +170,6 @@ func (a *API) removePermissionFromPolicy(c echo.Context) error {
 }
 
 func (a *API) getPermissionsByPolicy(c echo.Context) error {
-	page, err := strconv.Atoi(c.QueryParam("page"))
-	if err != nil {
-		return NewInvalidQueryError(
-			"page",
-			c.QueryParam("page"),
-		)
-	}
-
-	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
-	if err != nil {
-		return NewInvalidQueryError(
-			"per_page",
-			c.QueryParam("per_page"),
-		)
-	}
-
-	if err := checkPaginationParams(page, perPage); err != nil {
-		return err
-	}
-
 	policyID, err := strconv.Atoi(c.Param("policyID"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -187,11 +178,7 @@ func (a *API) getPermissionsByPolicy(c echo.Context) error {
 		)
 	}
 
-	permissions, err := a.GetPermissionsByPolicy(
-		policyID,
-		page,
-		perPage,
-	)
+	permissions, err := a.GetPermissionsByPolicy(policyID)
 	if err != nil {
 		return err
 	}

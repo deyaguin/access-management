@@ -33,3 +33,7 @@ type items struct {
 	PerPage     int         `json:"per_page"`
 	CurrentPage int         `json:"current_page"`
 }
+
+type pureItems struct {
+	Items interface{} `json:"items"`
+}

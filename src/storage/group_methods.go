@@ -14,10 +14,21 @@ func (dataBase SqlDB) CreateGroup(
 func (dataBase SqlDB) GetGroups(
 	page int,
 	perPage int,
+	groupName string,
 ) (*[]models.Group, error) {
 	groups := new([]models.Group)
 
-	err := dataBase.Limit(perPage).Offset((page - 1) * perPage).Find(groups).Error
+	if groupName == "" {
+		if err := dataBase.Limit(perPage).Offset((page - 1) * perPage).
+			Find(groups).Error; err != nil {
+			return nil, err
+		}
+
+		return groups, nil
+	}
+
+	err := dataBase.Where("name = ?", groupName).
+		Limit(perPage).Offset((page - 1) * perPage).Find(groups).Error
 
 	return groups, err
 }
@@ -76,26 +87,12 @@ func (dataBase SqlDB) RemoveUserFromGroup(
 
 func (dataBase SqlDB) GetUsersByGroup(
 	group *models.Group,
-	page *int,
-	perPage *int,
-) (*[]models.User, int, error) {
+) (*[]models.User, error) {
 	users := new([]models.User)
 
-	if page == nil || perPage == nil {
-		err := dataBase.Model(group).Related(users, "users").Error
-		if err != nil {
-			return nil, 0, err
-		}
+	err := dataBase.Model(group).Related(users, "users").Error
 
-		return users, 0, nil
-	}
-
-	err := dataBase.Limit(*perPage).Offset((*page-1)*(*perPage)).
-		Model(group).Related(users, "users").Error
-
-	count := dataBase.Model(group).Association("users").Count()
-
-	return users, count, err
+	return users, err
 }
 
 func (dataBase SqlDB) AttachPoliciesByGroup(
@@ -120,24 +117,10 @@ func (dataBase SqlDB) DetachPolicyByGroup(
 
 func (dataBase SqlDB) GetPoliciesByGroup(
 	group *models.Group,
-	page *int,
-	perPage *int,
-) (*[]models.Policy, int, error) {
+) (*[]models.Policy, error) {
 	policies := new([]models.Policy)
 
-	if page == nil || perPage == nil {
-		err := dataBase.Model(group).Related(policies, "policies").Error
-		if err != nil {
-			return nil, 0, err
-		}
+	err := dataBase.Model(group).Related(policies, "policies").Error
 
-		return policies, 0, nil
-	}
-
-	err := dataBase.Limit(*perPage).Offset((*page-1)*(*perPage)).
-		Model(group).Related(policies, "policies").Error
-
-	count := dataBase.Model(group).Association("policies").Count()
-
-	return policies, count, err
+	return policies, err
 }

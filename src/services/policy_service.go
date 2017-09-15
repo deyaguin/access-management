@@ -3,21 +3,22 @@ package services
 import (
 	"gitlab/nefco/access-management-system/src/models"
 	"gitlab/nefco/access-management-system/src/storage"
+
 	"gopkg.in/validator.v2"
 )
 
 type PoliciesService interface {
 	CreatePolicy(*models.Policy) (*models.Policy, error)
 	GetPolicy(int) (*models.Policy, error)
-	GetPolicies(int, int) (*items, error)
+	GetPolicies(int, int, string) (*items, error)
 	UpdatePolicy(*models.Policy) (*models.Policy, error)
 	RemovePolicy(int) error
 
 	AddPermissionsToPolicy(*models.Policy, *[]models.Permission) error
 	RemovePermissionFromPolicy(int, int) error
-	GetUsersByPolicy(int, int, int) (*items, error)
-	GetGroupsByPolicy(int, int, int) (*items, error)
-	GetPermissionsByPolicy(int, int, int) (*items, error)
+	GetUsersByPolicy(int) (*pureItems, error)
+	GetGroupsByPolicy(int) (*pureItems, error)
+	GetPermissionsByPolicy(int) (*pureItems, error)
 }
 
 type policiesService struct {
@@ -62,8 +63,9 @@ func (service *policiesService) GetPolicy(
 func (service *policiesService) GetPolicies(
 	page int,
 	perPage int,
+	name string,
 ) (*items, error) {
-	policies, err := service.storage.GetPolicies(page, perPage)
+	policies, err := service.storage.GetPolicies(page, perPage, name)
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}
@@ -169,87 +171,54 @@ func (service *policiesService) RemovePermissionFromPolicy(
 
 func (service *policiesService) GetPermissionsByPolicy(
 	policyID int,
-	page int,
-	perPage int,
-) (*items, error) {
+) (*pureItems, error) {
 	policy, err := service.storage.GetPolicy(policyID)
 	if err != nil {
 		return nil, NewEntityNotFoundError("policy", policyID)
 	}
 
-	permissions, count, err := service.storage.GetPermissionsByPolicy(
-		policy,
-		&page,
-		&perPage,
-	)
+	permissions, err := service.storage.GetPermissionsByPolicy(policy)
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	items := &items{
-		permissions,
-		count,
-		perPage,
-		page,
-	}
+	result := &pureItems{permissions}
 
-	return items, nil
+	return result, nil
 }
 
 func (service *policiesService) GetUsersByPolicy(
 	policyID int,
-	page int,
-	perPage int,
-) (*items, error) {
+) (*pureItems, error) {
 	policy, err := service.storage.GetPolicy(policyID)
 	if err != nil {
 		return nil, NewEntityNotFoundError("policy", policyID)
 	}
 
-	users, count, err := service.storage.GetUsersByPolicy(
-		policy,
-		&page,
-		&perPage,
-	)
+	users, err := service.storage.GetUsersByPolicy(policy)
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	items := &items{
-		users,
-		count,
-		perPage,
-		page,
-	}
+	result := &pureItems{users}
 
-	return items, nil
+	return result, nil
 }
 
 func (service *policiesService) GetGroupsByPolicy(
 	policyID int,
-	page int,
-	perPage int,
-) (*items, error) {
+) (*pureItems, error) {
 	policy, err := service.storage.GetPolicy(policyID)
 	if err != nil {
 		return nil, NewEntityNotFoundError("policy", policyID)
 	}
 
-	groups, count, err := service.storage.GetGroupsByPolicy(
-		policy,
-		&page,
-		&perPage,
-	)
+	groups, err := service.storage.GetGroupsByPolicy(policy)
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	items := &items{
-		groups,
-		count,
-		perPage,
-		page,
-	}
+	result := &pureItems{groups}
 
-	return items, nil
+	return result, nil
 }

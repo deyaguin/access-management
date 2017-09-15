@@ -16,8 +16,8 @@ type UsersService interface {
 
 	AttachPoliciesByUser(*models.User, *[]models.Policy) error
 	DetachPolicyByUser(int, int) error
-	GetPoliciesByUser(int, int, int) (*items, error)
-	GetGroupsByUser(int, int, int) (*items, error)
+	GetPoliciesByUser(int) (*pureItems, error)
+	GetGroupsByUser(int) (*pureItems, error)
 }
 
 type usersService struct {
@@ -165,58 +165,36 @@ func (service *usersService) DetachPolicyByUser(
 
 func (service *usersService) GetPoliciesByUser(
 	userID int,
-	page int,
-	perPage int,
-) (*items, error) {
+) (*pureItems, error) {
 	user, err := service.storage.GetUser(userID)
 	if err != nil {
 		return nil, NewEntityNotFoundError("user", userID)
 	}
 
-	policies, count, err := service.storage.GetPoliciesByUser(
-		user,
-		&page,
-		&perPage,
-	)
+	policies, err := service.storage.GetPoliciesByUser(user)
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	items := &items{
-		policies,
-		count,
-		perPage,
-		page,
-	}
+	result := &pureItems{policies}
 
-	return items, nil
+	return result, nil
 }
 
 func (service *usersService) GetGroupsByUser(
 	userID int,
-	page int,
-	perPage int,
-) (*items, error) {
+) (*pureItems, error) {
 	user, err := service.storage.GetUser(userID)
 	if err != nil {
 		return nil, NewEntityNotFoundError("user", userID)
 	}
 
-	groups, count, err := service.storage.GetGroupsByUser(
-		user,
-		&page,
-		&perPage,
-	)
+	groups, err := service.storage.GetGroupsByUser(user)
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	items := &items{
-		groups,
-		count,
-		perPage,
-		page,
-	}
+	result := &pureItems{groups}
 
-	return items, err
+	return result, err
 }

@@ -1,11 +1,12 @@
 package api
 
 import (
-	"github.com/labstack/echo"
 	"gitlab/nefco/access-management-system/src/logger"
 	"gitlab/nefco/access-management-system/src/services"
-	"go.uber.org/zap"
+
+	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"go.uber.org/zap"
 )
 
 var Log *zap.Logger = logger.NewLogger()
@@ -34,7 +35,8 @@ func NewAPI(
 	e.DELETE("/users/:userID", api.removeUser)
 	e.PUT("/users/:userID/policies", api.attachPoliciesByUser)
 	e.GET("/users/:userID/policies", api.getPoliciesByUser)
-	e.DELETE("users/:userID/policies/:policyID", api.detachPolicyByUser)
+	e.DELETE("/users/:userID/policies/:policyID", api.detachPolicyByUser)
+	e.GET("/users/:userID/groups", api.getGroupsByUser)
 
 	e.POST("/groups", api.createGroup)
 	e.GET("/groups", api.getGroups)

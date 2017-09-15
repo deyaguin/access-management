@@ -23,6 +23,15 @@ func (a *API) createGroup(c echo.Context) error {
 }
 
 func (a *API) getGroups(c echo.Context) error {
+	if c.QueryParam("page") == "" || c.QueryParam("per_page") == "" {
+		groups, err := a.GetGroups(1, 10, "")
+		if err != nil {
+			return err
+		}
+
+		return c.JSON(http.StatusOK, groups)
+	}
+
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -42,7 +51,9 @@ func (a *API) getGroups(c echo.Context) error {
 		return err
 	}
 
-	groups, err := a.GetGroups(page, perPage)
+	groupName := c.QueryParam("group_name")
+
+	groups, err := a.GetGroups(page, perPage, groupName)
 	if err != nil {
 		return err
 	}
@@ -160,31 +171,7 @@ func (a *API) getUsersByGroup(c echo.Context) error {
 		)
 	}
 
-	page, err := strconv.Atoi(c.QueryParam("page"))
-	if err != nil {
-		return NewInvalidQueryError(
-			"page",
-			c.QueryParam("page"),
-		)
-	}
-
-	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
-	if err != nil {
-		return NewInvalidQueryError(
-			"per_page",
-			c.Param("page"),
-		)
-	}
-
-	if err := checkPaginationParams(page, perPage); err != nil {
-		return err
-	}
-
-	users, err := a.GetUsersByGroup(
-		groupID,
-		page,
-		perPage,
-	)
+	users, err := a.GetUsersByGroup(groupID)
 	if err != nil {
 		return err
 	}
@@ -242,7 +229,6 @@ func (a *API) detachPolicyByGroup(c echo.Context) error {
 }
 
 func (a *API) getPoliciesByGroupHandler(c echo.Context) error {
-
 	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {
 		return NewInvalidQueryError(
@@ -251,30 +237,7 @@ func (a *API) getPoliciesByGroupHandler(c echo.Context) error {
 		)
 	}
 
-	page, err := strconv.Atoi(c.QueryParam("page"))
-	if err != nil {
-		return NewInvalidQueryError(
-			"page",
-			c.QueryParam("page"),
-		)
-	}
-
-	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
-	if err != nil {
-		return NewInvalidQueryError(
-			"per_page",
-			c.QueryParam("per_page"),
-		)
-	}
-
-	if err := checkPaginationParams(page, perPage); err != nil {
-		return err
-	}
-
-	policies, err := a.GetPoliciesByGroup(
-		groupID,
-		page,
-		perPage)
+	policies, err := a.GetPoliciesByGroup(groupID)
 	if err != nil {
 		return err
 	}

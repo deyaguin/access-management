@@ -19,24 +19,24 @@ type DB interface {
 	RemoveUser(*models.User) error
 	AttachPoliciesByUser(*models.User, *[]models.Policy) error
 	DetachPolicyByUser(*models.User, *models.Policy) error
-	GetPoliciesByUser(*models.User, *int, *int) (*[]models.Policy, int, error)
-	GetGroupsByUser(*models.User, *int, *int) (*[]models.Group, int, error)
+	GetPoliciesByUser(*models.User) (*[]models.Policy, error)
+	GetGroupsByUser(*models.User) (*[]models.Group, error)
 
 	CreateGroup(*models.Group) error
-	GetGroups(int, int) (*[]models.Group, error)
+	GetGroups(int, int, string) (*[]models.Group, error)
 	GetGroupsCount() (int, error)
 	GetGroup(int) (*models.Group, error)
 	UpdateGroup(*models.Group) error
 	RemoveGroup(*models.Group) error
 	AddUsersToGroup(*models.Group, *[]models.User) error
 	RemoveUserFromGroup(*models.Group, *models.User) error
-	GetUsersByGroup(*models.Group, *int, *int) (*[]models.User, int, error)
+	GetUsersByGroup(*models.Group) (*[]models.User, error)
 	AttachPoliciesByGroup(*models.Group, *[]models.Policy) error
 	DetachPolicyByGroup(*models.Group, *models.Policy) error
-	GetPoliciesByGroup(*models.Group, *int, *int) (*[]models.Policy, int, error)
+	GetPoliciesByGroup(*models.Group) (*[]models.Policy, error)
 
 	CreatePolicy(*models.Policy) error
-	GetPolicies(int, int) (*[]models.Policy, error)
+	GetPolicies(int, int, string) (*[]models.Policy, error)
 	GetPoliciesCount() (int, error)
 	GetPolicy(int) (*models.Policy, error)
 	UpdatePolicy(*models.Policy) error
@@ -46,9 +46,9 @@ type DB interface {
 	GetPermission(int) (*models.Permission, error)
 	UpdatePermission(*models.Permission) error
 	RemovePermission(*models.Permission) error
-	GetPermissionsByPolicy(*models.Policy, *int, *int) (*[]models.Permission, int, error)
-	GetUsersByPolicy(*models.Policy, *int, *int) (*[]models.User, int, error)
-	GetGroupsByPolicy(*models.Policy, *int, *int) (*[]models.Group, int, error)
+	GetPermissionsByPolicy(*models.Policy) (*[]models.Permission, error)
+	GetUsersByPolicy(*models.Policy) (*[]models.User, error)
+	GetGroupsByPolicy(*models.Policy) (*[]models.Group, error)
 
 	CreateAction(*models.Action) error
 	GetActions(int, int) (*[]models.Action, error)

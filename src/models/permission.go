@@ -8,7 +8,7 @@ type Permission struct {
 	ID        int        `json:"id"`
 	CreatedAt time.Time  `json:"createdAt"`
 	UpdatedAt time.Time  `json:"updatedAt"`
-	DeletedAt *time.Time `json:"-" gorm:"default:''"`
+	DeletedAt *time.Time `json:"-"`
 	Resourse  *string    `json:"resourse" validate:"nonzero"`
 	Access    *bool      `json:"access" validate:"nonzero"`
 	ActionID  *int       `json:"actionId" gorm:"column:action_id" validate:"nonzero"`

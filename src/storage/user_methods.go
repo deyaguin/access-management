@@ -91,48 +91,20 @@ func (dataBase SqlDB) DetachPolicyByUser(
 
 func (dataBase SqlDB) GetPoliciesByUser(
 	user *models.User,
-	page *int,
-	perPage *int,
-) (*[]models.Policy, int, error) {
+) (*[]models.Policy, error) {
 	policies := new([]models.Policy)
 
-	if page == nil || perPage == nil {
-		err := dataBase.Model(user).Related(policies, "policies").Error
-		if err != nil {
-			return nil, 0, err
-		}
+	err := dataBase.Model(user).Related(policies, "policies").Error
 
-		return policies, 0, nil
-	}
-
-	err := dataBase.Limit(*perPage).Offset((*page-1)*(*perPage)).
-		Model(user).Related(policies, "policies").Error
-
-	count := dataBase.Model(user).Association("policies").Count()
-
-	return policies, count, err
+	return policies, err
 }
 
 func (dataBase SqlDB) GetGroupsByUser(
 	user *models.User,
-	page *int,
-	perPage *int,
-) (*[]models.Group, int, error) {
+) (*[]models.Group, error) {
 	groups := new([]models.Group)
 
-	if page == nil || perPage == nil {
-		err := dataBase.Model(user).Related(groups, "groups").Error
-		if err != nil {
-			return nil, 0, err
-		}
+	err := dataBase.Model(user).Related(groups, "groups").Error
 
-		return groups, 0, nil
-	}
-
-	err := dataBase.Limit(*perPage).Offset((*page-1)*(*perPage)).
-		Model(user).Related(groups, "groups").Error
-
-	count := dataBase.Model(user).Association("groups").Count()
-
-	return groups, count, err
+	return groups, err
 }
