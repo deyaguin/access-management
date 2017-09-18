@@ -33,6 +33,12 @@ func (dataBase SqlDB) GetPolicies(
 	return policies, err
 }
 
+func (dataBase SqlDB) GetAllPolicies() (*[]models.Policy, error) {
+	policies := new([]models.Policy)
+	err := dataBase.Find(policies).Error
+	return policies, err
+}
+
 func (dataBase SqlDB) GetPoliciesCount() (int, error) {
 	var count int
 

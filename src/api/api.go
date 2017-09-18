@@ -30,6 +30,7 @@ func NewAPI(
 
 	e.POST("/users", api.createUser)
 	e.GET("/users", api.getUsers)
+	e.GET("/users/all", api.getAllUsers)
 	e.GET("/users/:userID", api.getUser)
 	e.PATCH("/users/:userID", api.updateUser)
 	e.DELETE("/users/:userID", api.removeUser)
@@ -40,6 +41,7 @@ func NewAPI(
 
 	e.POST("/groups", api.createGroup)
 	e.GET("/groups", api.getGroups)
+	e.GET("/groups/all", api.getAllGroups)
 	e.GET("/groups/:groupID", api.getGroup)
 	e.PATCH("/groups/:groupID", api.updateGroup)
 	e.DELETE("/groups/:groupID", api.removeGroup)
@@ -52,6 +54,7 @@ func NewAPI(
 
 	e.POST("/policies", api.createPolicy)
 	e.GET("/policies", api.getPolicies)
+	e.GET("/policies/all", api.getAllPolicies)
 	e.GET("/policies/:policyID", api.getPolicy)
 	e.PATCH("/policies/:policyID", api.updatePolicy)
 	e.DELETE("/policies/:policyID", api.removePolicy)

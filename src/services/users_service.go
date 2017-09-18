@@ -11,6 +11,7 @@ type UsersService interface {
 	CreateUser(*models.User) (*models.User, error)
 	GetUser(int) (*models.User, error)
 	GetUsers(int, int, string) (*items, error)
+	GetAllUsers() (*pureItems, error)
 	UpdateUser(*models.User) (*models.User, error)
 	RemoveUser(int) error
 
@@ -84,6 +85,15 @@ func (service *usersService) GetUsers(
 	}
 
 	return response, nil
+}
+
+func (service *usersService) GetAllUsers() (*pureItems, error) {
+	users, err := service.storage.GetAllUsers()
+	if err != nil {
+		return nil, err
+	}
+
+	return &pureItems{users}, nil
 }
 
 func (service *usersService) UpdateUser(

@@ -1,10 +1,11 @@
 package api
 
 import (
-	"github.com/labstack/echo"
 	"gitlab/nefco/access-management-system/src/models"
 	"net/http"
 	"strconv"
+
+	"github.com/labstack/echo"
 )
 
 func (a *API) createPolicy(c echo.Context) error {
@@ -24,7 +25,7 @@ func (a *API) createPolicy(c echo.Context) error {
 
 func (a *API) getPolicies(c echo.Context) error {
 	if c.QueryParam("page") == "" || c.QueryParam("per_page") == "" {
-		policies, err := a.GetPolicies(1, 10, "")
+		policies, err := a.GetPolicies(1, 10, c.QueryParam("policy_name"))
 		if err != nil {
 			return err
 		}
@@ -55,6 +56,15 @@ func (a *API) getPolicies(c echo.Context) error {
 	policyName := c.QueryParam("policy_name")
 
 	policies, err := a.GetPolicies(page, perPage, policyName)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, policies)
+}
+
+func (a *API) getAllPolicies(c echo.Context) error {
+	policies, err := a.GetAllPolicies()
 	if err != nil {
 		return err
 	}

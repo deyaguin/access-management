@@ -35,6 +35,12 @@ func (dataBase SqlDB) GetUsers(
 	return users, err
 }
 
+func (dataBase SqlDB) GetAllUsers() (*[]models.User, error) {
+	users := new([]models.User)
+	err := dataBase.Find(users).Error
+	return users, err
+}
+
 func (dataBase SqlDB) GetUsersTotal() (int, error) {
 	var count int
 

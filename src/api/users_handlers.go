@@ -25,7 +25,7 @@ func (a *API) createUser(c echo.Context) error {
 
 func (a *API) getUsers(c echo.Context) error {
 	if c.QueryParam("page") == "" || c.QueryParam("per_page") == "" {
-		users, err := a.GetUsers(1, 10, "")
+		users, err := a.GetUsers(1, 10, c.QueryParam("user_name"))
 		if err != nil {
 			return err
 		}
@@ -56,6 +56,15 @@ func (a *API) getUsers(c echo.Context) error {
 	userName := c.QueryParam("user_name")
 
 	users, err := a.GetUsers(page, perPage, userName)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, users)
+}
+
+func (a *API) getAllUsers(c echo.Context) error {
+	users, err := a.GetAllUsers()
 	if err != nil {
 		return err
 	}

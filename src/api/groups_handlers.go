@@ -24,7 +24,7 @@ func (a *API) createGroup(c echo.Context) error {
 
 func (a *API) getGroups(c echo.Context) error {
 	if c.QueryParam("page") == "" || c.QueryParam("per_page") == "" {
-		groups, err := a.GetGroups(1, 10, "")
+		groups, err := a.GetGroups(1, 10, c.QueryParam("group_name"))
 		if err != nil {
 			return err
 		}
@@ -54,6 +54,15 @@ func (a *API) getGroups(c echo.Context) error {
 	groupName := c.QueryParam("group_name")
 
 	groups, err := a.GetGroups(page, perPage, groupName)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, groups)
+}
+
+func (a *API) getAllGroups(c echo.Context) error {
+	groups, err := a.GetAllGroups()
 	if err != nil {
 		return err
 	}

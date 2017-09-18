@@ -33,6 +33,12 @@ func (dataBase SqlDB) GetGroups(
 	return groups, err
 }
 
+func (dataBase SqlDB) GetAllGroups() (*[]models.Group, error) {
+	groups := new([]models.Group)
+	err := dataBase.Find(groups).Error
+	return groups, err
+}
+
 func (dataBase SqlDB) GetGroupsCount() (int, error) {
 	var count int
 
