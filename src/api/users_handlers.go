@@ -161,11 +161,11 @@ func (a *API) detachPolicyByUser(c echo.Context) error {
 		)
 	}
 
-	policyId, err := strconv.Atoi(c.Param("policyId"))
+	policyId, err := strconv.Atoi(c.Param("policyID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"PolicyID",
-			c.Param("policyId"),
+			c.Param("policyID"),
 		)
 	}
 

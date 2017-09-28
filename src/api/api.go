@@ -67,7 +67,10 @@ func NewAPI(
 	e.GET("/actions", api.getActions)
 	e.GET("/actions/:actionID", api.getAction)
 	e.PATCH("/actions/:actionID", api.updateAction)
-	e.DELETE("/actions/actionID", api.removeAction)
+	e.DELETE("/actions/:actionID", api.removeAction)
+
+	e.GET("/services", api.getAllServices)
+	e.GET("/services/:serviceID/actions", api.getActionsByService)
 
 	e.POST("/check_permissions", api.userPermissions)
 

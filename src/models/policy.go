@@ -5,13 +5,13 @@ import (
 )
 
 type Policy struct {
-	ID          int          `json:"id"`
+	ID          int          `json:"id" gorm:"primary_key"`
 	CreatedAt   time.Time    `json:"createdAt"`
 	UpdatedAt   time.Time    `json:"updatedAt"`
 	DeletedAt   *time.Time   `json:"-"`
 	Name        *string      `json:"name" validate:"nonzero"`
 	Description *string      `json:"description" validate:"nonzero"`
-	Groups      []Group      `gorm:"many2many:group_policies;save_associations:false" json:"-"`
+	Groups      []Group      `gorm:"many2many:group_policies;" json:"-"`
 	Users       []User       `gorm:"many2many:user_policies;save_associations:false" json:"-"`
 	Permissions []Permission `json:"-"`
 }

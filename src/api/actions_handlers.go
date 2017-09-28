@@ -1,10 +1,11 @@
 package api
 
 import (
-	"github.com/labstack/echo"
 	"gitlab/nefco/access-management-system/src/models"
 	"net/http"
 	"strconv"
+
+	"github.com/labstack/echo"
 )
 
 func (a *API) createAction(c echo.Context) error {
@@ -23,26 +24,7 @@ func (a *API) createAction(c echo.Context) error {
 }
 
 func (a *API) getActions(c echo.Context) error {
-	page, err := strconv.Atoi(c.QueryParam("page"))
-	if err != nil {
-		return NewInvalidQueryError(
-			"page",
-			c.QueryParam("page"),
-		)
-	}
-
-	perPage, err := strconv.Atoi(c.QueryParam("per_page"))
-	if err != nil {
-		return NewInvalidQueryError("per_page",
-			c.QueryParam("per_page"),
-		)
-	}
-
-	if err := checkPaginationParams(page, perPage); err != nil {
-		return err
-	}
-
-	actions, err := a.GetActions(page, perPage)
+	actions, err := a.GetActions()
 	if err != nil {
 		return err
 	}

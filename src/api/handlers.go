@@ -6,11 +6,11 @@ import (
 )
 
 type users struct {
-	Users *[]models.User `validate:"required"`
+	Users *[]models.User `validate:"required" json:"users"`
 }
 
 type policies struct {
-	Policies *[]models.Policy `validate:"required"`
+	Policies *[]models.Policy `validate:"required" json:"policies"`
 }
 
 type permissions struct {

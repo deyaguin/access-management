@@ -5,12 +5,12 @@ import (
 )
 
 type Group struct {
-	ID        int        `json:"id" gorm:"AUTO_INCREMENT;not null;unique"`
+	ID        int        `json:"id" gorm:"primary_key"`
 	CreatedAt time.Time  `json:"createdAt"`
 	UpdatedAt time.Time  `json:"updatedAt"`
 	DeletedAt *time.Time `json:"-"`
 	Name      *string    `json:"name" validate:"nonzero"`
-	Users     []User     `gorm:"many2many:user_groups;save_associations:false" json:"-"`
+	Users     []User     `gorm:"many2many:user_groups;" json:"-"`
 	Policies  []Policy   `gorm:"many2many:group_policies;save_associations:false" json:"-"`
 }
 

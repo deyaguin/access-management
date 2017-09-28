@@ -15,7 +15,7 @@ type PoliciesService interface {
 	UpdatePolicy(*models.Policy) (*models.Policy, error)
 	RemovePolicy(int) error
 
-	AddPermissionsToPolicy(*models.Policy, *[]models.Permission) error
+	AddPermissionToPolicy(*models.Policy, *models.Permission) error
 	RemovePermissionFromPolicy(int, int) error
 	GetUsersByPolicy(int) (*pureItems, error)
 	GetGroupsByPolicy(int) (*pureItems, error)
@@ -130,27 +130,21 @@ func (service *policiesService) RemovePolicy(
 	return nil
 }
 
-func (service *policiesService) AddPermissionsToPolicy(
+func (service *policiesService) AddPermissionToPolicy(
 	policy *models.Policy,
-	permissions *[]models.Permission,
+	permission *models.Permission,
 ) error {
 	if _, err := service.storage.GetPolicy(policy.ID); err != nil {
 		return NewEntityNotFoundError("policy", policy.ID)
 	}
 
-	for _, permission := range *permissions {
-		if err := validator.Validate(permission); err != nil {
-			if err != nil {
-				return NewValidationError(err.Error())
-			}
-
-			return NewEntityCreateError(err.Error())
-		}
+	if err := validator.Validate(permission); err != nil {
+		return NewValidationError(err.Error())
 	}
 
-	if err := service.storage.AddPermissionsToPolicy(
+	if err := service.storage.AddPermissionToPolicy(
 		policy,
-		permissions,
+		permission,
 	); err != nil {
 		return NewEntityCreateError(err.Error())
 	}
@@ -192,9 +186,7 @@ func (service *policiesService) GetPermissionsByPolicy(
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	result := &pureItems{permissions}
-
-	return result, nil
+	return &pureItems{permissions}, nil
 }
 
 func (service *policiesService) GetUsersByPolicy(
@@ -210,9 +202,7 @@ func (service *policiesService) GetUsersByPolicy(
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	result := &pureItems{users}
-
-	return result, nil
+	return &pureItems{users}, nil
 }
 
 func (service *policiesService) GetGroupsByPolicy(
@@ -228,7 +218,5 @@ func (service *policiesService) GetGroupsByPolicy(
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	result := &pureItems{groups}
-
-	return result, nil
+	return &pureItems{groups}, nil
 }

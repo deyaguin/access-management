@@ -1,10 +1,11 @@
 package api
 
 import (
-	"github.com/labstack/echo"
 	"gitlab/nefco/access-management-system/src/models"
 	"net/http"
 	"strconv"
+
+	"github.com/labstack/echo"
 )
 
 func (a *API) createGroup(c echo.Context) error {
@@ -139,7 +140,6 @@ func (a *API) addUsersToGroup(c echo.Context) error {
 	if err = c.Bind(users); err != nil {
 		return NewUnprocessableBodyError()
 	}
-
 	if err = a.AddUsersToGroup(group, users.Users); err != nil {
 		return err
 	}
@@ -156,11 +156,11 @@ func (a *API) removeUserFromGroup(c echo.Context) error {
 		)
 	}
 
-	userId, err := strconv.Atoi(c.Param("userId"))
+	userId, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"userID",
-			c.Param("userId"),
+			c.Param("userID"),
 		)
 	}
 
@@ -222,11 +222,11 @@ func (a *API) detachPolicyByGroup(c echo.Context) error {
 		)
 	}
 
-	policyId, err := strconv.Atoi(c.Param("policyId"))
+	policyId, err := strconv.Atoi(c.Param("policyID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"policyID",
-			c.Param("policyId"),
+			c.Param("policyID"),
 		)
 	}
 

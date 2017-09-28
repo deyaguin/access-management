@@ -9,7 +9,7 @@ import (
 type ActionsService interface {
 	CreateAction(*models.Action) (*models.Action, error)
 	GetAction(int) (*models.Action, error)
-	GetActions(int, int) (*[]models.Action, error)
+	GetActions() (*pureItems, error)
 	UpdateAction(*models.Action) (*models.Action, error)
 	RemoveAction(int) error
 }
@@ -54,16 +54,13 @@ func (service *actionsService) GetAction(
 	return action, nil
 }
 
-func (service *actionsService) GetActions(
-	page int,
-	perPage int,
-) (*[]models.Action, error) {
-	actions, err := service.storage.GetActions(page, perPage)
+func (service *actionsService) GetActions() (*pureItems, error) {
+	actions, err := service.storage.GetActions()
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	return actions, nil
+	return &pureItems{actions}, nil
 }
 
 func (service *actionsService) UpdateAction(

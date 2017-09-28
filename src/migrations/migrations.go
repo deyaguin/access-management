@@ -1,12 +1,13 @@
 package migrations
 
 import (
-	"github.com/jinzhu/gorm"
-	"github.com/labstack/gommon/log"
 	"gitlab/nefco/access-management-system/src/models"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/labstack/gommon/log"
 	"gopkg.in/gormigrate.v1"
-	//_ "github.com/jinzhu/gorm/dialects/postgres"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	//_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 type Migration struct {
@@ -37,27 +38,27 @@ var migrate1 = &gormigrate.Migration{
 }
 
 func (migration *Migration) Init() {
-	//pgDB, err := gorm.Open("postgres", "host=localhost user=accessControl dbname=test password=agryz2010")
-	sqliteDB, err := gorm.Open("sqlite3", "test.db")
+	pgDB, err := gorm.Open("postgres", "host=localhost user=access-management dbname=access-management password=12345")
+	//sqliteDB, err := gorm.Open("sqlite3", "test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
-	//if err = pgDB.DB().Ping(); err != nil {
-	//	log.Fatal(err)
-	//}
-	if err = sqliteDB.DB().Ping(); err != nil {
+	if err = pgDB.DB().Ping(); err != nil {
 		log.Fatal(err)
 	}
-
-	sqliteDB.LogMode(true)
+	//if err = sqliteDB.DB().Ping(); err != nil {
+	//	log.Fatal(err)
+	//}
+	//
 	//sqliteDB.LogMode(true)
+	pgDB.LogMode(true)
 
-	//m := gormigrate.New(pgDB, gormigrate.DefaultOptions, []*gormigrate.Migration{
-	//	migrate1,
-	//})
-	m := gormigrate.New(sqliteDB, gormigrate.DefaultOptions, []*gormigrate.Migration{
+	m := gormigrate.New(pgDB, gormigrate.DefaultOptions, []*gormigrate.Migration{
 		migrate1,
 	})
+	//m := gormigrate.New(sqliteDB, gormigrate.DefaultOptions, []*gormigrate.Migration{
+	//	migrate1,
+	//})
 
 	if err = m.Migrate(); err != nil {
 		log.Fatal(err)

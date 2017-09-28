@@ -7,6 +7,7 @@ type ServicesConf struct {
 	PermissionsService
 	PermissionsCheckService
 	ActionsService
+	ServicesService
 }
 
 func NewServicesConf(
@@ -16,6 +17,7 @@ func NewServicesConf(
 	permissions PermissionsService,
 	permissionsCheck PermissionsCheckService,
 	actions ActionsService,
+	services ServicesService,
 ) *ServicesConf {
 	return &ServicesConf{
 		users,
@@ -24,6 +26,7 @@ func NewServicesConf(
 		permissions,
 		permissionsCheck,
 		actions,
+		services,
 	}
 }
 

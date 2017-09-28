@@ -44,7 +44,7 @@ type DB interface {
 	GetPolicy(int) (*models.Policy, error)
 	UpdatePolicy(*models.Policy) error
 	RemovePolicy(*models.Policy) error
-	AddPermissionsToPolicy(*models.Policy, *[]models.Permission) error
+	AddPermissionToPolicy(*models.Policy, *models.Permission) error
 	CreatePermission(*models.Permission) error
 	GetPermission(int) (*models.Permission, error)
 	UpdatePermission(*models.Permission) error
@@ -54,10 +54,14 @@ type DB interface {
 	GetGroupsByPolicy(*models.Policy) (*[]models.Group, error)
 
 	CreateAction(*models.Action) error
-	GetActions(int, int) (*[]models.Action, error)
+	GetActions() (*[]models.Action, error)
 	GetAction(int) (*models.Action, error)
 	UpdateAction(*models.Action) error
 	RemoveAction(*models.Action) error
+
+	GetService(int) (*models.Service, error)
+	GetAllServices() (*[]models.Service, error)
+	GetActionsByService(*models.Service) (*[]models.Action, error)
 }
 
 type SqlDB struct {
@@ -72,6 +76,8 @@ func SqlDBCreator(vendor, url string) DB {
 			zap.Error(err),
 		)
 	}
+
+	db.LogMode(true)
 
 	Log.Info("DB start successfully")
 

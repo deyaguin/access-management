@@ -73,12 +73,12 @@ func (dataBase SqlDB) RemovePolicy(
 	return err
 }
 
-func (dataBase SqlDB) AddPermissionsToPolicy(
+func (dataBase SqlDB) AddPermissionToPolicy(
 	policy *models.Policy,
-	permissions *[]models.Permission,
+	permission *models.Permission,
 ) error {
 	err := dataBase.Model(policy).Association("permissions").
-		Append(permissions).Error
+		Append(permission).Error
 
 	return err
 }
@@ -106,7 +106,6 @@ func (dataBase SqlDB) GetGroupsByPolicy(
 func (dataBase SqlDB) GetPermissionsByPolicy(
 	policy *models.Policy,
 ) (*[]models.Permission, error) {
-
 	permissions := new([]models.Permission)
 
 	err := dataBase.Model(policy).Related(permissions).Error

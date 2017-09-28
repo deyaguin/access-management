@@ -137,19 +137,19 @@ func (a *API) addPermissionsToPolicy(c echo.Context) error {
 	}
 	policy := &models.Policy{ID: policyID}
 
-	permissions := new(permissions)
-	if err = c.Bind(permissions); err != nil {
+	permission := new(models.Permission)
+	if err = c.Bind(permission); err != nil {
 		return NewUnprocessableBodyError()
 	}
 
-	if err = a.AddPermissionsToPolicy(
+	if err = a.AddPermissionToPolicy(
 		policy,
-		permissions.Permissions,
+		permission,
 	); err != nil {
 		return err
 	}
 
-	return c.NoContent(http.StatusCreated)
+	return c.JSON(http.StatusCreated, permission)
 }
 
 func (a *API) removePermissionFromPolicy(c echo.Context) error {
@@ -161,17 +161,17 @@ func (a *API) removePermissionFromPolicy(c echo.Context) error {
 		)
 	}
 
-	permissionId, err := strconv.Atoi(c.Param("permissionId"))
+	permissionID, err := strconv.Atoi(c.Param("permissionID"))
 	if err != nil {
 		return NewInvalidQueryError(
 			"PermissionID",
-			c.Param("permissionId"),
+			c.Param("permissionID"),
 		)
 	}
 
 	if err = a.RemovePermissionFromPolicy(
 		policyID,
-		permissionId,
+		permissionID,
 	); err != nil {
 		return err
 	}
