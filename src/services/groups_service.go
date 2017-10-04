@@ -12,6 +12,7 @@ type GroupsService interface {
 	GetGroup(int) (*models.Group, error)
 	GetGroups(int, int, string) (*items, error)
 	GetAllGroups() (*pureItems, error)
+	GetGroupsByEntry(string) (*pureItems, error)
 	UpdateGroup(*models.Group) (*models.Group, error)
 	RemoveGroup(int) error
 
@@ -90,6 +91,15 @@ func (service *groupsService) GetGroups(
 
 func (service *groupsService) GetAllGroups() (*pureItems, error) {
 	groups, err := service.storage.GetAllGroups()
+	if err != nil {
+		return nil, err
+	}
+
+	return &pureItems{groups}, nil
+}
+
+func (service *groupsService) GetGroupsByEntry(name string) (*pureItems, error) {
+	groups, err := service.storage.GetGroupsByEntry(name)
 	if err != nil {
 		return nil, err
 	}

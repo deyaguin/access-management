@@ -14,11 +14,11 @@ func (dataBase SqlDB) CreatePolicy(
 func (dataBase SqlDB) GetPolicies(
 	page int,
 	perPage int,
-	policyName string,
+	name string,
 ) (*[]models.Policy, error) {
 	policies := new([]models.Policy)
 
-	if policyName == "" {
+	if name == "" {
 		if err := dataBase.Limit(perPage).Offset((page - 1) * perPage).
 			Find(policies).Error; err != nil {
 			return nil, err
@@ -27,7 +27,7 @@ func (dataBase SqlDB) GetPolicies(
 		return policies, nil
 	}
 
-	err := dataBase.Where("name = ?", policyName).
+	err := dataBase.Where("name LIKE ?", "%"+name+"%").
 		Limit(perPage).Offset((page - 1) * perPage).Find(policies).Error
 
 	return policies, err
@@ -36,6 +36,12 @@ func (dataBase SqlDB) GetPolicies(
 func (dataBase SqlDB) GetAllPolicies() (*[]models.Policy, error) {
 	policies := new([]models.Policy)
 	err := dataBase.Find(policies).Error
+	return policies, err
+}
+
+func (dataBase SqlDB) GetPoliciesByEntry(name string) (*[]models.Policy, error) {
+	policies := new([]models.Policy)
+	err := dataBase.Where("name LIKE ?", "%"+name+"%").Find(policies).Error
 	return policies, err
 }
 

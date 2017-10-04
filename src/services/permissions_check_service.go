@@ -6,9 +6,9 @@ import (
 )
 
 type CheckingParams struct {
-	Resourse string `validation:"nonzero"`
-	Action   int    `validation:"nonzero"`
-	ID       int    `validation:"nonzero"`
+	Resourse string `validation:"nonzero" json:"resourse"`
+	Action   int    `validation:"nonzero" json:"action_id"`
+	ID       int    `validation:"nonzero" json:"user_id"`
 }
 
 type PermissionsCheckService interface {

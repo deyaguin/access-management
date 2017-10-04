@@ -71,6 +71,17 @@ func (a *API) getAllGroups(c echo.Context) error {
 	return c.JSON(http.StatusOK, groups)
 }
 
+func (a *API) getGroupsByEntry(c echo.Context) error {
+	name := c.QueryParam("name")
+
+	groups, err := a.GetGroupsByEntry(name)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, groups)
+}
+
 func (a *API) getGroup(c echo.Context) error {
 	groupID, err := strconv.Atoi(c.Param("groupID"))
 	if err != nil {

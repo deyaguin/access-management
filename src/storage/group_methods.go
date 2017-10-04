@@ -14,11 +14,11 @@ func (dataBase SqlDB) CreateGroup(
 func (dataBase SqlDB) GetGroups(
 	page int,
 	perPage int,
-	groupName string,
+	name string,
 ) (*[]models.Group, error) {
 	groups := new([]models.Group)
 
-	if groupName == "" {
+	if name == "" {
 		if err := dataBase.Limit(perPage).Offset((page - 1) * perPage).
 			Find(groups).Error; err != nil {
 			return nil, err
@@ -27,7 +27,7 @@ func (dataBase SqlDB) GetGroups(
 		return groups, nil
 	}
 
-	err := dataBase.Where("name = ?", groupName).
+	err := dataBase.Where("name LIKE ?", "%"+name+"%").
 		Limit(perPage).Offset((page - 1) * perPage).Find(groups).Error
 
 	return groups, err
@@ -36,6 +36,12 @@ func (dataBase SqlDB) GetGroups(
 func (dataBase SqlDB) GetAllGroups() (*[]models.Group, error) {
 	groups := new([]models.Group)
 	err := dataBase.Find(groups).Error
+	return groups, err
+}
+
+func (dataBase SqlDB) GetGroupsByEntry(name string) (*[]models.Group, error) {
+	groups := new([]models.Group)
+	err := dataBase.Where("name LIKE ?", "%"+name+"%").Find(groups).Error
 	return groups, err
 }
 

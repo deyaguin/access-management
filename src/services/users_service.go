@@ -12,6 +12,7 @@ type UsersService interface {
 	GetUser(int) (*models.User, error)
 	GetUsers(int, int, string) (*items, error)
 	GetAllUsers() (*pureItems, error)
+	GetUsersByEntry(string) (*pureItems, error)
 	UpdateUser(*models.User) (*models.User, error)
 	RemoveUser(int) error
 
@@ -94,6 +95,15 @@ func (service *usersService) GetAllUsers() (*pureItems, error) {
 	}
 
 	return &pureItems{users}, nil
+}
+
+func (service *usersService) GetUsersByEntry(name string) (*pureItems, error) {
+	users, err := service.GetUsersByEntry(name)
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
 
 func (service *usersService) UpdateUser(

@@ -1,5 +1,10 @@
 package services
 
+import (
+	"reflect"
+	"gopkg.in/validator.v2"
+)
+
 type ServicesConf struct {
 	UsersService
 	GroupsService
@@ -19,6 +24,7 @@ func NewServicesConf(
 	actions ActionsService,
 	services ServicesService,
 ) *ServicesConf {
+	validator.SetValidationFunc("isBool", isBool)
 	return &ServicesConf{
 		users,
 		groups,
@@ -40,3 +46,13 @@ type items struct {
 type pureItems struct {
 	Items interface{} `json:"items"`
 }
+
+func isBool(value interface{}, param string) error {
+	v := reflect.ValueOf(value)
+	if v.Kind() != reflect.Bool {
+		return validator.ErrUnsupported
+	}
+	return nil
+}
+
+

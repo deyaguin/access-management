@@ -72,6 +72,17 @@ func (a *API) getAllUsers(c echo.Context) error {
 	return c.JSON(http.StatusOK, users)
 }
 
+func (a *API) getUsersByEntry(c echo.Context) error {
+	name := c.QueryParam("name")
+
+	users, err := a.GetUsersByEntry(name)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, users)
+}
+
 func (a *API) getUser(c echo.Context) error {
 	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {

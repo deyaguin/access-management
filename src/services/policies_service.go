@@ -12,6 +12,7 @@ type PoliciesService interface {
 	GetPolicy(int) (*models.Policy, error)
 	GetPolicies(int, int, string) (*items, error)
 	GetAllPolicies() (*pureItems, error)
+	GetPoliciesByEntry(string) (*pureItems, error)
 	UpdatePolicy(*models.Policy) (*models.Policy, error)
 	RemovePolicy(int) error
 
@@ -88,6 +89,15 @@ func (service *policiesService) GetPolicies(
 
 func (service *policiesService) GetAllPolicies() (*pureItems, error) {
 	policies, err := service.storage.GetAllPolicies()
+	if err != nil {
+		return nil, err
+	}
+
+	return &pureItems{policies}, nil
+}
+
+func (service *policiesService) GetPoliciesByEntry(name string) (*pureItems, error) {
+	policies, err := service.storage.GetPoliciesByEntry(name)
 	if err != nil {
 		return nil, err
 	}

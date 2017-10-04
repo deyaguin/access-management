@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"fmt"
+
 	"github.com/labstack/echo"
 )
 
@@ -65,6 +67,17 @@ func (a *API) getPolicies(c echo.Context) error {
 
 func (a *API) getAllPolicies(c echo.Context) error {
 	policies, err := a.GetAllPolicies()
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, policies)
+}
+
+func (a *API) getPoliciesByEntry(c echo.Context) error {
+	name := c.QueryParam("name")
+
+	policies, err := a.GetPoliciesByEntry(name)
 	if err != nil {
 		return err
 	}
@@ -141,6 +154,7 @@ func (a *API) addPermissionsToPolicy(c echo.Context) error {
 	if err = c.Bind(permission); err != nil {
 		return NewUnprocessableBodyError()
 	}
+	fmt.Println(permission)
 
 	if err = a.AddPermissionToPolicy(
 		policy,

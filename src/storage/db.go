@@ -13,6 +13,7 @@ var Log *zap.Logger = logger.NewLogger()
 type DB interface {
 	CreateUser(*models.User) error
 	GetUsers(int, int, string) (*[]models.User, error)
+	GetUsersByEntry(string) (*[]models.User, error)
 	GetAllUsers() (*[]models.User, error)
 	GetUsersTotal() (int, error)
 	GetUser(int) (*models.User, error)
@@ -25,6 +26,7 @@ type DB interface {
 
 	CreateGroup(*models.Group) error
 	GetGroups(int, int, string) (*[]models.Group, error)
+	GetGroupsByEntry(string) (*[]models.Group, error)
 	GetAllGroups() (*[]models.Group, error)
 	GetGroupsCount() (int, error)
 	GetGroup(int) (*models.Group, error)
@@ -39,6 +41,7 @@ type DB interface {
 
 	CreatePolicy(*models.Policy) error
 	GetPolicies(int, int, string) (*[]models.Policy, error)
+	GetPoliciesByEntry(string) (*[]models.Policy, error)
 	GetAllPolicies() (*[]models.Policy, error)
 	GetPoliciesCount() (int, error)
 	GetPolicy(int) (*models.Policy, error)
