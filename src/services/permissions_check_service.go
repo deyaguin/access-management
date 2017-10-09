@@ -1,8 +1,10 @@
 package services
 
 import (
+	"fmt"
 	"gitlab/nefco/access-management-system/src/models"
 	"gitlab/nefco/access-management-system/src/storage"
+	"regexp"
 )
 
 type CheckingParams struct {
@@ -111,7 +113,7 @@ func (service *permissionsCheckService) comparePermissions(
 	result := false
 	has := false
 	for _, p := range *permissions {
-		if *p.ActionID == checkingParams.Action && *p.Resourse == checkingParams.Resourse {
+		if *p.ActionID == checkingParams.Action && compareResourses(checkingParams.Resourse, *p.Resourse) {
 			has = true
 			result = *p.Access
 			if !result {
@@ -120,4 +122,19 @@ func (service *permissionsCheckService) comparePermissions(
 		}
 	}
 	return result, has
+}
+
+func compareResourses(
+	resourse1, resourse2 string,
+) bool {
+	if resourse1 == resourse2 {
+		return true
+	}
+
+	if resourse2[len(resourse2)-1] == '*' {
+		r, _ := regexp.Compile("^" + resourse2[:len(resourse2)-1])
+		return r.MatchString(resourse1)
+	}
+
+	return false
 }

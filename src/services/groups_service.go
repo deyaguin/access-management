@@ -10,18 +10,18 @@ import (
 type GroupsService interface {
 	CreateGroup(*models.Group) (*models.Group, error)
 	GetGroup(int) (*models.Group, error)
-	GetGroups(int, int, string) (*items, error)
-	GetAllGroups() (*pureItems, error)
-	GetGroupsByEntry(string) (*pureItems, error)
+	GetGroups(int, int, string) (*paginationItems, error)
+	GetAllGroups() (*items, error)
+	GetGroupsByEntry(string) (*items, error)
 	UpdateGroup(*models.Group) (*models.Group, error)
 	RemoveGroup(int) error
 
 	AddUsersToGroup(*models.Group, *[]models.User) error
 	RemoveUserFromGroup(int, int) error
-	GetUsersByGroup(int) (*pureItems, error)
+	GetUsersByGroup(int) (*items, error)
 	AttachPoliciesByGroup(*models.Group, *[]models.Policy) error
 	DetachPolicyByGroup(int, int) error
-	GetPoliciesByGroup(int) (*pureItems, error)
+	GetPoliciesByGroup(int) (*items, error)
 }
 
 type groupsService struct {
@@ -68,7 +68,7 @@ func (service *groupsService) GetGroups(
 	page int,
 	perPage int,
 	name string,
-) (*items, error) {
+) (*paginationItems, error) {
 	groups, err := service.storage.GetGroups(page, perPage, name)
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
@@ -79,7 +79,7 @@ func (service *groupsService) GetGroups(
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	items := &items{
+	items := &paginationItems{
 		groups,
 		count,
 		perPage,
@@ -89,22 +89,22 @@ func (service *groupsService) GetGroups(
 	return items, nil
 }
 
-func (service *groupsService) GetAllGroups() (*pureItems, error) {
+func (service *groupsService) GetAllGroups() (*items, error) {
 	groups, err := service.storage.GetAllGroups()
 	if err != nil {
 		return nil, err
 	}
 
-	return &pureItems{groups}, nil
+	return &items{groups}, nil
 }
 
-func (service *groupsService) GetGroupsByEntry(name string) (*pureItems, error) {
+func (service *groupsService) GetGroupsByEntry(name string) (*items, error) {
 	groups, err := service.storage.GetGroupsByEntry(name)
 	if err != nil {
 		return nil, err
 	}
 
-	return &pureItems{groups}, nil
+	return &items{groups}, nil
 }
 
 func (service *groupsService) UpdateGroup(
@@ -186,7 +186,7 @@ func (service *groupsService) RemoveUserFromGroup(
 
 func (service *groupsService) GetUsersByGroup(
 	groupID int,
-) (*pureItems, error) {
+) (*items, error) {
 	group, err := service.storage.GetGroup(groupID)
 	if err != nil {
 		return nil, NewEntityNotFoundError("group", groupID)
@@ -197,7 +197,7 @@ func (service *groupsService) GetUsersByGroup(
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	result := &pureItems{users}
+	result := &items{users}
 
 	return result, nil
 }
@@ -252,7 +252,7 @@ func (service *groupsService) DetachPolicyByGroup(
 
 func (service *groupsService) GetPoliciesByGroup(
 	groupID int,
-) (*pureItems, error) {
+) (*items, error) {
 	group, err := service.storage.GetGroup(groupID)
 	if err != nil {
 		return nil, NewEntityNotFoundError("group", groupID)
@@ -263,7 +263,7 @@ func (service *groupsService) GetPoliciesByGroup(
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	result := &pureItems{policies}
+	result := &items{policies}
 
 	return result, nil
 }

@@ -9,7 +9,7 @@ type Permission struct {
 	CreatedAt time.Time  `json:"createdAt"`
 	UpdatedAt time.Time  `json:"updatedAt"`
 	DeletedAt *time.Time `json:"-"`
-	Resourse  *string    `json:"resourse" validate:"nonzero"`
+	Resourse  *string    `json:"resourse" validate:"nonzero, regexp=^[a-zA-Z_0-9]+/?\\*?"`
 	Access    *bool      `json:"access" validate:"isBool"`
 	ActionID  *int       `json:"action" gorm:"column:action_id" validate:"nonzero"`
 	PolicyID  int        `gorm:"column:policy_id" json:"-"`

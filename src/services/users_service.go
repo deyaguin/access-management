@@ -10,16 +10,16 @@ import (
 type UsersService interface {
 	CreateUser(*models.User) (*models.User, error)
 	GetUser(int) (*models.User, error)
-	GetUsers(int, int, string) (*items, error)
-	GetAllUsers() (*pureItems, error)
-	GetUsersByEntry(string) (*pureItems, error)
+	GetUsers(int, int, string) (*paginationItems, error)
+	GetAllUsers() (*items, error)
+	GetUsersByEntry(string) (*items, error)
 	UpdateUser(*models.User) (*models.User, error)
 	RemoveUser(int) error
 
 	AttachPoliciesByUser(*models.User, *[]models.Policy) error
 	DetachPolicyByUser(int, int) error
-	GetPoliciesByUser(int) (*pureItems, error)
-	GetGroupsByUser(int) (*pureItems, error)
+	GetPoliciesByUser(int) (*items, error)
+	GetGroupsByUser(int) (*items, error)
 }
 
 type usersService struct {
@@ -67,7 +67,7 @@ func (service *usersService) GetUsers(
 	page int,
 	perPage int,
 	userName string,
-) (*items, error) {
+) (*paginationItems, error) {
 	users, err := service.storage.GetUsers(page, perPage, userName)
 	if err != nil {
 		return nil, err
@@ -78,7 +78,7 @@ func (service *usersService) GetUsers(
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	response := &items{
+	response := &paginationItems{
 		users,
 		total,
 		perPage,
@@ -88,16 +88,16 @@ func (service *usersService) GetUsers(
 	return response, nil
 }
 
-func (service *usersService) GetAllUsers() (*pureItems, error) {
+func (service *usersService) GetAllUsers() (*items, error) {
 	users, err := service.storage.GetAllUsers()
 	if err != nil {
 		return nil, err
 	}
 
-	return &pureItems{users}, nil
+	return &items{users}, nil
 }
 
-func (service *usersService) GetUsersByEntry(name string) (*pureItems, error) {
+func (service *usersService) GetUsersByEntry(name string) (*items, error) {
 	users, err := service.GetUsersByEntry(name)
 	if err != nil {
 		return nil, err
@@ -185,7 +185,7 @@ func (service *usersService) DetachPolicyByUser(
 
 func (service *usersService) GetPoliciesByUser(
 	userID int,
-) (*pureItems, error) {
+) (*items, error) {
 	user, err := service.storage.GetUser(userID)
 	if err != nil {
 		return nil, NewEntityNotFoundError("user", userID)
@@ -196,14 +196,14 @@ func (service *usersService) GetPoliciesByUser(
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	result := &pureItems{policies}
+	result := &items{policies}
 
 	return result, nil
 }
 
 func (service *usersService) GetGroupsByUser(
 	userID int,
-) (*pureItems, error) {
+) (*items, error) {
 	user, err := service.storage.GetUser(userID)
 	if err != nil {
 		return nil, NewEntityNotFoundError("user", userID)
@@ -214,7 +214,7 @@ func (service *usersService) GetGroupsByUser(
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	result := &pureItems{groups}
+	result := &items{groups}
 
 	return result, err
 }

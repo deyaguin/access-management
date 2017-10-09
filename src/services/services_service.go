@@ -5,8 +5,8 @@ import (
 )
 
 type ServicesService interface {
-	GetAllServices() (*pureItems, error)
-	GetActionsByService(int) (*pureItems, error)
+	GetAllServices() (*items, error)
+	GetActionsByService(int) (*items, error)
 }
 
 type servicesService struct {
@@ -21,18 +21,18 @@ func NewServicesService(
 	}
 }
 
-func (service *servicesService) GetAllServices() (*pureItems, error) {
+func (service *servicesService) GetAllServices() (*items, error) {
 	services, err := service.storage.GetAllServices()
 	if err != nil {
 		return nil, err
 	}
 
-	return &pureItems{services}, nil
+	return &items{services}, nil
 }
 
 func (service *servicesService) GetActionsByService(
 	servicesId int,
-) (*pureItems, error) {
+) (*items, error) {
 	serv, err := service.storage.GetService(servicesId)
 	if err != nil {
 		return nil, NewEntityNotFoundError("service", servicesId)
@@ -43,5 +43,5 @@ func (service *servicesService) GetActionsByService(
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	return &pureItems{actions}, nil
+	return &items{actions}, nil
 }

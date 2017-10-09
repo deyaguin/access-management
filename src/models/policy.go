@@ -10,7 +10,7 @@ type Policy struct {
 	UpdatedAt   time.Time    `json:"updatedAt"`
 	DeletedAt   *time.Time   `json:"-"`
 	Name        *string      `json:"name" validate:"nonzero"`
-	Description *string      `json:"description" validate:"nonzero"`
+	Description *string      `json:"description"`
 	Groups      []Group      `gorm:"many2many:group_policies;" json:"-"`
 	Users       []User       `gorm:"many2many:user_policies;save_associations:false" json:"-"`
 	Permissions []Permission `json:"-"`

@@ -2,6 +2,7 @@ package services
 
 import (
 	"reflect"
+
 	"gopkg.in/validator.v2"
 )
 
@@ -36,14 +37,14 @@ func NewServicesConf(
 	}
 }
 
-type items struct {
+type paginationItems struct {
 	Items       interface{} `json:"items"`
 	Total       int         `json:"total"`
 	PerPage     int         `json:"per_page"`
 	CurrentPage int         `json:"current_page"`
 }
 
-type pureItems struct {
+type items struct {
 	Items interface{} `json:"items"`
 }
 
@@ -54,5 +55,3 @@ func isBool(value interface{}, param string) error {
 	}
 	return nil
 }
-
-
