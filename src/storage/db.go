@@ -15,7 +15,7 @@ type DB interface {
 	GetUsers(int, int, string) (*[]models.User, error)
 	GetUsersByEntry(string) (*[]models.User, error)
 	GetAllUsers() (*[]models.User, error)
-	GetUsersTotal() (int, error)
+	GetUsersCount() (int, error)
 	GetUser(int) (*models.User, error)
 	UpdateUser(*models.User) error
 	RemoveUser(*models.User) error

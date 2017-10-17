@@ -2,6 +2,8 @@ package storage
 
 import (
 	"gitlab/nefco/access-management-system/src/models"
+
+	"github.com/jinzhu/gorm"
 )
 
 func (dataBase SqlDB) CreatePolicy(
@@ -48,7 +50,9 @@ func (dataBase SqlDB) GetPoliciesByEntry(name string) (*[]models.Policy, error) 
 func (dataBase SqlDB) GetPoliciesCount() (int, error) {
 	var count int
 
-	err := dataBase.Table("policies").Count(&count).Error
+	err := dataBase.Table("policies").
+		Where("deleted_at is ?", gorm.Expr("NULL")).
+		Count(&count).Error
 
 	return count, err
 }

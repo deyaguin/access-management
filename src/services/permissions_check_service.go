@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"gitlab/nefco/access-management-system/src/models"
 	"gitlab/nefco/access-management-system/src/storage"
 	"regexp"
@@ -113,7 +112,11 @@ func (service *permissionsCheckService) comparePermissions(
 	result := false
 	has := false
 	for _, p := range *permissions {
-		if *p.ActionID == checkingParams.Action && compareResourses(checkingParams.Resourse, *p.Resourse) {
+		if checkingParams.Action == *p.ActionID && compareResourses(
+			checkingParams.Resourse,
+			*p.Resourse,
+			permissions,
+		) {
 			has = true
 			result = *p.Access
 			if !result {
@@ -125,14 +128,28 @@ func (service *permissionsCheckService) comparePermissions(
 }
 
 func compareResourses(
-	resourse1, resourse2 string,
+	resourse1 string,
+	resourse2 string,
+	permissions *[]models.Permission,
 ) bool {
+	isExist := false
+	for _, p := range *permissions {
+		if *p.Resourse == resourse1 {
+			isExist = true
+		}
+	}
+
+	if !isExist {
+		return false
+	}
+
 	if resourse1 == resourse2 {
 		return true
 	}
 
 	if resourse2[len(resourse2)-1] == '*' {
-		r, _ := regexp.Compile("^" + resourse2[:len(resourse2)-1])
+		pattern := "^" + resourse2[:len(resourse2)-1]
+		r, _ := regexp.Compile(pattern)
 		return r.MatchString(resourse1)
 	}
 

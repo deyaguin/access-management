@@ -47,3 +47,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/lib/pq"
+
+[[constraint]]
+  name = "github.com/beevik/etree"
+  version = "1.0.0"

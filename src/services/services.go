@@ -1,10 +1,6 @@
 package services
 
-import (
-	"reflect"
-
-	"gopkg.in/validator.v2"
-)
+import "gitlab/nefco/access-management-system/src/validator"
 
 type ServicesConf struct {
 	UsersService
@@ -25,7 +21,7 @@ func NewServicesConf(
 	actions ActionsService,
 	services ServicesService,
 ) *ServicesConf {
-	validator.SetValidationFunc("isBool", isBool)
+	validator.InitValidator()
 	return &ServicesConf{
 		users,
 		groups,
@@ -46,12 +42,4 @@ type paginationItems struct {
 
 type items struct {
 	Items interface{} `json:"items"`
-}
-
-func isBool(value interface{}, param string) error {
-	v := reflect.ValueOf(value)
-	if v.Kind() != reflect.Bool {
-		return validator.ErrUnsupported
-	}
-	return nil
 }

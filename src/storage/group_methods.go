@@ -2,6 +2,10 @@ package storage
 
 import (
 	"gitlab/nefco/access-management-system/src/models"
+
+	"fmt"
+
+	"github.com/jinzhu/gorm"
 )
 
 func (dataBase SqlDB) CreateGroup(
@@ -19,8 +23,10 @@ func (dataBase SqlDB) GetGroups(
 	groups := new([]models.Group)
 
 	if name == "" {
-		if err := dataBase.Limit(perPage).Offset((page - 1) * perPage).
-			Find(groups).Error; err != nil {
+		fmt.Println((page-1)*perPage, perPage+(page-1)*perPage)
+		if err := dataBase.
+			Raw(mssqlLimit("groups", (page-1)*perPage, perPage+(page-1)*perPage)).
+			Scan(groups).Error; err != nil {
 			return nil, err
 		}
 
@@ -48,7 +54,9 @@ func (dataBase SqlDB) GetGroupsByEntry(name string) (*[]models.Group, error) {
 func (dataBase SqlDB) GetGroupsCount() (int, error) {
 	var count int
 
-	err := dataBase.Table("groups").Count(&count).Error
+	err := dataBase.Table("groups").
+		Where("deleted_at is ?", gorm.Expr("NULL")).
+		Count(&count).Error
 
 	return count, err
 }

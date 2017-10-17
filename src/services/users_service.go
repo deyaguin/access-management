@@ -73,7 +73,7 @@ func (service *usersService) GetUsers(
 		return nil, err
 	}
 
-	total, err := service.storage.GetUsersTotal()
+	total, err := service.storage.GetUsersCount()
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}

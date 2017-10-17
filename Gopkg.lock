@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/beevik/etree"
+  packages = ["."]
+  revision = "15a30b44cfd6c5a16a7ddfe271bf146aaf2d3195"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/dgrijalva/jwt-go"
   packages = ["."]
   revision = "d2709f9f1f31ebcda9651b03077758c1f3a0018c"
@@ -106,6 +112,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7cd81cef6d1fd5d27b3b190f47f221abe667e4f46e05895210fa8b6722f53fd3"
+  inputs-digest = "08b3f12cadb3d915f16ae2448ca9190d3e5cd040dafaa058dab8eaa54d6bec0b"
   solver-name = "gps-cdcl"
   solver-version = 1

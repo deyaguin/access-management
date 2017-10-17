@@ -2,6 +2,8 @@ package storage
 
 import (
 	"gitlab/nefco/access-management-system/src/models"
+
+	"github.com/jinzhu/gorm"
 )
 
 func (dataBase SqlDB) CreateUser(
@@ -46,10 +48,12 @@ func (dataBase SqlDB) GetUsersByEntry(name string) (*[]models.User, error) {
 	return users, err
 }
 
-func (dataBase SqlDB) GetUsersTotal() (int, error) {
+func (dataBase SqlDB) GetUsersCount() (int, error) {
 	var count int
 
-	err := dataBase.Table("users").Count(&count).Error
+	err := dataBase.Table("users").
+		Where("deleted_at is ?", gorm.Expr("NULL")).
+		Count(&count).Error
 
 	return count, err
 }
