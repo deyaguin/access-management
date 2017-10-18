@@ -2,8 +2,6 @@ package storage
 
 import (
 	"gitlab/nefco/access-management-system/src/models"
-
-	"github.com/jinzhu/gorm"
 )
 
 func (dataBase SqlDB) CreateUser(
@@ -22,16 +20,24 @@ func (dataBase SqlDB) GetUsers(
 	users := new([]models.User)
 
 	if name == "" {
-		if err := dataBase.Limit(perPage).Offset((page - 1) * perPage).
-			Find(users).Error; err != nil {
+		if err := dataBase.
+			Raw(limitQuery(
+				"users",
+				"deleted_at IS NULL",
+				(page-1)*perPage, perPage+(page-1)*perPage,
+			)).
+			Scan(users).Error; err != nil {
 			return nil, err
 		}
 
 		return users, nil
 	}
 
-	err := dataBase.Where("name LIKE ?", "%"+name+"%").
-		Limit(perPage).Offset((page - 1) * perPage).Find(users).Error
+	err := dataBase.Raw(limitQuery(
+		"users",
+		LikeQuery("users", "name", name),
+		(page-1)*perPage, perPage+(page-1)*perPage)).
+		Scan(users).Error
 
 	return users, err
 }
@@ -48,11 +54,11 @@ func (dataBase SqlDB) GetUsersByEntry(name string) (*[]models.User, error) {
 	return users, err
 }
 
-func (dataBase SqlDB) GetUsersCount() (int, error) {
+func (dataBase SqlDB) GetUsersCount(query string) (int, error) {
 	var count int
 
 	err := dataBase.Table("users").
-		Where("deleted_at is ?", gorm.Expr("NULL")).
+		Where(query).
 		Count(&count).Error
 
 	return count, err

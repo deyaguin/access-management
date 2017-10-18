@@ -66,14 +66,15 @@ func (service *usersService) GetUser(
 func (service *usersService) GetUsers(
 	page int,
 	perPage int,
-	userName string,
+	name string,
 ) (*paginationItems, error) {
-	users, err := service.storage.GetUsers(page, perPage, userName)
+	users, err := service.storage.GetUsers(page, perPage, name)
 	if err != nil {
 		return nil, err
 	}
 
-	total, err := service.storage.GetUsersCount()
+	total, err := service.storage.GetUsersCount(
+		storage.LikeQuery("users", "name", name))
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}

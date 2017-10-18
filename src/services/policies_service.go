@@ -72,7 +72,8 @@ func (service *policiesService) GetPolicies(
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	count, err := service.storage.GetPoliciesCount()
+	count, err := service.storage.GetPoliciesCount(
+		storage.LikeQuery("policies", "name", name))
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}

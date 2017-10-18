@@ -2,8 +2,6 @@ package storage
 
 import (
 	"gitlab/nefco/access-management-system/src/models"
-
-	"github.com/jinzhu/gorm"
 )
 
 func (dataBase SqlDB) CreatePolicy(
@@ -21,16 +19,24 @@ func (dataBase SqlDB) GetPolicies(
 	policies := new([]models.Policy)
 
 	if name == "" {
-		if err := dataBase.Limit(perPage).Offset((page - 1) * perPage).
-			Find(policies).Error; err != nil {
+		if err := dataBase.
+			Raw(limitQuery(
+				"policies",
+				"deleted_at IS NULL",
+				(page-1)*perPage, perPage+(page-1)*perPage,
+			)).
+			Scan(policies).Error; err != nil {
 			return nil, err
 		}
 
 		return policies, nil
 	}
 
-	err := dataBase.Where("name LIKE ?", "%"+name+"%").
-		Limit(perPage).Offset((page - 1) * perPage).Find(policies).Error
+	err := dataBase.Raw(limitQuery(
+		"policies",
+		LikeQuery("policies", "name", name),
+		(page-1)*perPage, perPage+(page-1)*perPage)).
+		Scan(policies).Error
 
 	return policies, err
 }
@@ -47,11 +53,11 @@ func (dataBase SqlDB) GetPoliciesByEntry(name string) (*[]models.Policy, error) 
 	return policies, err
 }
 
-func (dataBase SqlDB) GetPoliciesCount() (int, error) {
+func (dataBase SqlDB) GetPoliciesCount(query string) (int, error) {
 	var count int
 
 	err := dataBase.Table("policies").
-		Where("deleted_at is ?", gorm.Expr("NULL")).
+		Where(query).
 		Count(&count).Error
 
 	return count, err

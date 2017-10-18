@@ -1,10 +1,20 @@
 package storage
 
-import "strconv"
+import (
+	"strconv"
+)
 
-func mssqlLimit(tableName string, limit, offset int) string {
+func limitQuery(tableName, selectorQuery string, limit, offset int) string {
 	query := "SELECT * FROM ( SELECT *, ROW_NUMBER() OVER (ORDER BY name) as row FROM " +
-		tableName + ") a WHERE a.row > " + strconv.Itoa(limit) + " and a.row <= " +
-		strconv.Itoa(offset)
+		tableName + " WHERE " + selectorQuery + ") a WHERE a.row > " + strconv.Itoa(limit) +
+		" AND a.row <= " + strconv.Itoa(offset)
+
+	return query
+}
+
+func LikeQuery(tableName, columnName, columnValue string) string {
+	query := `"` + tableName + `".deleted_at IS NULL AND ((` + columnName +
+		" LIKE '%" + columnValue + "%'))"
+
 	return query
 }

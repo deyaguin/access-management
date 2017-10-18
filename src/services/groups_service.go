@@ -74,7 +74,9 @@ func (service *groupsService) GetGroups(
 		return nil, NewGetEntitiesError(err.Error())
 	}
 
-	count, err := service.storage.GetGroupsCount()
+	count, err := service.storage.GetGroupsCount(
+		storage.LikeQuery("groups", "name", name),
+	)
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}

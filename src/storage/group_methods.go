@@ -25,7 +25,11 @@ func (dataBase SqlDB) GetGroups(
 	if name == "" {
 		fmt.Println((page-1)*perPage, perPage+(page-1)*perPage)
 		if err := dataBase.
-			Raw(mssqlLimit("groups", (page-1)*perPage, perPage+(page-1)*perPage)).
+			Raw(limitQuery(
+				"groups",
+				"deleted_at IS NULL",
+				(page-1)*perPage, perPage+(page-1)*perPage,
+			)).
 			Scan(groups).Error; err != nil {
 			return nil, err
 		}
@@ -33,8 +37,12 @@ func (dataBase SqlDB) GetGroups(
 		return groups, nil
 	}
 
-	err := dataBase.Where("name LIKE ?", "%"+name+"%").
-		Limit(perPage).Offset((page - 1) * perPage).Find(groups).Error
+	err := dataBase.
+		Raw(limitQuery(
+			"groups",
+			LikeQuery("groups", "name", name),
+			(page-1)*perPage, perPage+(page-1)*perPage)).
+		Scan(groups).Error
 
 	return groups, err
 }
@@ -51,11 +59,11 @@ func (dataBase SqlDB) GetGroupsByEntry(name string) (*[]models.Group, error) {
 	return groups, err
 }
 
-func (dataBase SqlDB) GetGroupsCount() (int, error) {
+func (dataBase SqlDB) GetGroupsCount(query string) (int, error) {
 	var count int
 
 	err := dataBase.Table("groups").
-		Where("deleted_at is ?", gorm.Expr("NULL")).
+		Where(query, gorm.Expr("NULL")).
 		Count(&count).Error
 
 	return count, err

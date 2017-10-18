@@ -15,7 +15,7 @@ type DB interface {
 	GetUsers(int, int, string) (*[]models.User, error)
 	GetUsersByEntry(string) (*[]models.User, error)
 	GetAllUsers() (*[]models.User, error)
-	GetUsersCount() (int, error)
+	GetUsersCount(string) (int, error)
 	GetUser(int) (*models.User, error)
 	UpdateUser(*models.User) error
 	RemoveUser(*models.User) error
@@ -28,7 +28,7 @@ type DB interface {
 	GetGroups(int, int, string) (*[]models.Group, error)
 	GetGroupsByEntry(string) (*[]models.Group, error)
 	GetAllGroups() (*[]models.Group, error)
-	GetGroupsCount() (int, error)
+	GetGroupsCount(string) (int, error)
 	GetGroup(int) (*models.Group, error)
 	UpdateGroup(*models.Group) error
 	RemoveGroup(*models.Group) error
@@ -43,7 +43,7 @@ type DB interface {
 	GetPolicies(int, int, string) (*[]models.Policy, error)
 	GetPoliciesByEntry(string) (*[]models.Policy, error)
 	GetAllPolicies() (*[]models.Policy, error)
-	GetPoliciesCount() (int, error)
+	GetPoliciesCount(string) (int, error)
 	GetPolicy(int) (*models.Policy, error)
 	UpdatePolicy(*models.Policy) error
 	RemovePolicy(*models.Policy) error
