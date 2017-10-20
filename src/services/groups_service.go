@@ -5,6 +5,7 @@ import (
 	"gitlab/nefco/access-management-system/src/storage"
 
 	"gopkg.in/validator.v2"
+	"gitlab/nefco/access-management-system/src/utils"
 )
 
 type GroupsService interface {
@@ -75,7 +76,7 @@ func (service *groupsService) GetGroups(
 	}
 
 	count, err := service.storage.GetGroupsCount(
-		storage.LikeQuery("groups", "name", name),
+		utils.LikeQuery("groups", "name", name),
 	)
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())

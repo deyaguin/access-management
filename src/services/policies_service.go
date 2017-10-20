@@ -5,6 +5,7 @@ import (
 	"gitlab/nefco/access-management-system/src/storage"
 
 	"gopkg.in/validator.v2"
+	"gitlab/nefco/access-management-system/src/utils"
 )
 
 type PoliciesService interface {
@@ -73,7 +74,7 @@ func (service *policiesService) GetPolicies(
 	}
 
 	count, err := service.storage.GetPoliciesCount(
-		storage.LikeQuery("policies", "name", name))
+		utils.LikeQuery("policies", "name", name))
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}

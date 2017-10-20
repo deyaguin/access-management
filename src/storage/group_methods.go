@@ -3,7 +3,7 @@ package storage
 import (
 	"gitlab/nefco/access-management-system/src/models"
 
-	"fmt"
+	"gitlab/nefco/access-management-system/src/utils"
 
 	"github.com/jinzhu/gorm"
 )
@@ -23,9 +23,8 @@ func (dataBase SqlDB) GetGroups(
 	groups := new([]models.Group)
 
 	if name == "" {
-		fmt.Println((page-1)*perPage, perPage+(page-1)*perPage)
 		if err := dataBase.
-			Raw(limitQuery(
+			Raw(utils.LimitQuery(
 				"groups",
 				"deleted_at IS NULL",
 				(page-1)*perPage, perPage+(page-1)*perPage,
@@ -40,7 +39,7 @@ func (dataBase SqlDB) GetGroups(
 	err := dataBase.
 		Raw(limitQuery(
 			"groups",
-			LikeQuery("groups", "name", name),
+			utils.LikeQuery("groups", "name", name),
 			(page-1)*perPage, perPage+(page-1)*perPage)).
 		Scan(groups).Error
 

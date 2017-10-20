@@ -5,6 +5,7 @@ import (
 	"gitlab/nefco/access-management-system/src/storage"
 
 	"gopkg.in/validator.v2"
+	"gitlab/nefco/access-management-system/src/utils"
 )
 
 type UsersService interface {
@@ -74,7 +75,7 @@ func (service *usersService) GetUsers(
 	}
 
 	total, err := service.storage.GetUsersCount(
-		storage.LikeQuery("users", "name", name))
+		utils.LikeQuery("users", "name", name))
 	if err != nil {
 		return nil, NewGetEntitiesError(err.Error())
 	}

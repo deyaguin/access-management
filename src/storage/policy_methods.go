@@ -2,6 +2,7 @@ package storage
 
 import (
 	"gitlab/nefco/access-management-system/src/models"
+	"gitlab/nefco/access-management-system/src/utils"
 )
 
 func (dataBase SqlDB) CreatePolicy(
@@ -20,7 +21,7 @@ func (dataBase SqlDB) GetPolicies(
 
 	if name == "" {
 		if err := dataBase.
-			Raw(limitQuery(
+			Raw(utils.LimitQuery(
 				"policies",
 				"deleted_at IS NULL",
 				(page-1)*perPage, perPage+(page-1)*perPage,
@@ -32,7 +33,7 @@ func (dataBase SqlDB) GetPolicies(
 		return policies, nil
 	}
 
-	err := dataBase.Raw(limitQuery(
+	err := dataBase.Raw(utils.LimitQuery(
 		"policies",
 		LikeQuery("policies", "name", name),
 		(page-1)*perPage, perPage+(page-1)*perPage)).

@@ -2,6 +2,7 @@ package storage
 
 import (
 	"gitlab/nefco/access-management-system/src/models"
+	"gitlab/nefco/access-management-system/src/utils"
 )
 
 func (dataBase SqlDB) CreateUser(
@@ -21,7 +22,7 @@ func (dataBase SqlDB) GetUsers(
 
 	if name == "" {
 		if err := dataBase.
-			Raw(limitQuery(
+			Raw(utils.LimitQuery(
 				"users",
 				"deleted_at IS NULL",
 				(page-1)*perPage, perPage+(page-1)*perPage,
@@ -33,7 +34,7 @@ func (dataBase SqlDB) GetUsers(
 		return users, nil
 	}
 
-	err := dataBase.Raw(limitQuery(
+	err := dataBase.Raw(utils.LimitQuery(
 		"users",
 		LikeQuery("users", "name", name),
 		(page-1)*perPage, perPage+(page-1)*perPage)).
